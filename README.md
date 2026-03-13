@@ -1,42 +1,69 @@
-Supermarket Website:
-A full-stack supermarket web application that allows customers to browse and purchase groceries online, providing warehouse members and the marketing team with management tools.
+# COMP2850 Supermarket Web Application
 
-Overview:
-This project consists of three core experiences:
+A full-stack online supermarket web application. The system provides three 
+distinct portals for customers, warehouse staff, and management/marketing teams.
 
-Customer-facing storefront — Browse products, manage a basket, and checkout
-Warehouse picking system — Allow warehouse staff to fulfil orders efficiently
-Marketing dashboard — Give the marketing team visibility over sales and campaign performance
+---
 
+## 👥 Team
+| Name | Role |
+|------|------|
+| Tanuushre Vjay | |
+| Geoffrey Tong | |
+| Chen When |  |
+| Ekundayo William Ladepo ||
 
-Features:
+---
 
-Homepage with featured products and categories
-Product pages with descriptions and basket functionality
-Basket and checkout flow
-Warehouse order picking screen
-Marketing analytics dashboard
+## 🧩 System Overview
 
-Team Roles:
+The application is split into three subsystems:
 
-- Rotating Weekly Roles
-Sprint Lead:
-Manages the sprint, runs standups
-Testing Lead:
-Oversees testing and QA
-Documentation Lead:
-Keeps docs and README up to date
-Integration Lead:
-Manages merges and protects main branch
+- **E-Commerce** — Customers can browse products, manage a shopping basket, 
+  check out, schedule deliveries, and view order history.
+- **Warehousing** — Warehouse staff access picking lists on mobile/tablet, 
+  update stock levels, flag substitutions, and process incoming deliveries.
+- **Management & Marketing** — Staff can view sales metrics, trending and 
+  best-selling products, and export data — all filterable and searchable.
 
-Skill-Based Roles:
+---
 
-Backend:
-Server, API, and business logic
-Frontend:
-UI components and user experience
-Database:
-Schema design and queries
-UX & Testing:
-Wireframes, user testing, Qusetion and answer
+## 🛠️ Tech Stack
+| Technology | Purpose |
+|------------|---------|
+| Kotlin + Ktor | Backend REST API |
+| React | Frontend UI |
+| Tailwind CSS + shadcn/ui | Styling and components |
 
+---
+
+## 🚀 Setup & Installation
+
+> ⚠️ Setup instructions will be added once the development environment is finalised.
+
+**Prerequisites**
+- Node.js (version TBC)
+- Kotlin / JDK (version TBC)
+- PostgreSQL (version TBC)
+
+**Running the Frontend**
+```bash
+# Instructions coming soon
+```
+
+**Running the Backend**
+```bash
+# Instructions coming soon
+```
+
+---
+
+## 📖 Documentation
+
+Full documentation is available on the [GitHub Wiki](../../wiki), including:
+
+- Personas & Job Stories
+- Wireframes & UI Design
+- Database & Class Diagrams
+- Meeting Notes & Retrospectives
+- Testing Strategy
