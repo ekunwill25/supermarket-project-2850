@@ -38,5 +38,5 @@ UI components and user experience
 Database:
 Schema design and queries
 UX & Testing:
-Wireframes, user testing, and QA
+Wireframes, user testing, Qusetion and answer
 
