@@ -28,12 +28,14 @@ The application is split into three subsystems:
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 | Technology | Purpose |
 |------------|---------|
-| Kotlin + Ktor | Backend REST API |
-| React | Frontend UI |
-| Tailwind CSS + shadcn/ui | Styling and components |
+| Kotlin + Ktor | Backend REST API | 
+| React | Frontend UI framework | 
+| TypeScript | Frontend type safety | 
+| HTML | Frontend markup structure | 
+| Tailwind CSS | Styling and UI components |
 
 ---
 
