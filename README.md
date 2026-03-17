@@ -36,6 +36,7 @@ The application is split into three subsystems:
 | TypeScript | Frontend type safety | 
 | HTML | Frontend markup structure | 
 | Tailwind CSS | Styling and UI components |
+| Kotlin + JDBC | Backend database setting |
 
 ---
 
