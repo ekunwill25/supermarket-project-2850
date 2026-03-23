@@ -3,15 +3,19 @@
 A full-stack online supermarket web application. The system provides three 
 distinct portals for customers, warehouse staff, and management/marketing teams.
 
+### Action Workflows:
+![Backend CI](https://github.com/YOUR_ORG/YOUR_REPO/actions/workflows/backend.yml/badge.svg)
+![Frontend CI](https://github.com/YOUR_ORG/YOUR_REPO/actions/workflows/frontend.yml/badge.svg)
+
 ---
 
 ## 👥 Team
 | Name | Role |
 |------|------|
-| Tanuushre Vjay | |
-| Geoffrey Tong | |
-| Chen When |  |
-| Ekundayo William Ladepo ||
+| Tanuushre Vjay | Frontend Lead |
+| Geoffrey Tong | Backend Lead |
+| Chen When | Full Stack |
+| Ekundayo William Ladepo | Full Stack |
 
 ---
 
@@ -36,27 +40,57 @@ The application is split into three subsystems:
 | TypeScript | Frontend type safety | 
 | HTML | Frontend markup structure | 
 | Tailwind CSS | Styling and UI components |
+| Kotlin + JDBC | Backend database setting |
 
 ---
 
 ## 🚀 Setup & Installation
 
-> ⚠️ Setup instructions will be added once the development environment is finalised.
+### Prerequisites
+- [Node.js](https://nodejs.org/) v20+
+- [JDK 17](https://adoptium.net/) (Temurin recommended)
+- [Git](https://git-scm.com/)
 
-**Prerequisites**
-- Node.js (version TBC)
-- Kotlin / JDK (version TBC)
-- PostgreSQL (version TBC)
+> No database installation required — SQLite is file-based and bundled with the project.
 
-**Running the Frontend**
+---
+
+### 1. Clone the Repository
 ```bash
-# Instructions coming soon
+git clone https://github.com/YOUR_ORG/supermarket-project-2850.git
+cd supermarket-project-2850
 ```
 
-**Running the Backend**
+### 2. Running the Backend
 ```bash
-# Instructions coming soon
+cd backend
+./gradlew run
 ```
+The API will be available at `http://localhost:8080`
+
+### 3. Running the Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
+The app will be available at `http://localhost:3000`
+
+### 4. Running Tests
+```bash
+# Backend
+cd backend && ./gradlew test
+
+# Frontend
+cd frontend && npm test
+```
+
+## 🌿 Branching Strategy
+- `main` — stable, protected branch. All changes go through PRs.
+- `feature/team/your-feature-name` — for new features
+- `fix/your-fix-name` — for bug fixes
+
+All PRs must pass CI checks before merging.
 
 ---
 
