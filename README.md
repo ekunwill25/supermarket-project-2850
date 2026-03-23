@@ -12,7 +12,7 @@ distinct portals for customers, warehouse staff, and management/marketing teams.
 ## 👥 Team
 | Name | Role |
 |------|------|
-| Tanuushre Vjay | Frontend Lead |
+| Tanuushre Vejayan | Frontend Lead |
 | Geoffrey Tong | Backend Lead |
 | Chen When | Full Stack |
 | Ekundayo William Ladepo | Full Stack |
