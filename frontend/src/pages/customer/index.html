@@ -1,1 +1,340 @@
-## customer portal home
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FreshMart — Customer Portal</title>
+  <!-- bootstrap css -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- google fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* base — light grey background matching the figma design */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: #f5f5f5; color: #1a1a1a; }
+
+    /* ── top navbar ── */
+    .top-nav {
+      background: #fff; border-bottom: 1px solid #e5e5e5;
+      padding: 0.75rem 2rem; display: flex; align-items: center; gap: 1rem;
+      position: sticky; top: 0; z-index: 100;
+    }
+    /* logo block — green rounded square + text */
+    .logo-block { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; flex-shrink: 0; }
+    .logo-icon { width: 42px; height: 42px; background: #2e7d32; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
+    .logo-text { line-height: 1.1; }
+    .logo-text strong { display: block; font-size: 1.05rem; color: #1a1a1a; }
+    .logo-text span   { font-size: 0.72rem; color: #888; }
+
+    /* search bar — expands to fill space between logo and actions */
+    .search-bar { flex: 1; max-width: 580px; display: flex; align-items: center; border: 1.5px solid #ddd; border-radius: 8px; padding: 0.45rem 0.9rem; gap: 0.5rem; background: #fff; }
+    .search-bar input { border: none; outline: none; font-size: 0.9rem; color: #333; width: 100%; font-family: 'Inter', sans-serif; }
+    .search-bar input::placeholder { color: #aaa; }
+    .search-icon { color: #aaa; font-size: 0.95rem; }
+
+    /* top-right nav actions */
+    .nav-actions { display: flex; align-items: center; gap: 0.75rem; margin-left: auto; }
+    .btn-login  { background: none; border: none; font-size: 0.9rem; color: #333; cursor: pointer; font-family: 'Inter', sans-serif; font-weight: 500; }
+    .btn-signup { background: #2e7d32; color: #fff; border: none; border-radius: 8px; padding: 0.45rem 1.1rem; font-size: 0.9rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: background 0.15s; }
+    .btn-signup:hover { background: #1b5e20; }
+    .nav-icon-btn { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #555; display: flex; align-items: center; gap: 0.3rem; font-family: 'Inter', sans-serif; font-size: 0.85rem; color: #333; }
+    .cart-btn { background: #2e7d32; color: #fff; border: none; border-radius: 8px; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer; transition: background 0.15s; }
+    .cart-btn:hover { background: #1b5e20; }
+
+    /* second nav row — shop, offers, categories */
+    .sub-nav { background: #fff; border-bottom: 1px solid #e5e5e5; padding: 0 2rem; display: flex; gap: 0.25rem; }
+    .sub-nav a { text-decoration: none; font-size: 0.9rem; font-weight: 500; color: #555; padding: 0.65rem 1rem; border-bottom: 2px solid transparent; transition: color 0.15s; }
+    .sub-nav a:hover { color: #2e7d32; }
+    /* active tab has green underline */
+    .sub-nav a.active { color: #2e7d32; border-bottom-color: #2e7d32; background: #f0faf0; border-radius: 6px 6px 0 0; }
+
+    /* page content wrapper */
+    .page-wrap { max-width: 1200px; margin: 0 auto; padding: 1.5rem 1.5rem; }
+
+    /* ── hero banner ── */
+    .hero { background: #2e7d32; border-radius: 16px; padding: 2.5rem 2.5rem; margin-bottom: 2rem; position: relative; overflow: hidden; }
+    /* decorative circle in top-right corner */
+    .hero::after { content: ''; position: absolute; top: -60px; right: -60px; width: 280px; height: 280px; background: rgba(255,255,255,0.06); border-radius: 50%; pointer-events: none; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 0.4rem; color: rgba(255,255,255,0.85); font-size: 0.82rem; font-weight: 500; margin-bottom: 0.75rem; }
+    .hero h1 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; color: #fff; margin-bottom: 0.5rem; line-height: 1.25; }
+    .hero p  { color: rgba(255,255,255,0.75); font-size: 0.9rem; margin-bottom: 1.5rem; }
+    /* search bar inside hero — lighter grey version */
+    .hero-search { display: flex; align-items: center; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); border-radius: 8px; padding: 0.6rem 1rem; gap: 0.5rem; max-width: 480px; }
+    .hero-search input { border: none; outline: none; background: transparent; color: #fff; font-size: 0.9rem; width: 100%; font-family: 'Inter', sans-serif; }
+    .hero-search input::placeholder { color: rgba(255,255,255,0.55); }
+
+    /* ── section headings ── */
+    .section-title { display: flex; align-items: center; gap: 0.5rem; font-size: 1.15rem; font-weight: 700; color: #1a1a1a; margin-bottom: 1rem; }
+
+    /* ── shop by category grid ── */
+    .category-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.85rem; margin-bottom: 2.5rem; }
+    /* each pastel category card */
+    .cat-card { border-radius: 12px; padding: 1.1rem 0.5rem 0.75rem; text-align: center; cursor: pointer; text-decoration: none; transition: transform 0.15s, box-shadow 0.15s; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+    .cat-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+    .cat-card .cat-emoji { font-size: 2rem; }
+    .cat-card .cat-name  { font-size: 0.78rem; font-weight: 600; }
+    /* each category has its own pastel background + text colour */
+    .cat-breakfast  { background: #fff3e0; } .cat-breakfast  .cat-name { color: #e65100; }
+    .cat-dairy      { background: #fffde7; } .cat-dairy      .cat-name { color: #f9a825; }
+    .cat-meat       { background: #fce4ec; } .cat-meat       .cat-name { color: #c62828; }
+    .cat-seafood    { background: #e3f2fd; } .cat-seafood    .cat-name { color: #1565c0; }
+    .cat-snacks     { background: #f3e5f5; } .cat-snacks     .cat-name { color: #6a1b9a; }
+    .cat-organic    { background: #e8f5e9; } .cat-organic    .cat-name { color: #2e7d32; }
+    .cat-alcohol    { background: #fce4ec; } .cat-alcohol    .cat-name { color: #ad1457; }
+    .cat-cleaning   { background: #e0f7fa; } .cat-cleaning   .cat-name { color: #00695c; }
+    .cat-emergency  { background: #fffde7; } .cat-emergency  .cat-name { color: #f57f17; }
+    .cat-health     { background: #e0f2f1; } .cat-health     .cat-name { color: #00695c; }
+    .cat-laundry    { background: #ede7f6; } .cat-laundry    .cat-name { color: #4527a0; }
+    .cat-paper      { background: #f5f5f5; } .cat-paper      .cat-name { color: #424242; }
+
+    /* ── product cards (used for sale, featured, trending) ── */
+    /* vertical card layout — used for sale and featured sections */
+    .products-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2.5rem; }
+    .product-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 1rem; display: flex; flex-direction: column; position: relative; transition: box-shadow 0.15s; cursor: pointer; }
+    .product-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.09); }
+    /* green badge in top-left corner (Top Rated) */
+    .card-badge-green { position: absolute; top: 0.65rem; left: 0.65rem; background: #2e7d32; color: #fff; font-size: 0.65rem; font-weight: 700; padding: 0.2rem 0.55rem; border-radius: 5px; text-transform: uppercase; }
+    /* red sale badge */
+    .card-badge-red { position: absolute; top: 0.65rem; right: 0.65rem; background: #e53935; color: #fff; font-size: 0.65rem; font-weight: 700; padding: 0.2rem 0.55rem; border-radius: 5px; text-transform: uppercase; }
+    /* product image area — centred emoji on white */
+    .card-img { height: 100px; display: flex; align-items: center; justify-content: center; font-size: 3rem; margin-bottom: 0.75rem; }
+    .card-name { font-size: 0.875rem; font-weight: 600; color: #1a1a1a; margin-bottom: 0.5rem; line-height: 1.35; flex: 1; }
+    /* star rating row */
+    .card-rating { display: flex; align-items: center; gap: 0.3rem; font-size: 0.78rem; color: #555; margin-bottom: 0.6rem; }
+    .star { color: #f9a825; }
+    /* was price struck through in grey */
+    .price-was  { font-size: 0.78rem; color: #aaa; text-decoration: line-through; margin-bottom: 0.1rem; }
+    /* now price in green for sale, or just green for regular */
+    .price-now  { font-size: 1rem; font-weight: 700; color: #e53935; }
+    .price-main { font-size: 1rem; font-weight: 700; color: #2e7d32; }
+    /* row containing price and + button */
+    .card-footer { display: flex; align-items: flex-end; justify-content: space-between; margin-top: auto; padding-top: 0.5rem; }
+    /* green + add to basket button */
+    .btn-add { width: 36px; height: 36px; background: #2e7d32; color: #fff; border: none; border-radius: 8px; font-size: 1.3rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s, transform 0.1s; flex-shrink: 0; }
+    .btn-add:hover  { background: #1b5e20; }
+    .btn-add:active { transform: scale(0.93); }
+
+    /* ── trending now — horizontal list cards ── */
+    .trending-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.85rem; margin-bottom: 2.5rem; }
+    /* horizontal card: image on left, info on right */
+    .trend-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 0.9rem 1rem; display: flex; align-items: center; gap: 0.9rem; cursor: pointer; transition: box-shadow 0.15s; }
+    .trend-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+    .trend-img  { font-size: 2rem; width: 48px; flex-shrink: 0; text-align: center; }
+    .trend-info { flex: 1; min-width: 0; }
+    .trend-name { font-size: 0.85rem; font-weight: 600; color: #1a1a1a; margin-bottom: 0.3rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .trend-meta { font-size: 0.75rem; color: #888; margin-bottom: 0.3rem; display: flex; align-items: center; gap: 0.4rem; }
+    .trend-price { font-size: 0.95rem; font-weight: 700; color: #2e7d32; }
+    /* cart icon button for trending cards */
+    .btn-cart { width: 36px; height: 36px; background: #2e7d32; color: #fff; border: none; border-radius: 8px; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.15s; }
+    .btn-cart:hover { background: #1b5e20; }
+
+    /* ── footer ── */
+    .site-footer { background: #0f1923; color: #ccc; padding: 3rem 2rem 2rem; margin-top: 1rem; }
+    .footer-wrap { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 2rem; }
+    .footer-brand strong { color: #fff; font-size: 1rem; display: block; margin-bottom: 0.5rem; }
+    .footer-brand p { font-size: 0.82rem; color: #888; line-height: 1.6; }
+    .footer-col h4 { color: #fff; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.85rem; }
+    .footer-col a  { display: block; color: #888; font-size: 0.82rem; text-decoration: none; margin-bottom: 0.5rem; transition: color 0.15s; }
+    .footer-col a:hover { color: #4caf50; }
+    /* legal heading has a red dot after it — matches figma */
+    .footer-col h4.legal::after { content: ''; display: inline-block; width: 6px; height: 6px; background: #e53935; border-radius: 50%; margin-left: 4px; vertical-align: middle; }
+
+    /* responsive — collapse to fewer columns on smaller screens */
+    @media (max-width: 900px) {
+      .category-grid  { grid-template-columns: repeat(4, 1fr); }
+      .products-grid  { grid-template-columns: repeat(2, 1fr); }
+      .trending-grid  { grid-template-columns: repeat(2, 1fr); }
+      .footer-wrap    { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 580px) {
+      .category-grid  { grid-template-columns: repeat(3, 1fr); }
+      .trending-grid  { grid-template-columns: 1fr; }
+      .top-nav .search-bar { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- top navbar -->
+  <nav class="top-nav">
+    <a href="../../index.html" class="logo-block">
+      <div class="logo-icon">🛒</div>
+      <div class="logo-text"><strong>FreshMart</strong><span>Online Supermarket</span></div>
+    </a>
+    <!-- central search bar -->
+    <div class="search-bar">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="topSearch" placeholder="Search for products..." onkeydown="if(event.key==='Enter') goSearch('topSearch')">
+    </div>
+    <!-- right-side actions -->
+    <div class="nav-actions">
+      <button class="btn-login">Login</button>
+      <button class="btn-signup">Sign Up</button>
+      <button class="nav-icon-btn">🤍</button>
+      <button class="nav-icon-btn">🎁 Orders</button>
+      <a href="basket.html" class="cart-btn">🛒</a>
+    </div>
+  </nav>
+
+  <!-- secondary nav row -->
+  <div class="sub-nav">
+    <a href="index.html"    class="active">Shop</a>
+    <a href="products.html">Offers</a>
+    <a href="products.html">Categories</a>
+  </div>
+
+  <!-- main content -->
+  <div class="page-wrap">
+
+    <!-- hero banner -->
+    <div class="hero">
+      <div class="hero-badge">✳️ Free Delivery on Orders Over £50</div>
+      <h1>Fresh Groceries Delivered to Your Door</h1>
+      <p>Premium quality products from trusted brands. Shop now and save time.</p>
+      <!-- search inside hero — passes query to products page via url param -->
+      <div class="hero-search">
+        <span style="color:rgba(255,255,255,0.6)">🔍</span>
+        <input type="text" id="heroSearch" placeholder="Search for products..." onkeydown="if(event.key==='Enter') goSearch('heroSearch')">
+      </div>
+    </div>
+
+    <!-- shop by category -->
+    <h2 class="section-title">Shop by Category</h2>
+    <div class="category-grid">
+      <a href="products.html?cat=breakfast" class="cat-card cat-breakfast"><span class="cat-emoji">🥐</span><span class="cat-name">Breakfast</span></a>
+      <a href="products.html?cat=dairy"     class="cat-card cat-dairy">    <span class="cat-emoji">🧀</span><span class="cat-name">Cheese &amp; Dairy</span></a>
+      <a href="products.html?cat=meat"      class="cat-card cat-meat">     <span class="cat-emoji">🥩</span><span class="cat-name">Meat</span></a>
+      <a href="products.html?cat=seafood"   class="cat-card cat-seafood">  <span class="cat-emoji">🐟</span><span class="cat-name">Seafood</span></a>
+      <a href="products.html?cat=snacks"    class="cat-card cat-snacks">   <span class="cat-emoji">🍿</span><span class="cat-name">Snacks</span></a>
+      <a href="products.html?cat=organic"   class="cat-card cat-organic">  <span class="cat-emoji">🌱</span><span class="cat-name">Organic</span></a>
+      <a href="products.html?cat=alcohol"   class="cat-card cat-alcohol">  <span class="cat-emoji">🍷</span><span class="cat-name">Alcohol</span></a>
+      <a href="products.html?cat=cleaning"  class="cat-card cat-cleaning"> <span class="cat-emoji">🧽</span><span class="cat-name">Cleaning</span></a>
+      <a href="products.html?cat=emergency" class="cat-card cat-emergency"><span class="cat-emoji">📦</span><span class="cat-name">Emergency</span></a>
+      <a href="products.html?cat=health"    class="cat-card cat-health">   <span class="cat-emoji">💊</span><span class="cat-name">Health &amp; Personal Care</span></a>
+      <a href="products.html?cat=laundry"   class="cat-card cat-laundry">  <span class="cat-emoji">🧺</span><span class="cat-name">Laundry</span></a>
+      <a href="products.html?cat=paper"     class="cat-card cat-paper">    <span class="cat-emoji">🧻</span><span class="cat-name">Paper &amp; Plastic</span></a>
+    </div>
+
+    <!-- products on sale -->
+    <h2 class="section-title">✳️ Products on Sale</h2>
+    <div class="products-grid" id="saleGrid"></div>
+
+    <!-- featured products -->
+    <h2 class="section-title">⭐ Featured Products</h2>
+    <div class="products-grid" id="featuredGrid"></div>
+
+    <!-- trending now -->
+    <h2 class="section-title">📈 Trending Now</h2>
+    <div class="trending-grid" id="trendingGrid"></div>
+
+  </div>
+
+  <!-- footer -->
+  <footer class="site-footer">
+    <div class="footer-wrap">
+      <div class="footer-brand">
+        <strong>FreshMart</strong>
+        <p>Your trusted online supermarket delivering fresh groceries to your door.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Customer Service</h4>
+        <a href="#">Help Centre</a><a href="#">Track Order</a><a href="#">Returns</a><a href="#">Contact Us</a>
+      </div>
+      <div class="footer-col">
+        <h4>About</h4>
+        <a href="#">About Us</a><a href="#">Careers</a><a href="#">Sustainability</a><a href="#">Press</a>
+      </div>
+      <div class="footer-col">
+        <h4 class="legal">Legal</h4>
+        <a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Cookie Policy</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- bootstrap js -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    /* sale products data — replace with fetch('/api/products?sale=true') when backend ready */
+    const SALE = [
+      { id:1,  emoji:'🍫', name:'Protein Bar, Variety Pack',           rating:4.6, reviews:234, was:26.49, price:21.99 },
+      { id:2,  emoji:'🥜', name:'Soft & Chewy Granola Bars',           rating:4.5, reviews:178, was:12.59, price:9.99  },
+      { id:3,  emoji:'🧁', name:'Mini Muffins, Blueberry',             rating:4.4, reviews:156, was:14.99, price:11.99 },
+      { id:4,  emoji:'🍪', name:'OREO Sandwich Cookies, Variety Pack', rating:4.8, reviews:512, was:18.99, price:15.99 },
+      { id:5,  emoji:'🍪', name:'Milano Cookies, Double Dark Chocolate',rating:4.7, reviews:267, was:14.49, price:11.99 },
+    ];
+
+    /* featured products data — replace with fetch('/api/products?featured=true') when backend ready */
+    const FEATURED = [
+      { id:6,  emoji:'🍷', name:'Leoville Las Cases Collection Miroir Vertical Set', rating:5.0, reviews:12,  price:3899.99 },
+      { id:7,  emoji:'🥩', name:'Japanese Wagyu Center Cut NY Strip Steaks',          rating:5.0, reviews:89,  price:469.99  },
+      { id:8,  emoji:'🍷', name:'Chateau Calon Segur Gift Set',                       rating:4.9, reviews:24,  price:1199.99 },
+      { id:9,  emoji:'🌾', name:'Quaker Oats Old Fashioned Rolled Oats',              rating:4.9, reviews:456, price:8.79    },
+      { id:10, emoji:'🧈', name:'Kerrygold Pure Irish Butter',                        rating:4.9, reviews:412, price:19.28   },
+      { id:11, emoji:'🥩', name:"Rastelli's USDA Choice Black Angus Sirloin",         rating:4.9, reviews:123, price:159.99  },
+      { id:12, emoji:'🍖', name:'Ermes Fontana Whole Boneless Leg Prosciutto',        rating:4.9, reviews:78,  price:149.99  },
+      { id:13, emoji:'🫒', name:'Organic Extra Virgin Olive Oil',                     rating:4.9, reviews:312, price:20.99   },
+    ];
+
+    /* trending products data — replace with fetch('/api/products?trending=true') when backend ready */
+    const TRENDING = [
+      { id:14, emoji:'🧻', name:'Charmin Ultra Soft Bath Tissue',         rating:4.9, stock:312, price:7.99  },
+      { id:15, emoji:'🧺', name:'Tide Pods HE Detergent, Spring...',      rating:4.9, stock:198, price:34.99 },
+      { id:16, emoji:'🧈', name:'Kirkland Signature Grass-Fed...',        rating:4.8, stock:234, price:15.88 },
+      { id:17, emoji:'🍪', name:'Frito Lay Classic Mix, Variety Pack',    rating:4.9, stock:201, price:23.49 },
+      { id:18, emoji:'🍪', name:'OREO Sandwich Cookies, Variet...',       rating:4.8, stock:267, price:15.99 },
+      { id:19, emoji:'🧺', name:'Tide Ultra Concentrated Liquid...',      rating:4.8, stock:167, price:24.99 },
+    ];
+
+    /* renders the star rating — filled star + rating number + review count */
+    const stars = (r, n) => `<span class="star">★</span> ${r} <span>(${n})</span>`;
+
+    /* builds vertical sale/featured product card html */
+    function makeCard(p, badgeType) {
+      const badge = badgeType === 'sale'
+        ? `<span class="card-badge-red">SALE</span>`
+        : `<span class="card-badge-green">Top Rated</span>`;
+      const priceHtml = badgeType === 'sale'
+        ? `<div class="price-was">Was £${p.was.toFixed(2)}</div><div class="price-now">Now £${p.price.toFixed(2)}</div>`
+        : `<div class="price-main">£${p.price.toFixed(2)}</div>`;
+      return `<div class="product-card">
+        ${badge}
+        <div class="card-img">${p.emoji}</div>
+        <div class="card-name">${p.name}</div>
+        <div class="card-rating">${stars(p.rating, p.reviews)}</div>
+        <div class="card-footer">${priceHtml}<button class="btn-add" onclick="addItem(${p.id})">+</button></div>
+      </div>`;
+    }
+
+    /* builds horizontal trending card html */
+    function makeTrend(p) {
+      return `<div class="trend-card">
+        <div class="trend-img">${p.emoji}</div>
+        <div class="trend-info">
+          <div class="trend-name">${p.name}</div>
+          <div class="trend-meta"><span class="star">★</span>${p.rating} · ${p.stock} in stock</div>
+          <div class="trend-price">£${p.price.toFixed(2)}</div>
+        </div>
+        <button class="btn-cart" onclick="addItem(${p.id})">🛒</button>
+      </div>`;
+    }
+
+    /* inject all sections */
+    document.getElementById('saleGrid').innerHTML     = SALE.map(p => makeCard(p,'sale')).join('');
+    document.getElementById('featuredGrid').innerHTML = FEATURED.map(p => makeCard(p,'featured')).join('');
+    document.getElementById('trendingGrid').innerHTML = TRENDING.map(p => makeTrend(p)).join('');
+
+    /* adds item to localStorage basket, used by basket.html */
+    function addItem(id) {
+      const b = JSON.parse(localStorage.getItem('fm_basket') || '{}');
+      b[id] = (b[id] || 0) + 1;
+      localStorage.setItem('fm_basket', JSON.stringify(b));
+    }
+
+    /* redirects to products page with search query as url param */
+    function goSearch(inputId) {
+      const q = document.getElementById(inputId).value.trim();
+      window.location.href = q ? `products.html?q=${encodeURIComponent(q)}` : 'products.html';
+    }
+  </script>
+</body>
+</html>
