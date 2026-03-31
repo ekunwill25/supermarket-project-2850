@@ -334,4 +334,19 @@ footer span { color: rgba(255,255,255,0.35); }
 @keyframes ripple {
   to { transform: scale(4); opacity: 0; }
 }
+
+/* - 15. Login Button 
+ makes the login <a> tag look like the existing login button */
+.btn-login-nav {
+  background: none;
+  border: none;
+  font-size: 0.9rem;
+  color: #333;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.btn-login-nav:hover { color: #2e7d32; }
  
