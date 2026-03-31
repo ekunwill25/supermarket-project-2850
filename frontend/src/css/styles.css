@@ -142,7 +142,7 @@ body {
  
 .logo-name {
   font-family: 'Fraunces', serif;
-  font-size: clamp(2.2rem, 5vw, 3.2rem); /* fluid: scales between 2.2rem and 3.2rem */
+  font-size: clamp(2.8rem, 6vw, 4rem); /* fluid: scales between 2.2rem and 3.2rem */
   font-weight: 700;
   letter-spacing: -1px;
   color: #fff;
@@ -154,14 +154,14 @@ body {
 .logo-name span { color: var(--green-mid); }
  
 .logo-tagline {
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   color: rgba(255,255,255,0.45);
   letter-spacing: 0.5px;
 }
  
 /* ── 7. "SELECT YOUR PORTAL" LABEL */
 .cards-label {
-  font-size: 0.72rem;
+  font-size: 0.85rem;
   font-weight: 600;
   letter-spacing: 2.5px;
   text-transform: uppercase;
@@ -178,7 +178,7 @@ body {
   background: rgba(255,255,255,0.04);    /* very subtle white tint */
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 20px;
-  padding: 2rem 1.75rem;
+  padding: 2.5rem 2.25rem;
   cursor: pointer;
   color: inherit;          /* inherits the white text colour from body */
   overflow: hidden;
@@ -225,10 +225,10 @@ body {
 /* ── 9. CARD ICON
    emoji inside each card + each portal has its own gradient colour. */
 .card-icon-wrap {
-  width: 52px; height: 52px;
+  width: 64px; height: 64px;
   border-radius: 14px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 1.5rem;
+  font-size: 1.85rem;
   margin-bottom: 1.25rem;
   flex-shrink: 0; /* prevents shrinking on small screens such as iphones or androids*/
 }
@@ -240,7 +240,7 @@ body {
  /* ── 10. CARD TEXT ── */
 .card-title {
   font-family: 'Fraunces', serif;
-  font-size: 1.2rem;
+  font-size: 1.45rem;
   font-weight: 600;
   color: #fff;
   margin-bottom: 0.5rem;
@@ -248,7 +248,7 @@ body {
 }
  
 .card-desc {
-  font-size: 0.83rem;
+  font-size: 0.95rem;
   color: rgba(255,255,255,0.45); /* dimmed white for secondary text */
   line-height: 1.55;
   flex: 1; /* pushes the CTA row to the bottom of the card */
@@ -267,7 +267,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.82rem;
+  font-size: 0.95rem;
   font-weight: 600;
 }
  
@@ -334,4 +334,19 @@ footer span { color: rgba(255,255,255,0.35); }
 @keyframes ripple {
   to { transform: scale(4); opacity: 0; }
 }
+
+/* - 15. Login Button 
+ makes the login <a> tag look like the existing login button */
+.btn-login-nav {
+  background: none;
+  border: none;
+  font-size: 0.9rem;
+  color: #333;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.btn-login-nav:hover { color: #2e7d32; }
  

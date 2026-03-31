@@ -1,1 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FreshMart — Checkout</title>
+  <!-- bootstrap css -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- google fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* base — matches all other customer pages */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: #f5f5f5; color: #1a1a1a; min-height: 100vh; display: flex; flex-direction: column; }
 
+    /* navbar */
+    .top-nav { background: #fff; border-bottom: 1px solid #e5e5e5; padding: 0.75rem 2rem; display: flex; align-items: center; gap: 1rem; position: sticky; top: 0; z-index: 100; }
+    .logo-block { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; flex-shrink: 0; }
+    .logo-icon { width: 42px; height: 42px; background: #2e7d32; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
+    .logo-text strong { display: block; font-size: 1.05rem; color: #1a1a1a; line-height: 1.1; }
+    .logo-text span { font-size: 0.72rem; color: #888; }
+    .search-bar { flex: 1; max-width: 580px; display: flex; align-items: center; border: 1.5px solid #ddd; border-radius: 8px; padding: 0.45rem 0.9rem; gap: 0.5rem; }
+    .search-bar input { border: none; outline: none; font-size: 0.9rem; color: #333; width: 100%; font-family: 'Inter', sans-serif; }
+    .search-bar input::placeholder { color: #aaa; }
+    .nav-actions { display: flex; align-items: center; gap: 0.75rem; margin-left: auto; }
+    .btn-login-nav { background: none; border: none; font-size: 0.9rem; color: #333; cursor: pointer; font-family: 'Inter', sans-serif; font-weight: 500; text-decoration: none; }
+    .btn-login-nav:hover { color: #2e7d32; }
+    .btn-signup-nav { background: #2e7d32; color: #fff; border: none; border-radius: 8px; padding: 0.45rem 1.1rem; font-size: 0.9rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; text-decoration: none; transition: background 0.15s; }
+    .btn-signup-nav:hover { background: #1b5e20; color: #fff; }
+    .cart-btn-wrap { position: relative; }
+    .cart-btn { background: #2e7d32; color: #fff; border-radius: 8px; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; text-decoration: none; transition: background 0.15s; }
+    .cart-btn:hover { background: #1b5e20; }
+    .cart-badge { position: absolute; top: -6px; right: -6px; background: #e53935; color: #fff; border-radius: 50%; font-size: 0.65rem; font-weight: 700; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; }
+
+    /* secondary nav */
+    .sub-nav { background: #fff; border-bottom: 1px solid #e5e5e5; padding: 0 2rem; display: flex; gap: 0.25rem; }
+    .sub-nav a { text-decoration: none; font-size: 0.9rem; font-weight: 500; color: #555; padding: 0.65rem 1rem; border-bottom: 2px solid transparent; transition: color 0.15s; }
+    .sub-nav a:hover { color: #2e7d32; }
+
+    /* page wrapper */
+    .page-wrap { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; flex: 1; }
+    .page-title { font-size: 1.6rem; font-weight: 700; margin-bottom: 1.5rem; }
+
+    /* two-column layout: form left, summary right */
+    .checkout-layout { display: grid; grid-template-columns: 1fr 360px; gap: 1.5rem; align-items: start; }
+
+    /* each section card (delivery address, delivery method, payment) */
+    .section-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 1.75rem; margin-bottom: 1.25rem; }
+
+    /* section heading row — green icon + bold title */
+    .section-head { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
+    .section-icon { width: 40px; height: 40px; background: #e8f5e9; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+    .section-title { font-size: 1.05rem; font-weight: 700; color: #1a1a1a; }
+
+    /* form fields */
+    .form-group { margin-bottom: 1.1rem; }
+    .form-label { font-size: 0.875rem; font-weight: 600; color: #1a1a1a; margin-bottom: 0.4rem; display: block; }
+    /* input with icon prefix — icon sits inside the field on the left */
+    .input-wrap { position: relative; }
+    .input-icon { position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); font-size: 0.95rem; color: #bbb; pointer-events: none; }
+    .form-input { width: 100%; border: 1.5px solid #ddd; border-radius: 8px; padding: 0.65rem 0.85rem 0.65rem 2.5rem; font-family: 'Inter', sans-serif; font-size: 0.9rem; outline: none; transition: border-color 0.15s; color: #1a1a1a; }
+    .form-input:focus { border-color: #2e7d32; }
+    .form-input.invalid { border-color: #e53935; }
+    /* input without icon — no left padding offset */
+    .form-input.no-icon { padding-left: 0.85rem; }
+    /* city and postcode sit side by side */
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    /* inline error text shown below invalid fields */
+    .field-error { font-size: 0.75rem; color: #e53935; margin-top: 0.25rem; display: none; }
+    .field-error.show { display: block; }
+
+    /* delivery method and payment method radio option cards */
+    .option-card { display: flex; align-items: center; gap: 1rem; border: 1.5px solid #ddd; border-radius: 10px; padding: 1rem 1.1rem; margin-bottom: 0.75rem; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
+    .option-card:hover { border-color: #2e7d32; background: #f9fdf9; }
+    /* selected option gets blue radio filled circle — matches figma */
+    .option-card.selected { border-color: #2e7d32; background: #f0faf0; }
+    /* the radio circle — filled blue when selected */
+    .radio-circle { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #ddd; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: border-color 0.15s; }
+    .option-card.selected .radio-circle { border-color: #1565c0; background: #1565c0; }
+    .option-card.selected .radio-circle::after { content: ''; width: 8px; height: 8px; background: #fff; border-radius: 50%; }
+    .option-info { flex: 1; }
+    .option-name { font-size: 0.9rem; font-weight: 600; color: #1a1a1a; }
+    .option-desc { font-size: 0.78rem; color: #888; margin-top: 0.15rem; }
+    /* price label on right of each option */
+    .option-price { font-size: 0.9rem; font-weight: 700; margin-left: auto; flex-shrink: 0; }
+    .price-free { color: #2e7d32; }
+    /* payment method icon */
+    .pay-icon { font-size: 1.2rem; }
+
+    /* card payment fields — shown when credit/debit card is selected */
+    .card-fields { border: 1px solid #e5e5e5; border-radius: 10px; padding: 1.1rem; margin-top: 0.5rem; background: #fafafa; display: none; }
+    .card-fields.show { display: block; }
+    .card-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+
+    /* order summary panel — sticky on the right */
+    .summary-panel { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 1.5rem; position: sticky; top: 80px; }
+    .summary-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 1.25rem; }
+
+    /* each item in the summary */
+    .summary-item { display: flex; align-items: center; gap: 0.85rem; padding-bottom: 1rem; margin-bottom: 1rem; border-bottom: 1px solid #f0f0f0; }
+    .summary-item:last-of-type { border-bottom: none; }
+    .si-emoji { font-size: 1.8rem; width: 44px; height: 44px; background: #f5f5f5; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .si-info { flex: 1; min-width: 0; }
+    .si-name { font-size: 0.85rem; font-weight: 600; color: #1a1a1a; }
+    .si-qty  { font-size: 0.78rem; color: #888; }
+    .si-price { font-size: 0.9rem; font-weight: 700; color: #1a1a1a; flex-shrink: 0; }
+
+    /* summary totals rows */
+    .summary-row { display: flex; justify-content: space-between; font-size: 0.875rem; color: #555; margin-bottom: 0.75rem; }
+    .summary-row.total { font-size: 1rem; font-weight: 700; color: #1a1a1a; border-top: 1px solid #e5e5e5; padding-top: 0.75rem; margin-top: 0.25rem; }
+    .val-green { color: #2e7d32; font-weight: 700; }
+    .val-free  { color: #2e7d32; font-weight: 700; font-size: 0.85rem; }
+    .summary-divider { height: 1px; background: #e5e5e5; margin: 0.75rem 0; }
+
+    /* place order button */
+    .btn-place { width: 100%; background: #2e7d32; color: #fff; border: none; border-radius: 10px; padding: 0.85rem; font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: background 0.15s, transform 0.1s; margin-top: 1rem; }
+    .btn-place:hover { background: #1b5e20; transform: scale(1.01); }
+    .btn-place.loading { opacity: 0.7; pointer-events: none; }
+    /* back to cart outline button */
+    .btn-back { width: 100%; background: #fff; color: #1a1a1a; border: 1.5px solid #ddd; border-radius: 10px; padding: 0.75rem; font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 500; cursor: pointer; margin-top: 0.65rem; text-decoration: none; display: block; text-align: center; transition: background 0.15s; }
+    .btn-back:hover { background: #f5f5f5; color: #1a1a1a; }
+
+    /* secure checkout notice at the bottom of the summary */
+    .secure-notice { background: #f0f4ff; border: 1px solid #dce5ff; border-radius: 8px; padding: 0.65rem 0.9rem; display: flex; align-items: center; gap: 0.5rem; margin-top: 0.85rem; }
+    .secure-notice p { font-size: 0.78rem; color: #1565c0; line-height: 1.4; }
+
+    /* order confirmation overlay — shown after place order is clicked */
+    .confirm-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; display: none; align-items: center; justify-content: center; }
+    .confirm-overlay.show { display: flex; }
+    .confirm-card { background: #fff; border-radius: 16px; padding: 2.5rem 2rem; max-width: 420px; width: 90%; text-align: center; animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+    .confirm-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+    .confirm-card h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .confirm-card p { font-size: 0.875rem; color: #888; margin-bottom: 0.3rem; }
+    .confirm-num { font-size: 0.85rem; font-weight: 600; color: #2e7d32; margin-bottom: 1.5rem; }
+    .btn-continue { background: #2e7d32; color: #fff; border: none; border-radius: 10px; padding: 0.75rem 2rem; font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: background 0.15s; text-decoration: none; display: inline-block; }
+    .btn-continue:hover { background: #1b5e20; color: #fff; }
+
+    @keyframes popIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+
+    /* mobile: stack columns */
+    @media (max-width: 768px) {
+      .checkout-layout { grid-template-columns: 1fr; }
+      .summary-panel { position: static; }
+      .form-row, .card-row { grid-template-columns: 1fr; }
+      .top-nav .search-bar { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- navbar -->
+  <nav class="top-nav">
+    <a href="../../index.html" class="logo-block">
+      <div class="logo-icon">🛒</div>
+      <div class="logo-text"><strong>FreshMart</strong><span>Online Supermarket</span></div>
+    </a>
+    <div class="search-bar"><span style="color:#aaa">🔍</span><input type="text" placeholder="Search for products..."></div>
+    <div class="nav-actions">
+      <a href="login.html"  class="btn-login-nav">Login</a>
+      <a href="signup.html" class="btn-signup-nav">Sign Up</a>
+      <button style="background:none;border:none;font-size:1.2rem;cursor:pointer">🤍</button>
+      <button style="background:none;border:none;font-size:0.85rem;color:#333;cursor:pointer;font-family:'Inter',sans-serif">🎁 Orders</button>
+      <div class="cart-btn-wrap">
+        <a href="basket.html" class="cart-btn">🛒</a>
+        <span class="cart-badge" id="cartBadge">0</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- secondary nav -->
+  <div class="sub-nav">
+    <a href="index.html">Shop</a>
+    <a href="products.html">Offers</a>
+    <a href="products.html">Categories</a>
+  </div>
+
+  <!-- page content -->
+  <div class="page-wrap">
+    <h1 class="page-title">Checkout</h1>
+
+    <div class="checkout-layout">
+
+      <!-- left column: form sections -->
+      <div>
+
+        <!-- delivery address section -->
+        <div class="section-card">
+          <div class="section-head">
+            <div class="section-icon">📍</div>
+            <div class="section-title">Delivery Address</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="fullName">Full Name</label>
+            <div class="input-wrap">
+              <span class="input-icon">👤</span>
+              <input type="text" id="fullName" class="form-input" placeholder="Dave Thompson">
+            </div>
+            <div class="field-error" id="nameErr">Please enter your full name</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="email">Email</label>
+            <div class="input-wrap">
+              <span class="input-icon">✉️</span>
+              <input type="email" id="email" class="form-input" placeholder="dave@example.com">
+            </div>
+            <div class="field-error" id="emailErr">Please enter a valid email</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="phone">Phone Number</label>
+            <div class="input-wrap">
+              <span class="input-icon">📞</span>
+              <input type="tel" id="phone" class="form-input" placeholder="+44 7700 900000">
+            </div>
+            <div class="field-error" id="phoneErr">Please enter a phone number</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="address">Street Address</label>
+            <div class="input-wrap">
+              <span class="input-icon">🏠</span>
+              <input type="text" id="address" class="form-input" placeholder="123 High Street">
+            </div>
+            <div class="field-error" id="addressErr">Please enter your street address</div>
+          </div>
+
+          <!-- city and postcode side by side -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="city">City</label>
+              <input type="text" id="city" class="form-input no-icon" placeholder="London">
+              <div class="field-error" id="cityErr">Please enter your city</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="postcode">Postcode</label>
+              <input type="text" id="postcode" class="form-input no-icon" placeholder="EC1A 1BB">
+              <div class="field-error" id="postcodeErr">Please enter your postcode</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- delivery method section -->
+        <div class="section-card">
+          <div class="section-head">
+            <div class="section-icon">🚚</div>
+            <div class="section-title">Delivery Method</div>
+          </div>
+
+          <!-- standard delivery option — selected by default -->
+          <div class="option-card selected" id="del-standard" onclick="selectDelivery('standard')">
+            <div class="radio-circle"></div>
+            <div class="option-info">
+              <div class="option-name">Standard Delivery</div>
+              <div class="option-desc">Delivery in 3–5 working days</div>
+            </div>
+            <div class="option-price price-free">FREE</div>
+          </div>
+
+          <!-- next day delivery option -->
+          <div class="option-card" id="del-nextday" onclick="selectDelivery('nextday')">
+            <div class="radio-circle"></div>
+            <div class="option-info">
+              <div class="option-name">Next Day Delivery</div>
+              <div class="option-desc">Choose your preferred delivery day and time</div>
+            </div>
+            <div class="option-price">£5.99</div>
+          </div>
+        </div>
+
+        <!-- payment method section -->
+        <div class="section-card">
+          <div class="section-head">
+            <div class="section-icon">💳</div>
+            <div class="section-title">Payment Method</div>
+          </div>
+
+          <!-- credit/debit card option — selected by default -->
+          <div class="option-card selected" id="pay-card" onclick="selectPayment('card')">
+            <div class="radio-circle"></div>
+            <div class="option-info">
+              <div class="option-name">🏧 Credit / Debit Card</div>
+            </div>
+          </div>
+
+          <!-- card detail fields — shown when credit/debit card is selected -->
+          <div class="card-fields show" id="cardFields">
+            <div class="form-group">
+              <label class="form-label" for="cardNumber">Card Number</label>
+              <input type="text" id="cardNumber" class="form-input no-icon" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCard(this)">
+              <div class="field-error" id="cardNumErr">Please enter a valid 16-digit card number</div>
+            </div>
+            <div class="card-row">
+              <div class="form-group">
+                <label class="form-label" for="cardExpiry">Expiry Date</label>
+                <input type="text" id="cardExpiry" class="form-input no-icon" placeholder="MM/YY" maxlength="5" oninput="formatExpiry(this)">
+                <div class="field-error" id="expiryErr">Please enter a valid expiry date</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="cardCvc">CVV</label>
+                <input type="text" id="cardCvc" class="form-input no-icon" placeholder="123" maxlength="3">
+                <div class="field-error" id="cvcErr">Please enter your 3-digit CVV</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- paypal option -->
+          <div class="option-card" id="pay-paypal" onclick="selectPayment('paypal')">
+            <div class="radio-circle"></div>
+            <div class="option-info">
+              <div class="option-name">🅿️ PayPal</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- right column: order summary -->
+      <div class="summary-panel">
+        <div class="summary-title">Order Summary</div>
+
+        <!-- basket items injected here by renderSummary() -->
+        <div id="summaryItems"></div>
+
+        <div class="summary-divider"></div>
+        <div class="summary-row"><span>Subtotal</span><span id="summarySubtotal">£0.00</span></div>
+        <div class="summary-row"><span>Delivery</span><span id="summaryDelivery" class="val-free">FREE</span></div>
+        <div class="summary-row total"><span>Total</span><span class="val-green" id="summaryTotal">£0.00</span></div>
+
+        <button class="btn-place" id="placeBtn" onclick="placeOrder()">Place Order</button>
+        <a href="basket.html" class="btn-back">Back to Cart</a>
+
+        <!-- secure checkout notice -->
+        <div class="secure-notice">
+          <span>🔒</span>
+          <p><strong>Secure Checkout</strong><br>Your payment information is encrypted</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- order confirmation overlay — shown after successful order placement -->
+  <div class="confirm-overlay" id="confirmOverlay">
+    <div class="confirm-card">
+      <div class="confirm-icon">✅</div>
+      <h2>Order Placed!</h2>
+      <p>Thank you for your order. We'll send a confirmation to your email.</p>
+      <div class="confirm-num" id="confirmNum">Order #FM-0000</div>
+      <a href="index.html" class="btn-continue" onclick="clearBasket()">Continue Shopping</a>
+    </div>
+  </div>
+
+  <!-- bootstrap js -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    /* product catalogue — mirrors products used across other pages */
+    const PRODUCTS = [
+      { id:1,  emoji:'🍫', name:'Protein Bar, Variety Pack', price:21.99 },
+      { id:2,  emoji:'🍞', name:'Sourdough Loaf',            price:2.49  },
+      { id:3,  emoji:'🍓', name:'Strawberries',              price:3.49  },
+      { id:4,  emoji:'🧀', name:'Cheddar Cheese',            price:3.49  },
+      { id:5,  emoji:'🍗', name:'Chicken Breast',            price:4.99  },
+      { id:6,  emoji:'🍎', name:'Gala Apples',               price:2.49  },
+      { id:7,  emoji:'🥛', name:'Whole Milk',                price:1.45  },
+      { id:8,  emoji:'🥦', name:'Broccoli',                  price:0.89  },
+      { id:9,  emoji:'🍌', name:'Ripe Bananas',              price:1.29  },
+      { id:10, emoji:'🥚', name:'Free Range Eggs',           price:2.79  },
+    ];
+
+    /* tracks selected delivery method and payment method */
+    let deliveryMethod = 'standard'; /* standard = free, nextday = £5.99 */
+    let paymentMethod  = 'card';
+
+    /* reads basket from localstorage — written by products/basket pages */
+    const getBasket = () => JSON.parse(localStorage.getItem('fm_basket') || '{}');
+
+    /* selects a delivery method — updates radio styles and recalculates total */
+    function selectDelivery(method) {
+      deliveryMethod = method;
+      ['standard','nextday'].forEach(m => document.getElementById(`del-${m}`).classList.toggle('selected', m === method));
+      renderSummary();
+    }
+
+    /* selects a payment method — shows card fields only when card is selected */
+    function selectPayment(method) {
+      paymentMethod = method;
+      ['card','paypal'].forEach(m => document.getElementById(`pay-${m}`).classList.toggle('selected', m === method));
+      /* show card number/expiry/cvv fields only when card is the selected method */
+      document.getElementById('cardFields').classList.toggle('show', method === 'card');
+    }
+
+    /* formats card number input with spaces every 4 digits (e.g. 1234 5678 9012 3456) */
+    function formatCard(input) {
+      input.value = input.value.replace(/\D/g,'').replace(/(.{4})/g,'$1 ').trim();
+    }
+
+    /* formats expiry date input as MM/YY */
+    function formatExpiry(input) {
+      const v = input.value.replace(/\D/g,'');
+      input.value = v.length >= 2 ? v.slice(0,2) + '/' + v.slice(2,4) : v;
+    }
+
+    /* builds and injects the order summary items and totals */
+    function renderSummary() {
+      const basket  = getBasket();
+      const entries = Object.entries(basket);
+      const panel   = document.getElementById('summaryItems');
+
+      /* calculate subtotal from basket items */
+      const subtotal = entries.reduce((s, [id, qty]) => {
+        const p = PRODUCTS.find(x => x.id == id);
+        return p ? s + p.price * qty : s;
+      }, 0);
+
+      const delCost = deliveryMethod === 'nextday' ? 5.99 : 0;
+      const total   = subtotal + delCost;
+      const qty     = entries.reduce((s, [,v]) => s + v, 0);
+
+      /* build item rows for the summary panel */
+      panel.innerHTML = entries.map(([id, qty]) => {
+        const p = PRODUCTS.find(x => x.id == id);
+        if (!p) return '';
+        return `<div class="summary-item">
+          <div class="si-emoji">${p.emoji}</div>
+          <div class="si-info">
+            <div class="si-name">${p.name}</div>
+            <div class="si-qty">Qty: ${qty}</div>
+          </div>
+          <div class="si-price">£${(p.price * qty).toFixed(2)}</div>
+        </div>`;
+      }).join('');
+
+      /* update totals */
+      document.getElementById('summarySubtotal').textContent = `£${subtotal.toFixed(2)}`;
+      document.getElementById('summaryTotal').textContent    = `£${total.toFixed(2)}`;
+      document.getElementById('cartBadge').textContent       = qty;
+
+      /* delivery label — free or £5.99 */
+      const del = document.getElementById('summaryDelivery');
+      del.textContent = delCost === 0 ? 'FREE' : `£${delCost.toFixed(2)}`;
+      del.className   = delCost === 0 ? 'val-free' : '';
+    }
+
+    /* shows a field error */
+    function showErr(id, errId) {
+      document.getElementById(id).classList.add('invalid');
+      document.getElementById(errId).classList.add('show');
+    }
+
+    /* clears a field error */
+    function clearErr(id, errId) {
+      document.getElementById(id).classList.remove('invalid');
+      document.getElementById(errId).classList.remove('show');
+    }
+
+    /* validates the form and shows the order confirmation overlay if everything passes */
+    function placeOrder() {
+      let valid = true;
+
+      /* field pairs to validate: [inputId, errorId, validation function] */
+      const fields = [
+        ['fullName', 'nameErr',     v => v.trim().length > 1],
+        ['email',    'emailErr',    v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())],
+        ['phone',    'phoneErr',    v => v.trim().length >= 7],
+        ['address',  'addressErr',  v => v.trim().length > 2],
+        ['city',     'cityErr',     v => v.trim().length > 1],
+        ['postcode', 'postcodeErr', v => v.trim().length >= 5],
+      ];
+
+      /* validate card fields only if card payment is selected */
+      if (paymentMethod === 'card') {
+        fields.push(
+          ['cardNumber', 'cardNumErr', v => v.replace(/\s/g,'').length === 16],
+          ['cardExpiry', 'expiryErr',  v => /^\d{2}\/\d{2}$/.test(v)],
+          ['cardCvc',    'cvcErr',     v => v.length === 3]
+        );
+      }
+
+      fields.forEach(([id, errId, test]) => {
+        const val = document.getElementById(id).value;
+        if (!test(val)) { showErr(id, errId); valid = false; }
+        else clearErr(id, errId);
+      });
+
+      if (!valid) return;
+
+      /* show loading state on button */
+      const btn = document.getElementById('placeBtn');
+      btn.textContent = 'Placing order...';
+      btn.classList.add('loading');
+
+      /* generate a random order number and show the confirmation overlay */
+      const orderNum = '#FM-' + Math.floor(1000 + Math.random() * 9000);
+      document.getElementById('confirmNum').textContent = `Order ${orderNum}`;
+      setTimeout(() => { document.getElementById('confirmOverlay').classList.add('show'); }, 800);
+    }
+
+    /* clears the basket from localstorage after order is confirmed */
+    function clearBasket() {
+      localStorage.removeItem('fm_basket');
+    }
+
+    /* pre-fill form with logged-in user data if available */
+    const user = JSON.parse(localStorage.getItem('fm_user') || sessionStorage.getItem('fm_user') || 'null');
+    if (user) {
+      document.getElementById('email').value    = user.email || '';
+      document.getElementById('fullName').value = user.name  || '';
+    }
+
+    /* run on page load */
+    renderSummary();
+  </script>
+</body>
+</html>
