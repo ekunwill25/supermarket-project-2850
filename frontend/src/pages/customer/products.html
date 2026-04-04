@@ -507,68 +507,37 @@
 
 <script>
 // ── DATA ──
-const PRODUCTS = [
-  // Breakfast
-  { id:1,  name:'Butter Croissants',    brand:'Pasquier',      cat:'Breakfast',             emoji:'🥐', price:2.49, orig:null,  weight:'6 pack',   rating:4.7, reviews:312, badge:'new',   organic:false },
-  { id:2,  name:'Thick Cut Bread',      brand:'Warburtons',    cat:'Breakfast',             emoji:'🍞', price:1.39, orig:1.79,  weight:'800g',     rating:4.5, reviews:890, badge:'sale',  organic:false },
-  { id:3,  name:'Granola & Honey',      brand:'Dorset Cereals',cat:'Breakfast',             emoji:'🥣', price:3.99, orig:null,  weight:'500g',     rating:4.8, reviews:156, badge:null,    organic:false },
-  { id:4,  name:'Free Range Eggs',      brand:'Happy Eggs',    cat:'Breakfast',             emoji:'🥚', price:2.29, orig:2.79,  weight:'12 large', rating:4.9, reviews:540, badge:'offer', organic:false },
-  { id:5,  name:'Smoked Salmon',        brand:'Loch Fyne',     cat:'Breakfast',             emoji:'🐟', price:4.50, orig:null,  weight:'100g',     rating:4.6, reviews:278, badge:null,    organic:false },
-  { id:6,  name:'Instant Oats',         brand:'Quaker',        cat:'Breakfast',             emoji:'🌾', price:1.89, orig:null,  weight:'1kg',      rating:4.4, reviews:730, badge:null,    organic:false },
-  // Cheese & Dairy
-  { id:7,  name:'Mature Cheddar',       brand:'Cathedral City',cat:'Cheese & Dairy',        emoji:'🧀', price:3.75, orig:4.50,  weight:'400g',     rating:4.8, reviews:920, badge:'sale',  organic:false },
-  { id:8,  name:'Full Fat Milk',        brand:'Organic Valley',cat:'Cheese & Dairy',        emoji:'🥛', price:1.25, orig:null,  weight:'2 litres', rating:4.5, reviews:430, badge:'org',   organic:true  },
-  { id:9,  name:'Greek Yoghurt',        brand:'Fage',          cat:'Cheese & Dairy',        emoji:'🫙', price:2.15, orig:null,  weight:'500g',     rating:4.7, reviews:610, badge:null,    organic:false },
-  { id:10, name:'Salted Butter',        brand:'Anchor',        cat:'Cheese & Dairy',        emoji:'🧈', price:1.99, orig:2.49,  weight:'250g',     rating:4.6, reviews:340, badge:'sale',  organic:false },
-  { id:11, name:'Brie de Meaux',        brand:'President',     cat:'Cheese & Dairy',        emoji:'🫕', price:3.29, orig:null,  weight:'200g',     rating:4.5, reviews:195, badge:'new',   organic:false },
-  // Meat
-  { id:12, name:'Chicken Breasts',      brand:'Waitrose',      cat:'Meat',                  emoji:'🍗', price:4.99, orig:6.49,  weight:'600g',     rating:4.7, reviews:820, badge:'sale',  organic:false },
-  { id:13, name:'British Beef Mince',   brand:'Hereford',      cat:'Meat',                  emoji:'🥩', price:3.79, orig:null,  weight:'500g',     rating:4.6, reviews:670, badge:null,    organic:false },
-  { id:14, name:'Pork Sausages',        brand:'Richmond',      cat:'Meat',                  emoji:'🌭', price:2.89, orig:3.49,  weight:'8 pack',   rating:4.4, reviews:540, badge:'offer', organic:false },
-  { id:15, name:'Lamb Chops',           brand:'Hereford',      cat:'Meat',                  emoji:'🫀', price:6.99, orig:null,  weight:'400g',     rating:4.8, reviews:210, badge:null,    organic:false },
-  { id:16, name:'Smoked Bacon',         brand:'Denny',         cat:'Meat',                  emoji:'🥓', price:2.49, orig:2.99,  weight:'200g',     rating:4.5, reviews:760, badge:'sale',  organic:false },
-  // Seafood
-  { id:17, name:'Scottish Salmon',      brand:'Loch Fyne',     cat:'Seafood',               emoji:'🐠', price:5.99, orig:7.49,  weight:'2 fillets',rating:4.8, reviews:390, badge:'sale',  organic:false },
-  { id:18, name:'Raw King Prawns',      brand:'SeaFresh',      cat:'Seafood',               emoji:'🦐', price:4.25, orig:null,  weight:'300g',     rating:4.7, reviews:275, badge:null,    organic:false },
-  { id:19, name:'Cod Fillets',          brand:'Birds Eye',     cat:'Seafood',               emoji:'🐟', price:3.99, orig:4.99,  weight:'4 pack',   rating:4.5, reviews:480, badge:'offer', organic:false },
-  { id:20, name:'Dressed Crab',         brand:'SeaFresh',      cat:'Seafood',               emoji:'🦀', price:6.50, orig:null,  weight:'170g',     rating:4.6, reviews:130, badge:'new',   organic:false },
-  // Snacks
-  { id:21, name:'Ridge Cut Crisps',     brand:"Tyrrell's",     cat:'Snacks',                emoji:'🥔', price:1.69, orig:2.09,  weight:'150g',     rating:4.6, reviews:920, badge:'sale',  organic:false },
-  { id:22, name:'Mixed Nuts',           brand:'KP Nuts',       cat:'Snacks',                emoji:'🥜', price:2.99, orig:null,  weight:'400g',     rating:4.5, reviews:610, badge:null,    organic:false },
-  { id:23, name:'Dark Chocolate',       brand:'Lindt',         cat:'Snacks',                emoji:'🍫', price:1.99, orig:2.49,  weight:'100g',     rating:4.9, reviews:1.2e3, badge:'offer', organic:false },
-  { id:24, name:'Rice Cakes',           brand:'Kallo',         cat:'Snacks',                emoji:'🫓', price:1.49, orig:null,  weight:'130g',     rating:4.3, reviews:320, badge:null,    organic:true  },
-  { id:25, name:'Popcorn Variety',      brand:'Propercorn',    cat:'Snacks',                emoji:'🍿', price:2.29, orig:2.79,  weight:'3 pack',   rating:4.7, reviews:450, badge:'sale',  organic:false },
-  // Organic
-  { id:26, name:'Organic Spinach',      brand:'Riverford',     cat:'Organic',               emoji:'🥬', price:1.99, orig:null,  weight:'200g',     rating:4.7, reviews:530, badge:'org',   organic:true  },
-  { id:27, name:'Organic Avocados',     brand:'Waitrose',      cat:'Organic',               emoji:'🥑', price:2.99, orig:null,  weight:'2 pack',   rating:4.8, reviews:880, badge:'org',   organic:true  },
-  { id:28, name:'Organic Blueberries',  brand:'Riverford',     cat:'Organic',               emoji:'🫐', price:3.49, orig:3.99,  weight:'250g',     rating:4.9, reviews:420, badge:'org',   organic:true  },
-  { id:29, name:'Organic Almond Milk',  brand:'Rude Health',   cat:'Organic',               emoji:'🥤', price:2.49, orig:null,  weight:'1 litre',  rating:4.6, reviews:310, badge:'org',   organic:true  },
-  // Alcohol
-  { id:30, name:'Sauvignon Blanc',      brand:'Villa Maria',   cat:'Alcohol',               emoji:'🍷', price:8.99, orig:11.99, weight:'75cl',     rating:4.7, reviews:640, badge:'sale',  organic:false },
-  { id:31, name:'Craft IPA',            brand:'Brewdog',       cat:'Alcohol',               emoji:'🍺', price:2.49, orig:null,  weight:'330ml',    rating:4.6, reviews:890, badge:null,    organic:false },
-  { id:32, name:'Prosecco',             brand:'Santa Margherita',cat:'Alcohol',             emoji:'🥂', price:9.99, orig:12.99, weight:'75cl',     rating:4.5, reviews:380, badge:'offer', organic:false },
-  { id:33, name:'London Dry Gin',       brand:'Tanqueray',     cat:'Alcohol',               emoji:'🍸', price:19.99,orig:24.99, weight:'70cl',     rating:4.8, reviews:270, badge:'sale',  organic:false },
-  // Cleaning
-  { id:34, name:'Surface Spray',        brand:'Flash',         cat:'Cleaning',              emoji:'🧴', price:1.99, orig:2.79,  weight:'500ml',    rating:4.5, reviews:410, badge:'sale',  organic:false },
-  { id:35, name:'Dishwasher Tablets',   brand:'Finish',        cat:'Cleaning',              emoji:'✨', price:5.49, orig:6.99,  weight:'40 pack',  rating:4.7, reviews:760, badge:'offer', organic:false },
-  { id:36, name:'Bleach',               brand:'Domestos',      cat:'Cleaning',              emoji:'🪣', price:1.29, orig:null,  weight:'750ml',    rating:4.4, reviews:550, badge:null,    organic:false },
-  { id:37, name:'Rubber Gloves',        brand:'Marigold',      cat:'Cleaning',              emoji:'🧤', price:2.19, orig:null,  weight:'Medium',   rating:4.3, reviews:310, badge:'new',   organic:false },
-  // Emergency
-  { id:38, name:'Tinned Tomatoes',      brand:'Napolina',      cat:'Emergency',             emoji:'🥫', price:0.89, orig:null,  weight:'400g',     rating:4.6, reviews:1.5e3, badge:null,  organic:false },
-  { id:39, name:'Pasta Penne',          brand:'De Cecco',      cat:'Emergency',             emoji:'🍝', price:1.09, orig:1.49,  weight:'500g',     rating:4.7, reviews:920, badge:'sale',  organic:false },
-  { id:40, name:'Baked Beans',          brand:'Heinz',         cat:'Emergency',             emoji:'🫘', price:0.79, orig:null,  weight:'415g',     rating:4.8, reviews:2.1e3, badge:null,  organic:false },
-  // Health & Personal Care
-  { id:41, name:'Vitamin C 1000mg',     brand:'Holland & Barrett',cat:'Health & Personal Care',emoji:'💊', price:5.99, orig:7.99, weight:'60 tabs', rating:4.8, reviews:380, badge:'sale',  organic:false },
-  { id:42, name:'Charcoal Toothpaste',  brand:'Arm & Hammer', cat:'Health & Personal Care', emoji:'🦷', price:3.49, orig:null,  weight:'75ml',     rating:4.5, reviews:620, badge:null,    organic:false },
-  { id:43, name:'Hand Sanitiser',       brand:'Carex',         cat:'Health & Personal Care',emoji:'🧼', price:1.99, orig:null,  weight:'300ml',    rating:4.6, reviews:870, badge:null,    organic:false },
-  { id:44, name:'Eye Drops',            brand:'Systane',       cat:'Health & Personal Care',emoji:'👁️', price:6.99, orig:8.99, weight:'10ml',      rating:4.7, reviews:210, badge:'offer', organic:false },
-  // Laundry
-  { id:45, name:'Liquid Detergent',     brand:'Persil',        cat:'Laundry',               emoji:'🧺', price:7.49, orig:9.99,  weight:'40 wash',  rating:4.7, reviews:650, badge:'sale',  organic:false },
-  { id:46, name:'Fabric Softener',      brand:'Comfort',       cat:'Laundry',               emoji:'🌸', price:3.99, orig:null,  weight:'1 litre',  rating:4.5, reviews:430, badge:null,    organic:false },
-  // Paper & Plastic
-  { id:47, name:'Toilet Rolls',         brand:'Andrex',        cat:'Paper & Plastic',       emoji:'🧻', price:4.99, orig:6.49,  weight:'9 pack',   rating:4.8, reviews:1.4e3, badge:'offer', organic:false },
-  { id:48, name:'Kitchen Roll',         brand:'Plenty',        cat:'Paper & Plastic',       emoji:'📄', price:2.49, orig:null,  weight:'2 pack',   rating:4.6, reviews:570, badge:null,    organic:false },
-];
+  const API = 'http://localhost:8080';
+
+  /* fetch all products from backend on page load */
+  async function loadProducts() {
+    try {
+      const res = await fetch(`${API}/products`);
+      if (!res.ok) throw new Error(`Status ${res.status}`);
+      const products = await res.json();
+      /* pass to your existing render/filter function */
+      window.ALL_PRODUCTS = products.filter(p => p.isActive !== false);
+      filterProducts(); /* call whatever your existing filter function is named */
+    } catch (err) {
+      console.error('Failed to load products:', err);
+    }
+  }
+
+  /* fetch categories for the sidebar */
+  async function loadCategories() {
+    try {
+      const res = await fetch(`${API}/categories`);
+      const cats = await res.json();
+      /* use cats array to build your sidebar dynamically */
+      window.ALL_CATEGORIES = cats;
+    } catch (err) {
+      console.error('Failed to load categories:', err);
+    }
+  }
+
+  loadProducts();
+  loadCategories();
+;
 
 // ── STATE ──
 let cart = {};
