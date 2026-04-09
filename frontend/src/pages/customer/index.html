@@ -254,76 +254,69 @@
   <!-- bootstrap js -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    /* sale products data — replace with fetch('/api/products?sale=true') when backend ready */
-    const SALE = [
-      { id:1,  emoji:'🍫', name:'Protein Bar, Variety Pack',           rating:4.6, reviews:234, was:26.49, price:21.99 },
-      { id:2,  emoji:'🥜', name:'Soft & Chewy Granola Bars',           rating:4.5, reviews:178, was:12.59, price:9.99  },
-      { id:3,  emoji:'🧁', name:'Mini Muffins, Blueberry',             rating:4.4, reviews:156, was:14.99, price:11.99 },
-      { id:4,  emoji:'🍪', name:'OREO Sandwich Cookies, Variety Pack', rating:4.8, reviews:512, was:18.99, price:15.99 },
-      { id:5,  emoji:'🍪', name:'Milano Cookies, Double Dark Chocolate',rating:4.7, reviews:267, was:14.49, price:11.99 },
-    ];
+    /* base api url */
+    const API = 'http://localhost:8080';
 
-    /* featured products data — replace with fetch('/api/products?featured=true') when backend ready */
-    const FEATURED = [
-      { id:6,  emoji:'🍷', name:'Leoville Las Cases Collection Miroir Vertical Set', rating:5.0, reviews:12,  price:3899.99 },
-      { id:7,  emoji:'🥩', name:'Japanese Wagyu Center Cut NY Strip Steaks',          rating:5.0, reviews:89,  price:469.99  },
-      { id:8,  emoji:'🍷', name:'Chateau Calon Segur Gift Set',                       rating:4.9, reviews:24,  price:1199.99 },
-      { id:9,  emoji:'🌾', name:'Quaker Oats Old Fashioned Rolled Oats',              rating:4.9, reviews:456, price:8.79    },
-      { id:10, emoji:'🧈', name:'Kerrygold Pure Irish Butter',                        rating:4.9, reviews:412, price:19.28   },
-      { id:11, emoji:'🥩', name:"Rastelli's USDA Choice Black Angus Sirloin",         rating:4.9, reviews:123, price:159.99  },
-      { id:12, emoji:'🍖', name:'Ermes Fontana Whole Boneless Leg Prosciutto',        rating:4.9, reviews:78,  price:149.99  },
-      { id:13, emoji:'🫒', name:'Organic Extra Virgin Olive Oil',                     rating:4.9, reviews:312, price:20.99   },
-    ];
-
-    /* trending products data — replace with fetch('/api/products?trending=true') when backend ready */
-    const TRENDING = [
-      { id:14, emoji:'🧻', name:'Charmin Ultra Soft Bath Tissue',         rating:4.9, stock:312, price:7.99  },
-      { id:15, emoji:'🧺', name:'Tide Pods HE Detergent, Spring...',      rating:4.9, stock:198, price:34.99 },
-      { id:16, emoji:'🧈', name:'Kirkland Signature Grass-Fed...',        rating:4.8, stock:234, price:15.88 },
-      { id:17, emoji:'🍪', name:'Frito Lay Classic Mix, Variety Pack',    rating:4.9, stock:201, price:23.49 },
-      { id:18, emoji:'🍪', name:'OREO Sandwich Cookies, Variet...',       rating:4.8, stock:267, price:15.99 },
-      { id:19, emoji:'🧺', name:'Tide Ultra Concentrated Liquid...',      rating:4.8, stock:167, price:24.99 },
-    ];
-
-    /* renders the star rating — filled star + rating number + review count */
+    /* renders star rating — uses rating and reviewCount once backend adds them */
     const stars = (r, n) => `<span class="star">★</span> ${r} <span>(${n})</span>`;
 
-    /* builds vertical sale/featured product card html */
+    /* builds a product image element — uses imageUrl if available, falls back to emoji */
+    const productImg = p => p.imageUrl
+      ? `<img src="${p.imageUrl}" alt="${p.name}" style="width:80px;height:80px;object-fit:contain;">`
+      : `<span style="font-size:3rem">🛍️</span>`;
+
+    /* builds vertical sale/featured card */
     function makeCard(p, badgeType) {
       const badge = badgeType === 'sale'
         ? `<span class="card-badge-red">SALE</span>`
         : `<span class="card-badge-green">Top Rated</span>`;
-      const priceHtml = badgeType === 'sale'
-        ? `<div class="price-was">Was £${p.was.toFixed(2)}</div><div class="price-now">Now £${p.price.toFixed(2)}</div>`
+      /* sale cards show original price struck through, featured show price in green */
+      const priceHtml = (badgeType === 'sale' && p.originalPrice)
+        ? `<div class="price-was">Was £${p.originalPrice.toFixed(2)}</div>
+          <div class="price-now">Now £${p.price.toFixed(2)}</div>`
         : `<div class="price-main">£${p.price.toFixed(2)}</div>`;
       return `<div class="product-card">
         ${badge}
-        <div class="card-img">${p.emoji}</div>
+        <div class="card-img">${productImg(p)}</div>
         <div class="card-name">${p.name}</div>
-        <div class="card-rating">${stars(p.rating, p.reviews)}</div>
-        <div class="card-footer">${priceHtml}<button class="btn-add" onclick="addItem(${p.id})">+</button></div>
+        <div style="font-size:0.78rem;color:#888;margin-bottom:0.5rem">${p.category?.name ?? ''}</div>
+        <div class="card-rating">${stars(p.rating ?? 0, p.reviewCount ?? 0)}</div>
+        <div class="card-footer">${priceHtml}
+          <button class="btn-add" onclick="addItem(${p.id})">+</button>
+        </div>
       </div>`;
     }
 
-    /* builds horizontal trending card html */
+    /* builds horizontal trending card (asked AI to help)*/
     function makeTrend(p) {
       return `<div class="trend-card">
-        <div class="trend-img">${p.emoji}</div>
+        <div class="trend-img">${productImg(p)}</div>
         <div class="trend-info">
           <div class="trend-name">${p.name}</div>
-          <div class="trend-meta"><span class="star">★</span>${p.rating} · ${p.stock} in stock</div>
+          <div class="trend-meta">
+            <span class="star">★</span>${p.rating ?? 0} · ${p.category?.name ?? ''}
+          </div>
           <div class="trend-price">£${p.price.toFixed(2)}</div>
         </div>
         <button class="btn-cart" onclick="addItem(${p.id})">🛒</button>
       </div>`;
     }
 
-    /* inject all sections */
-    document.getElementById('saleGrid').innerHTML     = SALE.map(p => makeCard(p,'sale')).join('');
-    document.getElementById('featuredGrid').innerHTML = FEATURED.map(p => makeCard(p,'featured')).join('');
-    document.getElementById('trendingGrid').innerHTML = TRENDING.map(p => makeTrend(p)).join('');
+    /* shows loading placeholder while fetch is in progress */
+    function showLoading(id) {
+      document.getElementById(id).innerHTML =
+        `<div style="color:#aaa;font-size:0.85rem;padding:1rem">Loading...</div>`;
+    }
 
-    /* adds item to localStorage basket, used by basket.html */
+    /* shows error message if fetch fails */
+    function showError(id) {
+      document.getElementById(id).innerHTML =
+        `<div style="color:#e53935;font-size:0.85rem;padding:1rem">
+          ⚠️ Could not load products. Make sure the backend is running.
+        </div>`;
+    }
+
+    /* adds item to localstorage basket */
     function addItem(id) {
       const b = JSON.parse(localStorage.getItem('fm_basket') || '{}');
       b[id] = (b[id] || 0) + 1;
@@ -335,6 +328,39 @@
       const q = document.getElementById(inputId).value.trim();
       window.location.href = q ? `products.html?q=${encodeURIComponent(q)}` : 'products.html';
     }
+
+    /* fetches all active products and splits them into sections */
+    async function loadProducts() {
+      ['saleGrid','featuredGrid','trendingGrid'].forEach(showLoading);
+
+      try {
+        const res = await fetch(`${API}/products`);
+        if (!res.ok) throw new Error(`Status ${res.status}`);
+        const all = await res.json();
+
+        /* only show active products */
+        const active = all.filter(p => p.isActive !== false);
+
+        /* split into sections — once Geoffrey adds the boolean flags these
+          filters will work automatically. until then shows first N products */
+        const sale     = active.filter(p => p.onSale).slice(0, 5);
+        const featured = active.filter(p => p.isFeatured).slice(0, 8);
+        const trending = active.filter(p => p.isTrending).slice(0, 6);
+
+        document.getElementById('saleGrid').innerHTML =
+          (sale.length ? sale : active.slice(0,5)).map(p => makeCard(p,'sale')).join('');
+        document.getElementById('featuredGrid').innerHTML =
+          (featured.length ? featured : active.slice(0,8)).map(p => makeCard(p,'featured')).join('');
+        document.getElementById('trendingGrid').innerHTML =
+          (trending.length ? trending : active.slice(0,6)).map(p => makeTrend(p)).join('');
+
+      } catch (err) {
+        console.error('Backend fetch failed:', err);
+        ['saleGrid','featuredGrid','trendingGrid'].forEach(showError);
+      }
+    }
+
+    loadProducts();
   </script>
 </body>
 </html>
