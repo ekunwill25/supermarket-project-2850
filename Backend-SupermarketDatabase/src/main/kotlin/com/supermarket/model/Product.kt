@@ -5,7 +5,8 @@ import jakarta.persistence.*
 @Entity
 @Table(name = "products")
 data class Product(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 
     @ManyToOne
@@ -24,11 +25,4 @@ data class Product(
 
     val imageUrl: String?,
     val isActive: Boolean = true
-
-    val onSale: Boolean = false,
-    val originalPrice: Double? = null,   /* the "was" price shown on sale cards */
-    val isFeatured: Boolean = false,
-    val isTrending: Boolean = false,
-    val rating: Double = 0.0,
-    val reviewCount: Int = 0,
 )
