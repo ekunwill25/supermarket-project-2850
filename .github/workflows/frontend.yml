@@ -17,5 +17,6 @@ jobs:
 
       - name: Check frontend files exist
         run: |
-          echo "Frontend files present:"
+          echo "Checking frontend structure..."
           find frontend/ -name "*.html" -o -name "*.css" -o -name "*.js" | sort
+          echo "All frontend files found"
