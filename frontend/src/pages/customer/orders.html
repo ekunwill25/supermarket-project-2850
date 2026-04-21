@@ -138,15 +138,21 @@
     </a>
     <div class="search-bar"><span style="color:#aaa">🔍</span><input type="text" placeholder="Search for products..."></div>
     <div class="nav-actions">
-      <a href="login.html"  class="btn-login-nav">Login</a>
-      <a href="signup.html" class="btn-signup-nav">Sign Up</a>
-      <button style="background:none;border:none;font-size:1.2rem;cursor:pointer">🤍</button>
-      <button style="background:none;border:none;font-size:0.85rem;color:#333;cursor:pointer;font-family:'Inter',sans-serif">🎁 Orders</button>
-      <div class="cart-btn-wrap">
-        <a href="basket.html" class="cart-btn">🛒</a>
-        <span class="cart-badge" id="cartBadge">0</span>
-      </div>
+  <!-- shown when not logged in -->
+    <a href="login.html"  id="nav-login"  class="btn-login-nav">Login</a>
+    <a href="signup.html" id="nav-signup" class="btn-signup-nav">Sign Up</a>
+    <!-- shown when logged in -->
+    <div id="nav-user" style="display:none;align-items:center;gap:0.5rem;">
+      <span id="nav-username" style="font-size:0.9rem;font-weight:600;color:#1a1a1a;"></span>
+      <button onclick="logout()" style="background:#f5f5f5;border:1.5px solid #ddd;border-radius:8px;padding:0.4rem 0.85rem;font-family:'Inter',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;color:#e53935;">Logout</button>
     </div>
+    <button style="background:none;border:none;font-size:1.2rem;cursor:pointer">🤍</button>
+    <button style="background:none;border:none;font-size:0.85rem;color:#333;cursor:pointer;font-family:'Inter',sans-serif">🎁 Orders</button>
+    <div class="cart-btn-wrap">
+      <a href="basket.html" class="cart-btn">🛒</a>
+      <span class="cart-badge" id="cartBadge">0</span>
+    </div>
+  </div>
   </nav>
 
   <!-- secondary nav — orders tab is active on this page -->
@@ -342,6 +348,31 @@
       localStorage.setItem('fm_basket', JSON.stringify(basket));
       window.location.href = 'basket.html';
     }
+
+    function updateNavAuth() {
+      const user = JSON.parse(localStorage.getItem('fm_user') || sessionStorage.getItem('fm_user') || 'null');
+      const loginBtn  = document.getElementById('nav-login');
+      const signupBtn = document.getElementById('nav-signup');
+      const userInfo  = document.getElementById('nav-user');
+      if (user) {
+        if (loginBtn)  loginBtn.style.display  = 'none';
+        if (signupBtn) signupBtn.style.display = 'none';
+        if (userInfo)  { userInfo.style.display = 'flex'; document.getElementById('nav-username').textContent = `👤 ${user.name || user.email}`; }
+      } else {
+        if (loginBtn)  loginBtn.style.display  = '';
+        if (signupBtn) signupBtn.style.display = '';
+        if (userInfo)  userInfo.style.display  = 'none';
+      }
+    }
+
+  function logout() {
+    localStorage.removeItem('fm_user');
+    sessionStorage.removeItem('fm_user');
+    localStorage.removeItem('fm_basket');
+    window.location.href = 'login.html';
+  }
+
+  updateNavAuth();
 
     /* updates the cart badge from localstorage */
     function updateCartBadge() {
