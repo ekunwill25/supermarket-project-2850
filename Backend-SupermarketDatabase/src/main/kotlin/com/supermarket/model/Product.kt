@@ -23,11 +23,5 @@ data class Product(
     val price: Double,
 
     val imageUrl: String?,
-    val isActive: Boolean = true,
-    val onSale: Boolean = false,
-    val originalPrice: Double? = null,
-    val isFeatured: Boolean = false,
-    val isTrending: Boolean = false,
-    val rating: Double = 0.0,
-    val reviewCount: Int = 0
+    val isActive: Boolean = true
 )
