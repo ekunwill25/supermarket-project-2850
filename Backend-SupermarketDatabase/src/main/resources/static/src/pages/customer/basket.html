@@ -1,0 +1,66 @@
+<script>
+  const API = "";
+  let PRODUCTS = [];
+
+  async function loadProducts() {
+    try {
+      const res = await fetch(`${API}/products`);
+      PRODUCTS = await res.json();
+      render();
+    } catch (err) {
+      console.error("Failed to load products:", err);
+    }
+  }
+
+  const getBasket = () => JSON.parse(localStorage.getItem('fm_basket') || '{}');
+  const saveBasket = b => localStorage.setItem('fm_basket', JSON.stringify(b));
+
+  function changeQty(id, delta) {
+    const b = getBasket();
+    b[id] = (b[id] || 0) + delta;
+    if (b[id] <= 0) delete b[id];
+    saveBasket(b);
+    render();
+  }
+
+  function removeItem(id) {
+    const b = getBasket();
+    delete b[id];
+    saveBasket(b);
+    render();
+  }
+
+  function render() {
+    const entries = Object.entries(getBasket());
+    const panel = document.getElementById('basketPanel');
+
+    if (!entries.length) {
+      panel.innerHTML = `<div class="empty-state"><h3>Your basket is empty</h3></div>`;
+      return;
+    }
+
+    panel.innerHTML = entries.map(([id, qty]) => {
+      const p = PRODUCTS.find(x => x.id == id);
+      if (!p) return '';
+
+      return `
+        <div class="basket-item">
+          <div class="item-img">🛍️</div>
+          <div class="item-info">
+            <div class="item-name">${p.name}</div>
+            <div class="item-cat">${p.category?.name || ''}</div>
+            <div class="item-price">£${Number(p.price).toFixed(2)}</div>
+          </div>
+          <div class="qty-ctrl">
+            <button class="qty-btn" onclick="changeQty(${p.id}, -1)">−</button>
+            <div class="qty-num">${qty}</div>
+            <button class="qty-btn" onclick="changeQty(${p.id}, 1)">+</button>
+          </div>
+          <button class="remove-btn" onclick="removeItem(${p.id})">🗑️</button>
+        </div>
+      `;
+    }).join('');
+  }
+
+  loadProducts();
+</script>
