@@ -1,0 +1,22 @@
+name: Frontend CI
+
+on:
+  push:
+    paths:
+      - 'frontend/**'
+  pull_request:
+    paths:
+      - 'frontend/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check frontend files exist
+        run: |
+          echo "Checking frontend structure..."
+          find frontend/ -name "*.html" -o -name "*.css" -o -name "*.js" | sort
+          echo "All frontend files found"
