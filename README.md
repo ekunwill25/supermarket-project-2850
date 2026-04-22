@@ -135,6 +135,7 @@ supermarket-project-2850/
 ---
 
 ### 1. Clone the Repository
+
 ```bash
 git clone https://github.com/ekunwill25/supermarket-project-2850.git
 cd supermarket-project-2850
@@ -143,6 +144,7 @@ cd supermarket-project-2850
 ---
 
 ### 2. Running the Backend
+
 ```bash
 cd Backend-SupermarketDatabase
 
