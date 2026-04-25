@@ -349,4 +349,94 @@ footer span { color: rgba(255,255,255,0.35); }
 }
 
 .btn-login-nav:hover { color: #2e7d32; }
- 
+
+/* Sidebar */
+.w-sidebar {
+  width: 240px;
+  height: 100vh;
+  position: fixed;
+  padding: 24px;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(10px);
+  border-right: 1px solid rgba(255,255,255,0.05);
+}
+
+.w-sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #cbd5f5;
+  padding: 12px;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.w-sidebar a:hover {
+  background: rgba(255,255,255,0.08);
+  color: white;
+}
+
+/* Main content */
+.w-main {
+  margin-left: 260px;
+  padding: 30px;
+}
+
+/* Cards */
+.w-card {
+  background: rgba(255,255,255,0.9);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  backdrop-filter: blur(8px);
+  margin-bottom: 20px;
+}
+
+/* Buttons */
+.w-btn {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.w-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+}
+
+/* Status */
+.w-good {
+  color: #22c55e;
+  font-weight: 600;
+}
+
+.w-low {
+  color: #f59e0b;
+  font-weight: 600;
+}
+
+.w-critical {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+/* Scan input */
+.w-scan-input {
+  width: 100%;
+  padding: 16px;
+  font-size: 18px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.1);
+  background: rgba(255,255,255,0.9);
+}
+
+/* Picked */
+.w-picked {
+  opacity: 0.5;
+  text-decoration: line-through;
+}

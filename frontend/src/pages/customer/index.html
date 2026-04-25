@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FreshMart — Customer Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: #f5f5f5; color: #1a1a1a; }
+
+    .btn-login-nav { background: none; border: none; font-size: 0.9rem; color: #333; cursor: pointer; font-family: 'Inter', sans-serif; font-weight: 500; text-decoration: none; }
+    .btn-login-nav:hover { color: #2e7d32; }
+
+    .top-nav { background: #fff; border-bottom: 1px solid #e5e5e5; padding: 0.75rem 2rem; display: flex; align-items: center; gap: 1rem; position: sticky; top: 0; z-index: 100; }
+    .logo-block { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; flex-shrink: 0; }
+    .logo-icon { width: 42px; height: 42px; background: #2e7d32; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
+    .logo-text { line-height: 1.1; }
+    .logo-text strong { display: block; font-size: 1.05rem; color: #1a1a1a; }
+    .logo-text span   { font-size: 0.72rem; color: #888; }
+
+    .search-bar { flex: 1; max-width: 580px; display: flex; align-items: center; border: 1.5px solid #ddd; border-radius: 8px; padding: 0.45rem 0.9rem; gap: 0.5rem; background: #fff; }
+    .search-bar input { border: none; outline: none; font-size: 0.9rem; color: #333; width: 100%; font-family: 'Inter', sans-serif; }
+    .search-bar input::placeholder { color: #aaa; }
+    .search-icon { color: #aaa; font-size: 0.95rem; }
+
+    .nav-actions { display: flex; align-items: center; gap: 0.75rem; margin-left: auto; }
+    .btn-signup { background: #2e7d32; color: #fff; border: none; border-radius: 8px; padding: 0.45rem 1.1rem; font-size: 0.9rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: background 0.15s; text-decoration: none; }
+    .btn-signup:hover { background: #1b5e20; }
+    .nav-icon-btn { background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 0.3rem; font-family: 'Inter', sans-serif; font-size: 0.85rem; color: #333; }
+
+    .cart-btn-wrap { position: relative; display: inline-flex; }
+    .cart-btn { background: #2e7d32; color: #fff; border: none; border-radius: 8px; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer; transition: background 0.15s; text-decoration: none; }
+    .cart-btn:hover { background: #1b5e20; }
+    .cart-badge { position: absolute; top: -6px; right: -6px; background: #e53935; color: #fff; font-size: 10px; font-weight: 700; border-radius: 99px; min-width: 18px; height: 18px; display: none; align-items: center; justify-content: center; padding: 0 4px; }
+
+    .sub-nav { background: #fff; border-bottom: 1px solid #e5e5e5; padding: 0 2rem; display: flex; gap: 0.25rem; }
+    .sub-nav a { text-decoration: none; font-size: 0.9rem; font-weight: 500; color: #555; padding: 0.65rem 1rem; border-bottom: 2px solid transparent; transition: color 0.15s; }
+    .sub-nav a:hover { color: #2e7d32; }
+    .sub-nav a.active { color: #2e7d32; border-bottom-color: #2e7d32; background: #f0faf0; border-radius: 6px 6px 0 0; }
+
+    .page-wrap { max-width: 1200px; margin: 0 auto; padding: 1.5rem 1.5rem; }
+
+    .hero { background: #2e7d32; border-radius: 16px; padding: 2.5rem 2.5rem; margin-bottom: 2rem; position: relative; overflow: hidden; }
+    .hero::after { content: ''; position: absolute; top: -60px; right: -60px; width: 280px; height: 280px; background: rgba(255,255,255,0.06); border-radius: 50%; pointer-events: none; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 0.4rem; color: rgba(255,255,255,0.85); font-size: 0.82rem; font-weight: 500; margin-bottom: 0.75rem; }
+    .hero h1 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; color: #fff; margin-bottom: 0.5rem; line-height: 1.25; }
+    .hero p  { color: rgba(255,255,255,0.75); font-size: 0.9rem; margin-bottom: 1.5rem; }
+    .hero-search { display: flex; align-items: center; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); border-radius: 8px; padding: 0.6rem 1rem; gap: 0.5rem; max-width: 480px; }
+    .hero-search input { border: none; outline: none; background: transparent; color: #fff; font-size: 0.9rem; width: 100%; font-family: 'Inter', sans-serif; }
+    .hero-search input::placeholder { color: rgba(255,255,255,0.55); }
+
+    .section-title { display: flex; align-items: center; gap: 0.5rem; font-size: 1.15rem; font-weight: 700; color: #1a1a1a; margin-bottom: 1rem; }
+
+    .category-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.85rem; margin-bottom: 2.5rem; }
+    .cat-card { border-radius: 12px; padding: 1.1rem 0.5rem 0.75rem; text-align: center; cursor: pointer; text-decoration: none; transition: transform 0.15s, box-shadow 0.15s; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+    .cat-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+    .cat-card .cat-emoji { font-size: 2rem; }
+    .cat-card .cat-name  { font-size: 0.78rem; font-weight: 600; }
+    .cat-breakfast { background: #fff3e0; } .cat-breakfast .cat-name { color: #e65100; }
+    .cat-dairy     { background: #fffde7; } .cat-dairy     .cat-name { color: #f9a825; }
+    .cat-meat      { background: #fce4ec; } .cat-meat      .cat-name { color: #c62828; }
+    .cat-seafood   { background: #e3f2fd; } .cat-seafood   .cat-name { color: #1565c0; }
+    .cat-snacks    { background: #f3e5f5; } .cat-snacks    .cat-name { color: #6a1b9a; }
+    .cat-organic   { background: #e8f5e9; } .cat-organic   .cat-name { color: #2e7d32; }
+    .cat-alcohol   { background: #fce4ec; } .cat-alcohol   .cat-name { color: #ad1457; }
+    .cat-cleaning  { background: #e0f7fa; } .cat-cleaning  .cat-name { color: #00695c; }
+    .cat-emergency { background: #fffde7; } .cat-emergency .cat-name { color: #f57f17; }
+    .cat-health    { background: #e0f2f1; } .cat-health    .cat-name { color: #00695c; }
+    .cat-laundry   { background: #ede7f6; } .cat-laundry   .cat-name { color: #4527a0; }
+    .cat-paper     { background: #f5f5f5; } .cat-paper     .cat-name { color: #424242; }
+
+    .products-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2.5rem; }
+    .product-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 1rem; display: flex; flex-direction: column; position: relative; transition: box-shadow 0.15s; }
+    .product-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.09); }
+    .card-badge-green { position: absolute; top: 0.65rem; left: 0.65rem; background: #2e7d32; color: #fff; font-size: 0.65rem; font-weight: 700; padding: 0.2rem 0.55rem; border-radius: 5px; text-transform: uppercase; }
+    .card-badge-red   { position: absolute; top: 0.65rem; right: 0.65rem; background: #e53935; color: #fff; font-size: 0.65rem; font-weight: 700; padding: 0.2rem 0.55rem; border-radius: 5px; text-transform: uppercase; }
+    .card-img { height: 100px; display: flex; align-items: center; justify-content: center; font-size: 3rem; margin-bottom: 0.75rem; }
+    .card-name { font-size: 0.875rem; font-weight: 600; color: #1a1a1a; margin-bottom: 0.5rem; line-height: 1.35; flex: 1; }
+    .card-rating { display: flex; align-items: center; gap: 0.3rem; font-size: 0.78rem; color: #555; margin-bottom: 0.6rem; }
+    .star { color: #f9a825; }
+    .price-was  { font-size: 0.78rem; color: #aaa; text-decoration: line-through; margin-bottom: 0.1rem; }
+    .price-now  { font-size: 1rem; font-weight: 700; color: #e53935; }
+    .price-main { font-size: 1rem; font-weight: 700; color: #2e7d32; }
+    .card-footer { display: flex; align-items: flex-end; justify-content: space-between; margin-top: auto; padding-top: 0.5rem; }
+
+    .btn-add { width: 36px; height: 36px; background: #2e7d32; color: #fff; border: none; border-radius: 8px; font-size: 1.3rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s, transform 0.1s; flex-shrink: 0; }
+    .btn-add:hover  { background: #1b5e20; }
+    .btn-add:active { transform: scale(0.93); }
+    .btn-minus { width: 36px; height: 36px; background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; border-radius: 8px; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s; flex-shrink: 0; }
+    .btn-minus:hover { background: #c8e6c9; }
+    .qty-num { font-weight: 800; font-size: 14px; min-width: 20px; text-align: center; }
+
+    #toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px); background: #1b5e20; color: #fff; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; padding: 12px 22px; border-radius: 99px; box-shadow: 0 6px 24px rgba(0,0,0,.18); pointer-events: none; transition: transform .3s cubic-bezier(.34,1.56,.64,1), opacity .3s; opacity: 0; z-index: 999; white-space: nowrap; }
+    #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+    .trending-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.85rem; margin-bottom: 2.5rem; }
+    .trend-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 0.9rem 1rem; display: flex; align-items: center; gap: 0.9rem; transition: box-shadow 0.15s; }
+    .trend-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+    .trend-img  { font-size: 2rem; width: 48px; flex-shrink: 0; text-align: center; }
+    .trend-info { flex: 1; min-width: 0; }
+    .trend-name { font-size: 0.85rem; font-weight: 600; color: #1a1a1a; margin-bottom: 0.3rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .trend-meta { font-size: 0.75rem; color: #888; margin-bottom: 0.3rem; display: flex; align-items: center; gap: 0.4rem; }
+    .trend-price { font-size: 0.95rem; font-weight: 700; color: #2e7d32; }
+    .btn-cart { width: 36px; height: 36px; background: #2e7d32; color: #fff; border: none; border-radius: 8px; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.15s; }
+    .btn-cart:hover { background: #1b5e20; }
+
+    .site-footer { background: #0f1923; color: #ccc; padding: 3rem 2rem 2rem; margin-top: 1rem; }
+    .footer-wrap { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 2rem; }
+    .footer-brand strong { color: #fff; font-size: 1rem; display: block; margin-bottom: 0.5rem; }
+    .footer-brand p { font-size: 0.82rem; color: #888; line-height: 1.6; }
+    .footer-col h4 { color: #fff; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.85rem; }
+    .footer-col a  { display: block; color: #888; font-size: 0.82rem; text-decoration: none; margin-bottom: 0.5rem; transition: color 0.15s; }
+    .footer-col a:hover { color: #4caf50; }
+    .footer-col h4.legal::after { content: ''; display: inline-block; width: 6px; height: 6px; background: #e53935; border-radius: 50%; margin-left: 4px; vertical-align: middle; }
+
+    @media (max-width: 900px) {
+      .category-grid { grid-template-columns: repeat(4, 1fr); }
+      .products-grid { grid-template-columns: repeat(2, 1fr); }
+      .trending-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-wrap   { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 580px) {
+      .category-grid { grid-template-columns: repeat(3, 1fr); }
+      .trending-grid { grid-template-columns: 1fr; }
+      .top-nav .search-bar { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="top-nav">
+    <a href="../../index.html" class="logo-block">
+      <div class="logo-icon">🛒</div>
+      <div class="logo-text"><strong>FreshMart</strong><span>Online Supermarket</span></div>
+    </a>
+    <div class="search-bar">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="topSearch" placeholder="Search for products..." onkeydown="if(event.key==='Enter') goSearch('topSearch')">
+    </div>
+    <div class="nav-actions">
+      <a href="login.html"  id="nav-login"  class="btn-login-nav">Login</a>
+      <a href="signup.html" id="nav-signup" class="btn-signup">Sign Up</a>
+      <div id="nav-user" style="display:none;align-items:center;gap:0.5rem;">
+        <span id="nav-username" style="font-size:0.9rem;font-weight:600;color:#1a1a1a;"></span>
+        <button onclick="logout()" style="background:#f5f5f5;border:1.5px solid #ddd;border-radius:8px;padding:0.4rem 0.85rem;font-family:'Inter',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;color:#333;" onmouseover="this.style.background='#fee2e2';this.style.color='#e53935'" onmouseout="this.style.background='#f5f5f5';this.style.color='#333'">Logout</button>
+      </div>
+      <button class="nav-icon-btn">🤍</button>
+      <button class="nav-icon-btn" onclick="location.href='orders.html'">🎁 Orders</button>
+      <div class="cart-btn-wrap">
+        <a href="basket.html" class="cart-btn">🛒</a>
+        <span class="cart-badge" id="cartBadge">0</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="sub-nav">
+    <a href="index.html" class="active">Shop</a>
+    <a href="products.html">Offers</a>
+    <a href="products.html">Categories</a>
+  </div>
+
+  <div class="page-wrap">
+
+    <div class="hero">
+      <div class="hero-badge">✳️ Free Delivery on Orders Over £50</div>
+      <h1>Fresh Groceries Delivered to Your Door</h1>
+      <p>Premium quality products from trusted brands. Shop now and save time.</p>
+      <div class="hero-search">
+        <span style="color:rgba(255,255,255,0.6)">🔍</span>
+        <input type="text" id="heroSearch" placeholder="Search for products..." onkeydown="if(event.key==='Enter') goSearch('heroSearch')">
+      </div>
+    </div>
+
+    <!-- fix #67: exact backend category names used as ?cat= param -->
+    <h2 class="section-title">Shop by Category</h2>
+    <div class="category-grid">
+      <a href="products.html?cat=Breakfast"                class="cat-card cat-breakfast"><span class="cat-emoji">🥐</span><span class="cat-name">Breakfast</span></a>
+      <a href="products.html?cat=Cheese and Dairy"         class="cat-card cat-dairy">    <span class="cat-emoji">🧀</span><span class="cat-name">Cheese &amp; Dairy</span></a>
+      <a href="products.html?cat=Meat"                     class="cat-card cat-meat">     <span class="cat-emoji">🥩</span><span class="cat-name">Meat</span></a>
+      <a href="products.html?cat=Seafood"                  class="cat-card cat-seafood">  <span class="cat-emoji">🐟</span><span class="cat-name">Seafood</span></a>
+      <a href="products.html?cat=Snacks"                   class="cat-card cat-snacks">   <span class="cat-emoji">🍿</span><span class="cat-name">Snacks</span></a>
+      <a href="products.html?cat=Organic"                  class="cat-card cat-organic">  <span class="cat-emoji">🌱</span><span class="cat-name">Organic</span></a>
+      <a href="products.html?cat=Alcohol"                  class="cat-card cat-alcohol">  <span class="cat-emoji">🍷</span><span class="cat-name">Alcohol</span></a>
+      <a href="products.html?cat=Cleaning Supplies"        class="cat-card cat-cleaning"> <span class="cat-emoji">🧽</span><span class="cat-name">Cleaning</span></a>
+      <a href="products.html?cat=Emergency Supplies"       class="cat-card cat-emergency"><span class="cat-emoji">📦</span><span class="cat-name">Emergency</span></a>
+      <a href="products.html?cat=Health %26 Personal Care" class="cat-card cat-health">   <span class="cat-emoji">💊</span><span class="cat-name">Health &amp; Personal Care</span></a>
+      <a href="products.html?cat=Laundry"                  class="cat-card cat-laundry">  <span class="cat-emoji">🧺</span><span class="cat-name">Laundry</span></a>
+      <a href="products.html?cat=Paper %26 Plastic"        class="cat-card cat-paper">    <span class="cat-emoji">🧻</span><span class="cat-name">Paper &amp; Plastic</span></a>
+    </div>
+
+    <h2 class="section-title">✳️ Products on Sale</h2>
+    <div class="products-grid" id="saleGrid"></div>
+
+    <h2 class="section-title">⭐ Featured Products</h2>
+    <div class="products-grid" id="featuredGrid"></div>
+
+    <h2 class="section-title">📈 Trending Now</h2>
+    <div class="trending-grid" id="trendingGrid"></div>
+
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-wrap">
+      <div class="footer-brand">
+        <strong>FreshMart</strong>
+        <p>Your trusted online supermarket delivering fresh groceries to your door.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Customer Service</h4>
+        <a href="#">Help Centre</a><a href="#">Track Order</a><a href="#">Returns</a><a href="#">Contact Us</a>
+      </div>
+      <div class="footer-col">
+        <h4>About</h4>
+        <a href="#">About Us</a><a href="#">Careers</a><a href="#">Sustainability</a><a href="#">Press</a>
+      </div>
+      <div class="footer-col">
+        <h4 class="legal">Legal</h4>
+        <a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Cookie Policy</a>
+      </div>
+    </div>
+  </footer>
+
+  <div id="toast">🛒 Added to basket!</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const API = 'http://localhost:8080';
+
+    /* cart loaded from localstorage so badge is correct immediately */
+    let cart = JSON.parse(localStorage.getItem('fm_basket') || '{}');
+    /* store fetched products so we can re-render without re-fetching */
+    let allProducts = [];
+
+    function cartTotal() { return Object.values(cart).reduce((s, v) => s + v, 0); }
+
+    function updateCartBadge() {
+      const badge = document.getElementById('cartBadge');
+      const n = cartTotal();
+      badge.textContent = n;
+      badge.style.display = n === 0 ? 'none' : 'flex';
+    }
+
+    function showToast() {
+      const t = document.getElementById('toast');
+      t.classList.add('show');
+      clearTimeout(t._t);
+      t._t = setTimeout(() => t.classList.remove('show'), 2200);
+    }
+
+    /* fix #72: addItem saves quantity + metadata and re-renders cards with qty controls */
+    function addItem(id, name, price, emoji) {
+      cart[id] = (cart[id] || 0) + 1;
+      localStorage.setItem('fm_basket', JSON.stringify(cart));
+      /* save product metadata so basket.html shows correct name and price — fix #70 */
+      const meta = JSON.parse(localStorage.getItem('fm_basket_meta') || '{}');
+      meta[id] = { id, name, price, emoji: emoji || '🛍️' };
+      localStorage.setItem('fm_basket_meta', JSON.stringify(meta));
+      updateCartBadge();
+      showToast();
+      renderSections(); /* re-render so +/- controls appear immediately */
+    }
+
+    function removeItem(id) {
+      if (!cart[id]) return;
+      cart[id]--;
+      if (cart[id] === 0) delete cart[id];
+      localStorage.setItem('fm_basket', JSON.stringify(cart));
+      updateCartBadge();
+      renderSections();
+    }
+
+    /* returns the correct button/controls html based on cart quantity */
+    function qtyCtrl(id, name, price, isTrend) {
+      const safe = (name || '').replace(/'/g, "\\'");
+      const qty  = cart[id] || 0;
+      if (qty === 0) {
+        return isTrend
+          ? `<button class="btn-cart" onclick="addItem(${id},'${safe}',${price},'🛍️')">🛒</button>`
+          : `<button class="btn-add"  onclick="addItem(${id},'${safe}',${price},'🛍️')">+</button>`;
+      }
+      return `<div style="display:flex;align-items:center;gap:5px;">
+        <button class="btn-minus" onclick="removeItem(${id})">−</button>
+        <span class="qty-num">${qty}</span>
+        <button class="btn-add"  onclick="addItem(${id},'${safe}',${price},'🛍️')">+</button>
+      </div>`;
+    }
+
+    const stars = (r, n) => `<span class="star">★</span> ${r} <span>(${n})</span>`;
+    const productImg = p => p.imageUrl
+      ? `<img src="${p.imageUrl}" alt="${p.name}" style="width:80px;height:80px;object-fit:contain;">`
+      : `<span style="font-size:3rem">🛍️</span>`;
+
+    function makeCard(p, badgeType) {
+      const badge = badgeType === 'sale'
+        ? `<span class="card-badge-red">SALE</span>`
+        : `<span class="card-badge-green">Top Rated</span>`;
+      const priceHtml = (badgeType === 'sale' && p.originalPrice)
+        ? `<div class="price-was">Was £${p.originalPrice.toFixed(2)}</div><div class="price-now">Now £${p.price.toFixed(2)}</div>`
+        : `<div class="price-main">£${p.price.toFixed(2)}</div>`;
+      return `<div class="product-card">
+        ${badge}
+        <div class="card-img">${productImg(p)}</div>
+        <div class="card-name">${p.name}</div>
+        <div style="font-size:0.78rem;color:#888;margin-bottom:0.5rem">${p.category?.name ?? ''}</div>
+        <div class="card-rating">${stars(p.rating ?? 0, p.reviewCount ?? 0)}</div>
+        <div class="card-footer">${priceHtml}${qtyCtrl(p.id, p.name, p.price, false)}</div>
+      </div>`;
+    }
+
+    function makeTrend(p) {
+      return `<div class="trend-card">
+        <div class="trend-img">${productImg(p)}</div>
+        <div class="trend-info">
+          <div class="trend-name">${p.name}</div>
+          <div class="trend-meta"><span class="star">★</span>${p.rating ?? 0} · ${p.category?.name ?? ''}</div>
+          <div class="trend-price">£${p.price.toFixed(2)}</div>
+        </div>
+        ${qtyCtrl(p.id, p.name, p.price, true)}
+      </div>`;
+    }
+
+    function showLoading(id) {
+      document.getElementById(id).innerHTML = `<div style="color:#aaa;font-size:0.85rem;padding:1rem">Loading...</div>`;
+    }
+    function showError(id) {
+      document.getElementById(id).innerHTML =
+        `<div style="color:#e53935;font-size:0.85rem;padding:1rem">⚠️ Could not load products. Make sure the backend is running.</div>`;
+    }
+
+    function goSearch(inputId) {
+      const q = document.getElementById(inputId).value.trim();
+      window.location.href = q ? `products.html?q=${encodeURIComponent(q)}` : 'products.html';
+    }
+
+    /* re-render all three sections using cached products + current cart state */
+    function renderSections() {
+      if (!allProducts.length) return;
+      const active   = allProducts.filter(p => p.isActive !== false);
+      const sale     = active.filter(p => p.onSale).slice(0, 5);
+      const featured = active.filter(p => p.isFeatured).slice(0, 8);
+      const trending = active.filter(p => p.isTrending).slice(0, 6);
+      document.getElementById('saleGrid').innerHTML =
+        (sale.length ? sale : active.slice(0, 5)).map(p => makeCard(p, 'sale')).join('');
+      document.getElementById('featuredGrid').innerHTML =
+        (featured.length ? featured : active.slice(0, 8)).map(p => makeCard(p, 'featured')).join('');
+      document.getElementById('trendingGrid').innerHTML =
+        (trending.length ? trending : active.slice(0, 6)).map(p => makeTrend(p)).join('');
+    }
+
+    async function loadProducts() {
+      ['saleGrid','featuredGrid','trendingGrid'].forEach(showLoading);
+      try {
+        const res = await fetch(`${API}/products`);
+        if (!res.ok) throw new Error(`Status ${res.status}`);
+        allProducts = await res.json();
+        renderSections();
+      } catch (err) {
+        console.error('Backend fetch failed:', err);
+        ['saleGrid','featuredGrid','trendingGrid'].forEach(showError);
+      }
+    }
+
+    function updateNavAuth() {
+      const user = JSON.parse(localStorage.getItem('fm_user') || sessionStorage.getItem('fm_user') || 'null');
+      const loginBtn  = document.getElementById('nav-login');
+      const signupBtn = document.getElementById('nav-signup');
+      const userInfo  = document.getElementById('nav-user');
+      if (user) {
+        if (loginBtn)  loginBtn.style.display  = 'none';
+        if (signupBtn) signupBtn.style.display = 'none';
+        if (userInfo)  { userInfo.style.display = 'flex'; document.getElementById('nav-username').textContent = `👤 ${user.name || user.email}`; }
+      } else {
+        if (loginBtn)  loginBtn.style.display  = '';
+        if (signupBtn) signupBtn.style.display = '';
+        if (userInfo)  userInfo.style.display  = 'none';
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('fm_user');
+      sessionStorage.removeItem('fm_user');
+      localStorage.removeItem('fm_basket');
+      localStorage.removeItem('fm_basket_meta');
+      window.location.href = 'login.html';
+    }
+
+    /* init */
+    updateNavAuth();
+    updateCartBadge();
+    loadProducts();
+  </script>
+</body>
+</html>

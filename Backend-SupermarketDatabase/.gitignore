@@ -1,0 +1,17 @@
+# gradle build cache
+.gradle/
+build/
+
+# kotlin cache
+.kotlin/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# asked ai for this
