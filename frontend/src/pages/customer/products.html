@@ -25,386 +25,168 @@
       --shadow-md:   0 4px 16px rgba(0,0,0,.12);
     }
 
-    body {
-      font-family: 'Nunito', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
+    body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
     /* ── NAV ── */
-    nav {
-      background: var(--white);
-      border-bottom: 1px solid var(--border);
-      padding: 0 24px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: var(--shadow);
-    }
-    .nav-top {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 12px 0;
-    }
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-    }
-    .logo-icon {
-      width: 42px; height: 42px;
-      background: var(--green);
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px;
-    }
+    nav { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 24px; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow); }
+    .nav-top { display: flex; align-items: center; gap: 16px; padding: 12px 0; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 42px; height: 42px; background: var(--green); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
     .logo-text { line-height: 1.1; }
     .logo-text strong { font-size: 16px; font-weight: 800; color: var(--text); }
     .logo-text span   { font-size: 11px; color: var(--muted); display: block; }
-
-    .search-bar {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      background: #f3f4f6;
-      border-radius: 24px;
-      padding: 8px 16px;
-      gap: 8px;
-      border: 1px solid var(--border);
-      transition: border-color .2s;
-    }
+    .search-bar { flex: 1; display: flex; align-items: center; background: #f3f4f6; border-radius: 24px; padding: 8px 16px; gap: 8px; border: 1px solid var(--border); transition: border-color .2s; }
     .search-bar:focus-within { border-color: var(--green); background: var(--white); }
     .search-bar input { border: none; background: transparent; outline: none; font-family: inherit; font-size: 14px; width: 100%; }
-
     .nav-actions { display: flex; align-items: center; gap: 8px; }
-    .btn-ghost { background: none; border: none; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; padding: 8px 12px; border-radius: 8px; color: var(--text); transition: background .15s; }
+    .btn-ghost { background: none; border: none; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; padding: 8px 12px; border-radius: 8px; color: var(--text); transition: background .15s; text-decoration: none; display: inline-flex; align-items: center; }
     .btn-ghost:hover { background: #f3f4f6; }
-    .btn-primary { background: var(--green); color: #fff; border: none; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; padding: 8px 18px; border-radius: 8px; transition: background .15s; }
+    .btn-primary { background: var(--green); color: #fff; border: none; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; padding: 8px 18px; border-radius: 8px; transition: background .15s; text-decoration: none; display: inline-flex; align-items: center; }
     .btn-primary:hover { background: var(--green-dark); }
     .icon-btn { background: none; border: none; cursor: pointer; font-size: 20px; padding: 6px; border-radius: 8px; transition: background .15s; position: relative; }
     .icon-btn:hover { background: #f3f4f6; }
-    .badge {
-      position: absolute; top: 2px; right: 2px;
-      background: var(--red); color: #fff;
-      font-size: 10px; font-weight: 700;
-      border-radius: 99px; min-width: 16px; height: 16px;
-      display: flex; align-items: center; justify-content: center;
-      padding: 0 4px;
-    }
-
-    .nav-bottom {
-      display: flex;
-      gap: 4px;
-      padding-bottom: 0;
-    }
-    .nav-tab {
-      font-size: 14px; font-weight: 600;
-      padding: 10px 16px;
-      border: none; background: none;
-      cursor: pointer; color: var(--muted);
-      border-bottom: 2px solid transparent;
-      transition: color .15s, border-color .15s;
-      font-family: inherit;
-    }
+    .badge { position: absolute; top: 2px; right: 2px; background: var(--red); color: #fff; font-size: 10px; font-weight: 700; border-radius: 99px; min-width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; padding: 0 4px; }
+    .nav-bottom { display: flex; gap: 4px; padding-bottom: 0; }
+    .nav-tab { font-size: 14px; font-weight: 600; padding: 10px 16px; border: none; background: none; cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent; transition: color .15s, border-color .15s; font-family: inherit; }
     .nav-tab.active { color: var(--green); border-bottom-color: var(--green); }
     .nav-tab:hover:not(.active) { color: var(--text); }
 
     /* ── PAGE LAYOUT ── */
-    .page {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 24px 16px;
-      display: grid;
-      grid-template-columns: 220px 1fr;
-      gap: 24px;
-      align-items: start;
-    }
+    .page { max-width: 1280px; margin: 0 auto; padding: 24px 16px; display: grid; grid-template-columns: 220px 1fr; gap: 24px; align-items: start; }
 
     /* ── SIDEBAR ── */
-    .sidebar {
-      background: var(--white);
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      overflow: hidden;
-      box-shadow: var(--shadow);
-      position: sticky;
-      top: 104px;
-    }
-    .sidebar-title {
-      padding: 14px 16px;
-      font-size: 13px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      color: var(--muted);
-      border-bottom: 1px solid var(--border);
-      background: #fafafa;
-    }
-    .cat-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 16px;
-      cursor: pointer;
-      border: none;
-      background: none;
-      width: 100%;
-      text-align: left;
-      font-family: inherit;
-      font-size: 13.5px;
-      font-weight: 600;
-      color: var(--text);
-      border-left: 3px solid transparent;
-      transition: background .15s, border-color .15s, color .15s;
-    }
+    .sidebar { background: var(--white); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; box-shadow: var(--shadow); position: sticky; top: 104px; }
+    .sidebar-title { padding: 14px 16px; font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); border-bottom: 1px solid var(--border); background: #fafafa; }
+    .cat-item { display: flex; align-items: center; gap: 10px; padding: 10px 16px; cursor: pointer; border: none; background: none; width: 100%; text-align: left; font-family: inherit; font-size: 13.5px; font-weight: 600; color: var(--text); border-left: 3px solid transparent; transition: background .15s, border-color .15s, color .15s; }
     .cat-item:hover { background: var(--green-light); color: var(--green); }
     .cat-item.active { background: var(--green-light); color: var(--green); border-left-color: var(--green); }
     .cat-item .cat-emoji { font-size: 18px; width: 24px; text-align: center; }
     .cat-count { margin-left: auto; font-size: 11px; background: var(--border); border-radius: 99px; padding: 1px 7px; color: var(--muted); font-weight: 700; }
     .cat-item.active .cat-count { background: var(--green-mid); color: var(--green-dark); }
 
+    /* favourites sidebar item — red heart accent */
+    .cat-item.fav-item:hover { background: #fff0f0; color: var(--red); }
+    .cat-item.fav-item.active { background: #fff0f0; color: var(--red); border-left-color: var(--red); }
+    .cat-item.fav-item.active .cat-count { background: #fecdd3; color: #b91c1c; }
+
+    /* sidebar divider */
+    .sidebar-divider { height: 1px; background: var(--border); margin: 4px 0; }
+
     /* ── MAIN CONTENT ── */
     .main { display: flex; flex-direction: column; gap: 20px; }
-
-    /* breadcrumb */
     .breadcrumb { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
     .breadcrumb a { color: var(--green); text-decoration: none; font-weight: 600; }
     .breadcrumb a:hover { text-decoration: underline; }
 
-    /* toolbar */
-    .toolbar {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
+    .toolbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
     .toolbar-left { display: flex; align-items: center; gap: 8px; flex: 1; }
     .result-count { font-size: 14px; font-weight: 700; }
     .result-count span { color: var(--muted); font-weight: 500; }
-
-    .filter-chip {
-      display: flex; align-items: center; gap: 6px;
-      background: var(--white); border: 1px solid var(--border);
-      border-radius: 99px; padding: 5px 12px;
-      font-size: 12.5px; font-weight: 600;
-      cursor: pointer; color: var(--text);
-      font-family: inherit;
-      transition: border-color .15s, background .15s;
-    }
+    .filter-chip { display: flex; align-items: center; gap: 6px; background: var(--white); border: 1px solid var(--border); border-radius: 99px; padding: 5px 12px; font-size: 12.5px; font-weight: 600; cursor: pointer; color: var(--text); font-family: inherit; transition: border-color .15s, background .15s; }
     .filter-chip:hover { border-color: var(--green); color: var(--green); }
     .filter-chip.active { background: var(--green); color: #fff; border-color: var(--green); }
-
-    .sort-select {
-      margin-left: auto;
-      background: var(--white); border: 1px solid var(--border);
-      border-radius: 8px; padding: 7px 12px;
-      font-family: inherit; font-size: 13px; font-weight: 600;
-      cursor: pointer; color: var(--text);
-      outline: none;
-    }
+    .sort-select { margin-left: auto; background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 7px 12px; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; color: var(--text); outline: none; }
     .sort-select:focus { border-color: var(--green); }
 
-    /* offer banner */
-    .offer-banner {
-      background: linear-gradient(120deg, #1f5a29 0%, #2d7a3a 60%, #3a9a49 100%);
-      border-radius: var(--radius);
-      padding: 18px 24px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      color: #fff;
-    }
+    .offer-banner { background: linear-gradient(120deg, #1f5a29 0%, #2d7a3a 60%, #3a9a49 100%); border-radius: var(--radius); padding: 18px 24px; display: flex; align-items: center; gap: 16px; color: #fff; }
     .offer-banner .offer-emoji { font-size: 32px; }
     .offer-banner h3 { font-size: 16px; font-weight: 800; }
     .offer-banner p { font-size: 13px; opacity: .85; margin-top: 2px; }
-    .offer-tag {
-      margin-left: auto;
-      background: var(--accent);
-      color: #fff;
-      font-size: 13px; font-weight: 800;
-      border-radius: 8px; padding: 6px 14px;
-      white-space: nowrap;
-    }
+    .offer-tag { margin-left: auto; background: var(--accent); color: #fff; font-size: 13px; font-weight: 800; border-radius: 8px; padding: 6px 14px; white-space: nowrap; }
 
-    /* product grid */
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-      gap: 16px;
-    }
+    /* favourites empty state banner */
+    .fav-empty { background: #fff0f0; border: 1px dashed #fca5a5; border-radius: var(--radius); padding: 32px; text-align: center; color: var(--muted); }
+    .fav-empty span { font-size: 40px; display: block; margin-bottom: 10px; }
+    .fav-empty p { font-size: 14px; font-weight: 600; }
+    .fav-empty small { font-size: 12px; color: #aaa; }
 
-    .product-card {
-      background: var(--white);
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      overflow: hidden;
-      box-shadow: var(--shadow);
-      transition: box-shadow .2s, transform .2s;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-    }
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 16px; }
+    .product-card { background: var(--white); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; box-shadow: var(--shadow); transition: box-shadow .2s, transform .2s; display: flex; flex-direction: column; position: relative; }
     .product-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
-
-    .product-badge {
-      position: absolute;
-      top: 10px; left: 10px;
-      font-size: 10px; font-weight: 800;
-      border-radius: 6px;
-      padding: 3px 8px;
-      text-transform: uppercase;
-      letter-spacing: .04em;
-    }
+    .product-badge { position: absolute; top: 10px; left: 10px; font-size: 10px; font-weight: 800; border-radius: 6px; padding: 3px 8px; text-transform: uppercase; letter-spacing: .04em; }
     .badge-sale  { background: #fee2e2; color: var(--red); }
     .badge-new   { background: #dbeafe; color: #1d4ed8; }
     .badge-offer { background: #fef3c7; color: #92400e; }
     .badge-org   { background: #d1fae5; color: #065f46; }
 
-    .wishlist-btn {
-      position: absolute; top: 8px; right: 8px;
-      background: var(--white); border: 1px solid var(--border);
-      border-radius: 50%; width: 30px; height: 30px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 14px; cursor: pointer;
-      transition: background .15s, border-color .15s;
-      box-shadow: 0 1px 4px rgba(0,0,0,.1);
-    }
+    /* wishlist button — red when active (favourited) */
+    .wishlist-btn { position: absolute; top: 8px; right: 8px; background: var(--white); border: 1px solid var(--border); border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; transition: background .15s, border-color .15s; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
     .wishlist-btn:hover { background: #fee2e2; border-color: #fca5a5; }
     .wishlist-btn.active { background: #fee2e2; border-color: #fca5a5; }
 
-    .product-img-wrap {
-      padding: 20px 16px 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 130px;
-      background: #fafafa;
-    }
+    .product-img-wrap { padding: 20px 16px 12px; display: flex; align-items: center; justify-content: center; height: 130px; background: #fafafa; }
     .product-img { font-size: 62px; line-height: 1; }
-
     .product-info { padding: 10px 14px 14px; flex: 1; display: flex; flex-direction: column; }
-    .product-brand { font-size: 10.5px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
-    .product-name  { font-size: 13.5px; font-weight: 700; margin: 2px 0 4px; line-height: 1.3; }
+    .product-brand  { font-size: 10.5px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+    .product-name   { font-size: 13.5px; font-weight: 700; margin: 2px 0 4px; line-height: 1.3; }
     .product-weight { font-size: 11.5px; color: var(--muted); margin-bottom: 8px; }
     .product-rating { display: flex; align-items: center; gap: 4px; margin-bottom: 8px; }
     .stars { color: var(--accent); font-size: 11px; }
     .rating-count { font-size: 11px; color: var(--muted); }
-
     .product-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
-    .price-block {}
     .price-orig { font-size: 11px; color: var(--muted); text-decoration: line-through; }
     .price-main { font-size: 16px; font-weight: 800; color: var(--text); }
     .price-main.sale { color: var(--red); }
-
-    .add-btn {
-      background: var(--green);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      width: 32px; height: 32px;
-      font-size: 20px;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      font-family: inherit;
-      font-weight: 300;
-      transition: background .15s, transform .1s;
-      flex-shrink: 0;
-    }
+    .add-btn { background: var(--green); color: #fff; border: none; border-radius: 8px; width: 32px; height: 32px; font-size: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: inherit; font-weight: 300; transition: background .15s, transform .1s; flex-shrink: 0; }
     .add-btn:hover { background: var(--green-dark); transform: scale(1.1); }
-
-    .qty-ctrl {
-      display: flex; align-items: center; gap: 6px;
-    }
-    .qty-btn {
-      background: var(--green-light); color: var(--green);
-      border: 1px solid var(--green-mid);
-      border-radius: 6px; width: 26px; height: 26px;
-      font-size: 16px; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: background .15s;
-      font-weight: 700;
-    }
+    .qty-ctrl { display: flex; align-items: center; gap: 6px; }
+    .qty-btn { background: var(--green-light); color: var(--green); border: 1px solid var(--green-mid); border-radius: 6px; width: 26px; height: 26px; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .15s; font-weight: 700; }
     .qty-btn:hover { background: var(--green-mid); }
     .qty-num { font-size: 14px; font-weight: 800; min-width: 18px; text-align: center; }
 
-    /* pagination */
-    .pagination {
-      display: flex; align-items: center; justify-content: center; gap: 6px;
-      padding: 8px 0 4px;
-    }
-    .page-btn {
-      width: 36px; height: 36px; border-radius: 8px;
-      border: 1px solid var(--border); background: var(--white);
-      font-family: inherit; font-size: 14px; font-weight: 700;
-      cursor: pointer; color: var(--text);
-      display: flex; align-items: center; justify-content: center;
-      transition: background .15s, border-color .15s, color .15s;
-    }
+    .pagination { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 0 4px; }
+    .page-btn { width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--border); background: var(--white); font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; color: var(--text); display: flex; align-items: center; justify-content: center; transition: background .15s, border-color .15s, color .15s; }
     .page-btn:hover { border-color: var(--green); color: var(--green); }
     .page-btn.active { background: var(--green); color: #fff; border-color: var(--green); }
     .page-btn:disabled { opacity: .4; cursor: default; }
 
-    /* toast */
-    #toast {
-      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px);
-      background: var(--green-dark); color: #fff;
-      font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 700;
-      padding: 12px 22px; border-radius: 99px;
-      box-shadow: 0 6px 24px rgba(0,0,0,.18);
-      pointer-events: none;
-      transition: transform .3s cubic-bezier(.34,1.56,.64,1), opacity .3s;
-      opacity: 0;
-      z-index: 200;
-      white-space: nowrap;
-    }
+    #toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--green-dark); color: #fff; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 700; padding: 12px 22px; border-radius: 99px; box-shadow: 0 6px 24px rgba(0,0,0,.18); pointer-events: none; transition: transform .3s cubic-bezier(.34,1.56,.64,1), opacity .3s; opacity: 0; z-index: 200; white-space: nowrap; }
     #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
     @media (max-width: 768px) {
       .page { grid-template-columns: 1fr; }
       .sidebar { position: static; display: flex; flex-wrap: nowrap; overflow-x: auto; border-radius: var(--radius); }
       .sidebar-title { display: none; }
+      .sidebar-divider { display: none; }
       .cat-item { white-space: nowrap; flex-shrink: 0; border-left: none; border-bottom: 3px solid transparent; }
       .cat-item.active { border-bottom-color: var(--green); border-left: none; }
+      .cat-item.fav-item.active { border-bottom-color: var(--red); }
     }
   </style>
 </head>
 <body>
 
-<!-- ── NAVBAR ── -->
 <nav>
   <div class="nav-top">
-    <a href="index.html" class="logo">
+    <a href="../../../index.html" class="logo">
       <div class="logo-icon">🛒</div>
       <div class="logo-text">
         <strong>FreshMart</strong>
         <span>Online Supermarket</span>
       </div>
     </a>
-
     <div class="search-bar">
       <svg width="16" height="16" fill="none" stroke="#9ca3af" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
       <input type="text" placeholder="Search for products..." id="searchInput" oninput="handleSearch(this.value)" />
     </div>
-
     <div class="nav-actions">
-      <!-- shown when not logged in -->
       <a href="login.html" id="nav-login" class="btn-ghost">Login</a>
       <a href="signup.html" id="nav-signup" class="btn-primary">Sign Up</a>
-      <!-- shown when logged in -->
       <div id="nav-user" style="display:none;align-items:center;gap:0.5rem;">
         <span id="nav-username" style="font-size:14px;font-weight:600;color:#1a1a1a;"></span>
         <button onclick="logout()" class="btn-ghost" style="color:#e53e3e;">Logout</button>
       </div>
-      <button class="icon-btn" title="Wishlist">❤️</button>
-      <button class="icon-btn" title="Orders">🎁 Orders</button>
-      <button class="icon-btn" title="Basket" id="cartBtn">
+      <!-- heart icon shows favourites count -->
+      <button class="icon-btn" onclick="filterToFavourites()" title="My Favourites">
+        ❤️ <span class="badge" id="favCount" style="display:none;background:#e53e3e">0</span>
+      </button>
+      <button class="icon-btn" onclick="location.href='orders.html'" title="Orders">🎁 Orders</button>
+      <button class="icon-btn" onclick="location.href='basket.html'" title="Basket" id="cartBtn">
         🛒
-        <span class="badge" id="cartCount">0</span>
+        <span class="badge" id="cartCount" style="display:none">0</span>
       </button>
     </div>
+  </div>
   <div class="nav-bottom">
     <button class="nav-tab" onclick="location.href='index.html'">Shop</button>
     <button class="nav-tab">Offers</button>
@@ -412,61 +194,65 @@
   </div>
 </nav>
 
-<!-- ── PAGE ── -->
 <div class="page">
 
-  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-title">Categories</div>
-    <button class="cat-item active" onclick="filterCategory('all', this)">
-      <span class="cat-emoji">🏪</span> All Products <span class="cat-count" id="cnt-all">48</span>
+
+    <!-- favourites as a special category at the top -->
+    <button class="cat-item fav-item" data-cat="__favourites__" id="favSidebarBtn" onclick="filterCategory('__favourites__', this)">
+      <span class="cat-emoji">❤️</span> My Favourites <span class="cat-count" id="cnt-fav">0</span>
     </button>
-    <button class="cat-item" onclick="filterCategory('Breakfast', this)">
-      <span class="cat-emoji">🥐</span> Breakfast <span class="cat-count" id="cnt-Breakfast">6</span>
+
+    <div class="sidebar-divider"></div>
+
+    <button class="cat-item active" data-cat="all" onclick="filterCategory('all', this)">
+      <span class="cat-emoji">🏪</span> All Products <span class="cat-count" id="cnt-all">0</span>
     </button>
-    <button class="cat-item" onclick="filterCategory('Cheese & Dairy', this)">
-      <span class="cat-emoji">🧀</span> Cheese &amp; Dairy <span class="cat-count" id="cnt-CheeseandDairy">5</span>
+    <button class="cat-item" data-cat="Breakfast" onclick="filterCategory('Breakfast', this)">
+      <span class="cat-emoji">🥐</span> Breakfast <span class="cat-count">0</span>
     </button>
-    <button class="cat-item" onclick="filterCategory('Meat', this)">
-      <span class="cat-emoji">🥩</span> Meat <span class="cat-count" id="cnt-Meat">5</span>
+    <button class="cat-item" data-cat="Cheese and Dairy" onclick="filterCategory('Cheese and Dairy', this)">
+      <span class="cat-emoji">🧀</span> Cheese &amp; Dairy <span class="cat-count">0</span>
     </button>
-    <button class="cat-item" onclick="filterCategory('Seafood', this)">
-      <span class="cat-emoji">🐟</span> Seafood <span class="cat-count" id="cnt-Seafood">4</span>
+    <button class="cat-item" data-cat="Meat" onclick="filterCategory('Meat', this)">
+      <span class="cat-emoji">🥩</span> Meat <span class="cat-count">0</span>
     </button>
-    <button class="cat-item" onclick="filterCategory('Snacks', this)">
-      <span class="cat-emoji">🍿</span> Snacks <span class="cat-count" id="cnt-Snacks">5</span>
+    <button class="cat-item" data-cat="Seafood" onclick="filterCategory('Seafood', this)">
+      <span class="cat-emoji">🐟</span> Seafood <span class="cat-count">0</span>
     </button>
-    <button class="cat-item" onclick="filterCategory('Organic', this)">
-      <span class="cat-emoji">🌱</span> Organic <span class="cat-count" id="cnt-Organic">4</span>
+    <button class="cat-item" data-cat="Snacks" onclick="filterCategory('Snacks', this)">
+      <span class="cat-emoji">🍿</span> Snacks <span class="cat-count">0</span>
     </button>
-    <button class="cat-item" onclick="filterCategory('Alcohol', this)">
-      <span class="cat-emoji">🍷</span> Alcohol <span class="cat-count" id="cnt-Alcohol">4</span>
+    <button class="cat-item" data-cat="Organic" onclick="filterCategory('Organic', this)">
+      <span class="cat-emoji">🌱</span> Organic <span class="cat-count">0</span>
     </button>
-    <button class="cat-item" onclick="filterCategory('Cleaning', this)">
-      <span class="cat-emoji">🧹</span> Cleaning <span class="cat-count" id="cnt-Cleaning">4</span>
+    <button class="cat-item" data-cat="Alcohol" onclick="filterCategory('Alcohol', this)">
+      <span class="cat-emoji">🍷</span> Alcohol <span class="cat-count">0</span>
     </button>
-    <button class="cat-item" onclick="filterCategory('Emergency', this)">
-      <span class="cat-emoji">📦</span> Emergency <span class="cat-count" id="cnt-Emergency">3</span>
+    <button class="cat-item" data-cat="Cleaning Supplies" onclick="filterCategory('Cleaning Supplies', this)">
+      <span class="cat-emoji">🧹</span> Cleaning <span class="cat-count">0</span>
     </button>
-    <button class="cat-item" onclick="filterCategory('Health & Personal Care', this)">
-      <span class="cat-emoji">💊</span> Health &amp; Personal Care <span class="cat-count" id="cnt-HealthandPersonalCare">4</span>
+    <button class="cat-item" data-cat="Emergency Supplies" onclick="filterCategory('Emergency Supplies', this)">
+      <span class="cat-emoji">📦</span> Emergency <span class="cat-count">0</span>
     </button>
-    <button class="cat-item" onclick="filterCategory('Laundry', this)">
-      <span class="cat-emoji">🧺</span> Laundry <span class="cat-count" id="cnt-Laundry">2</span>
+    <button class="cat-item" data-cat="Health & Personal Care" onclick="filterCategory('Health & Personal Care', this)">
+      <span class="cat-emoji">💊</span> Health &amp; Personal Care <span class="cat-count">0</span>
     </button>
-    <button class="cat-item" onclick="filterCategory('Paper & Plastic', this)">
-      <span class="cat-emoji">🧻</span> Paper &amp; Plastic <span class="cat-count" id="cnt-PaperandPlastic">2</span>
+    <button class="cat-item" data-cat="Laundry" onclick="filterCategory('Laundry', this)">
+      <span class="cat-emoji">🧺</span> Laundry <span class="cat-count">0</span>
+    </button>
+    <button class="cat-item" data-cat="Paper & Plastic" onclick="filterCategory('Paper & Plastic', this)">
+      <span class="cat-emoji">🧻</span> Paper &amp; Plastic <span class="cat-count">0</span>
     </button>
   </aside>
 
-  <!-- MAIN -->
   <main class="main">
 
     <div class="breadcrumb">
       <a href="index.html">Home</a> › <span id="breadCat">All Products</span>
     </div>
 
-    <!-- Offer Banner -->
     <div class="offer-banner">
       <div class="offer-emoji">🚚</div>
       <div>
@@ -476,10 +262,9 @@
       <div class="offer-tag">Shop Now</div>
     </div>
 
-    <!-- Toolbar -->
     <div class="toolbar">
       <div class="toolbar-left">
-        <span class="result-count" id="resultCount">48 <span>products found</span></span>
+        <span class="result-count" id="resultCount">0 <span>products found</span></span>
         <button class="filter-chip active" onclick="toggleFilter(this,'inStock')">✓ In Stock</button>
         <button class="filter-chip" onclick="toggleFilter(this,'onSale')">🏷 On Sale</button>
         <button class="filter-chip" onclick="toggleFilter(this,'organic')">🌱 Organic</button>
@@ -493,10 +278,8 @@
       </select>
     </div>
 
-    <!-- Product Grid -->
     <div class="product-grid" id="productGrid"></div>
 
-    <!-- Pagination -->
     <div class="pagination">
       <button class="page-btn" id="prevBtn" onclick="changePage(-1)">‹</button>
       <button class="page-btn active" id="p1" onclick="goPage(1)">1</button>
@@ -508,33 +291,88 @@
   </main>
 </div>
 
-<div id="toast">🛒 Added to basket!</div>
+<div id="toast"></div>
 
 <script>
   const API = 'http://localhost:8080';
 
   /* state */
-  let cart = JSON.parse(localStorage.getItem('fm_basket') || '{}');
-  let wishlist = new Set();
-  let currentCat = 'all';
+  let cart     = JSON.parse(localStorage.getItem('fm_basket') || '{}');
+  /* fix #65: favourites stored in localstorage as a set of product ids */
+  let favourites = new Set(JSON.parse(localStorage.getItem('fm_favourites') || '[]'));
+  let currentCat    = 'all';
   let currentFilters = { inStock: true, onSale: false, organic: false };
-  let currentSort = 'default';
-  let searchQuery = '';
-  let currentPage = 1;
-  const PER_PAGE = 16;
+  let currentSort   = 'default';
+  let currentPage   = 1;
+  const PER_PAGE    = 16;
 
-  /* reads url params — allows search from home page hero to pre-fill */
+  /* fix #67: read both 'q' and 'cat' from url params on page load */
   const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get('q')) searchQuery = urlParams.get('q');
-  if (urlParams.get('cat')) currentCat = urlParams.get('cat');
+  let searchQuery = urlParams.get('q') || '';
+  if (searchQuery) document.getElementById('searchInput').value = searchQuery;
 
-  /* fetches all products from backend and stores in window.PRODUCTS */
+  /* cat param is applied after products load — stored here temporarily */
+  const urlCat = urlParams.get('cat') || '';
+
+  /* save favourites to localstorage */
+  function saveFavourites() {
+    localStorage.setItem('fm_favourites', JSON.stringify([...favourites]));
+  }
+
+  /* update the heart badge and sidebar count */
+  function updateFavBadge() {
+    const n = favourites.size;
+    const badge = document.getElementById('favCount');
+    badge.textContent = n;
+    badge.style.display = n === 0 ? 'none' : 'flex';
+    /* update sidebar count */
+    const countEl = document.getElementById('cnt-fav');
+    if (countEl) countEl.textContent = n;
+  }
+
+  /* clicking the heart icon in the navbar jumps straight to favourites category */
+  function filterToFavourites() {
+    const btn = document.getElementById('favSidebarBtn');
+    filterCategory('__favourites__', btn);
+  }
+
+  function getBasketMeta() {
+    return JSON.parse(localStorage.getItem('fm_basket_meta') || '{}');
+  }
+
+  function saveCart() {
+    localStorage.setItem('fm_basket', JSON.stringify(cart));
+    const meta = getBasketMeta();
+    Object.keys(cart).forEach(id => {
+      const p = window.PRODUCTS?.find(x => x.id == id);
+      if (p) meta[id] = { id: p.id, name: p.name, price: p.price, emoji: p.emoji, brand: p.brand };
+    });
+    Object.keys(meta).forEach(id => { if (!cart[id]) delete meta[id]; });
+    localStorage.setItem('fm_basket_meta', JSON.stringify(meta));
+  }
+
+  function cartTotal() { return Object.values(cart).reduce((s, v) => s + v, 0); }
+
+  function updateCartBadge() {
+    const el = document.getElementById('cartCount');
+    const n  = cartTotal();
+    el.textContent = n;
+    el.style.display = n === 0 ? 'none' : 'flex';
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(t._t);
+    t._t = setTimeout(() => t.classList.remove('show'), 2200);
+  }
+
   async function loadProducts() {
     try {
       const res = await fetch(`${API}/products`);
       if (!res.ok) throw new Error(`Status ${res.status}`);
       const data = await res.json();
-      /* map backend fields to what render() expects */
       window.PRODUCTS = data
         .filter(p => p.isActive !== false)
         .map(p => ({
@@ -544,17 +382,34 @@
           cat:     p.category?.name ?? '',
           weight:  p.description ?? '',
           price:   p.price,
-          orig:    p.onSale ? p.originalPrice : null,
-          rating:  p.rating ?? 0,
-          reviews: p.reviewCount ?? 0,
+          orig:    null,
+          rating:  0,
+          reviews: 0,
           emoji:   p.imageUrl ?? '🛍️',
-          badge:   p.onSale ? 'sale' : p.isFeatured ? 'new' : null,
-          organic: p.category?.name?.toLowerCase().includes('organic') ?? false,
+          badge:   null,
+          organic: (p.category?.name ?? '').toLowerCase().includes('organic'),
         }));
+
+      updateSidebarCounts();
+      updateFavBadge();
+
+      /* fix #67: apply ?cat= param from url after products are loaded */
+      if (urlCat) {
+        currentCat = urlCat;
+        /* highlight the matching sidebar button */
+        document.querySelectorAll('.cat-item').forEach(btn => {
+          if (btn.dataset.cat === urlCat) {
+            btn.classList.add('active');
+            document.getElementById('breadCat').textContent = urlCat;
+          } else {
+            btn.classList.remove('active');
+          }
+        });
+      }
+
       render();
     } catch (err) {
-      console.error('Failed to load products from backend:', err);
-      /* show error in grid */
+      console.error('Failed to load products:', err);
       document.getElementById('productGrid').innerHTML =
         `<div style="grid-column:1/-1;text-align:center;padding:48px;color:#e53e3e">
           ⚠️ Could not load products. Make sure the backend is running at ${API}
@@ -562,45 +417,29 @@
     }
   }
 
-  /* fetches categories and updates sidebar counts dynamically */
-  async function loadCategories() {
-    try {
-      const res = await fetch(`${API}/categories`);
-      const cats = await res.json();
-      window.ALL_CATEGORIES = cats;
-    } catch (err) {
-      console.error('Failed to load categories:', err);
-    }
+  function updateSidebarCounts() {
+    if (!window.PRODUCTS) return;
+    document.getElementById('cnt-all').textContent = window.PRODUCTS.length;
+    document.querySelectorAll('.cat-item[data-cat]').forEach(btn => {
+      const cat = btn.dataset.cat;
+      if (cat === 'all' || cat === '__favourites__') return;
+      const count = window.PRODUCTS.filter(p => p.cat === cat).length;
+      const countEl = btn.querySelector('.cat-count');
+      if (countEl) countEl.textContent = count;
+    });
   }
 
-  /* helpers */
-  function cartTotal() { return Object.values(cart).reduce((s,v) => s+v, 0); }
-
-  function updateCartBadge() {
-    const el = document.getElementById('cartCount');
-    const n = cartTotal();
-    el.textContent = n;
-    el.style.display = n === 0 ? 'none' : 'flex';
-  }
-
-  function showToast(msg = '🛒 Added to basket!') {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    clearTimeout(t._t);
-    t._t = setTimeout(() => t.classList.remove('show'), 2200);
-  }
-
-  /* saves basket to localstorage so basket.html can read it */
-  function saveCart() {
-    localStorage.setItem('fm_basket', JSON.stringify(cart));
-  }
-
-  /* filter and sort the products array based on current state */
   function getFiltered() {
     if (!window.PRODUCTS) return [];
     let list = window.PRODUCTS.slice();
-    if (currentCat !== 'all') list = list.filter(p => p.cat === currentCat);
+
+    /* fix #65: favourites acts as a special filter */
+    if (currentCat === '__favourites__') {
+      list = list.filter(p => favourites.has(p.id));
+    } else if (currentCat !== 'all') {
+      list = list.filter(p => p.cat === currentCat);
+    }
+
     if (currentFilters.onSale)  list = list.filter(p => p.orig !== null);
     if (currentFilters.organic) list = list.filter(p => p.organic);
     if (searchQuery) {
@@ -611,26 +450,24 @@
         p.cat.toLowerCase().includes(q)
       );
     }
-    if (currentSort === 'price-asc')  list.sort((a,b) => a.price - b.price);
-    if (currentSort === 'price-desc') list.sort((a,b) => b.price - a.price);
-    if (currentSort === 'rating')     list.sort((a,b) => b.rating - a.rating);
-    if (currentSort === 'name')       list.sort((a,b) => a.name.localeCompare(b.name));
+    if (currentSort === 'price-asc')  list.sort((a, b) => a.price - b.price);
+    if (currentSort === 'price-desc') list.sort((a, b) => b.price - a.price);
+    if (currentSort === 'rating')     list.sort((a, b) => b.rating - a.rating);
+    if (currentSort === 'name')       list.sort((a, b) => a.name.localeCompare(b.name));
     return list;
   }
 
-  /* renders the product grid and pagination */
   function render() {
-    if (!window.PRODUCTS) return; /* wait for fetch to complete */
+    if (!window.PRODUCTS) return;
     const filtered = getFiltered();
-    const total = filtered.length;
-    const pages = Math.max(1, Math.ceil(total / PER_PAGE));
+    const total    = filtered.length;
+    const pages    = Math.max(1, Math.ceil(total / PER_PAGE));
     if (currentPage > pages) currentPage = pages;
     const slice = filtered.slice((currentPage - 1) * PER_PAGE, currentPage * PER_PAGE);
 
     document.getElementById('resultCount').innerHTML =
       `${total} <span>product${total !== 1 ? 's' : ''} found</span>`;
 
-    /* update pagination buttons */
     for (let i = 1; i <= 3; i++) {
       const btn = document.getElementById('p' + i);
       btn.style.display = i <= pages ? 'flex' : 'none';
@@ -640,14 +477,16 @@
     document.getElementById('prevBtn').disabled = currentPage <= 1;
     document.getElementById('nextBtn').disabled = currentPage >= pages;
 
-    /* update sidebar category counts */
-    document.getElementById('cnt-all').textContent = window.PRODUCTS.length;
-    document.querySelectorAll('.cat-item[data-cat]').forEach(btn => {
-      const cat = btn.dataset.cat;
-      const count = window.PRODUCTS.filter(p => p.cat === cat).length;
-      const countEl = btn.querySelector('.cat-count');
-      if (countEl) countEl.textContent = count;
-    });
+    /* fix #65: show empty favourites state */
+    if (currentCat === '__favourites__' && total === 0) {
+      document.getElementById('productGrid').innerHTML = `
+        <div class="fav-empty" style="grid-column:1/-1">
+          <span>💔</span>
+          <p>No favourites yet</p>
+          <small>Click the ❤️ on any product to save it here</small>
+        </div>`;
+      return;
+    }
 
     const grid = document.getElementById('productGrid');
     if (slice.length === 0) {
@@ -660,18 +499,17 @@
     }
 
     grid.innerHTML = slice.map(p => {
-      const qty = cart[p.id] || 0;
-      const inWish = wishlist.has(p.id);
+      const qty    = cart[p.id] || 0;
+      const inFav  = favourites.has(p.id);
       const badgeHTML = p.badge
         ? `<span class="product-badge badge-${p.badge}">${p.badge === 'sale' ? 'Sale' : p.badge === 'org' ? 'Organic' : 'New'}</span>`
         : '';
-      const origHTML = p.orig ? `<div class="price-orig">£${p.orig.toFixed(2)}</div>` : '';
+      const origHTML  = p.orig ? `<div class="price-orig">£${p.orig.toFixed(2)}</div>` : '';
       const priceClass = p.orig ? 'price-main sale' : 'price-main';
-      /* show emoji or image depending on what backend returns */
-      const imgHTML = p.emoji.startsWith('http')
+      const imgHTML   = (p.emoji && p.emoji.startsWith('http'))
         ? `<img src="${p.emoji}" alt="${p.name}" style="width:80px;height:80px;object-fit:contain;">`
-        : `<div class="product-img">${p.emoji}</div>`;
-      const ctrlHTML = qty === 0
+        : `<div class="product-img">${p.emoji || '🛍️'}</div>`;
+      const ctrlHTML  = qty === 0
         ? `<button class="add-btn" onclick="addToCart(${p.id})" title="Add to basket">+</button>`
         : `<div class="qty-ctrl">
             <button class="qty-btn" onclick="removeFromCart(${p.id})">−</button>
@@ -681,7 +519,8 @@
 
       return `<div class="product-card" id="card-${p.id}">
         ${badgeHTML}
-        <button class="wishlist-btn ${inWish ? 'active' : ''}" onclick="toggleWish(${p.id})">${inWish ? '❤️' : '🤍'}</button>
+        <!-- fix #65: wishlist btn toggles favourites and updates sidebar count -->
+        <button class="wishlist-btn ${inFav ? 'active' : ''}" onclick="toggleFav(${p.id})" title="${inFav ? 'Remove from favourites' : 'Add to favourites'}">${inFav ? '❤️' : '🤍'}</button>
         <div class="product-img-wrap">${imgHTML}</div>
         <div class="product-info">
           <div class="product-brand">${p.brand}</div>
@@ -700,7 +539,6 @@
     }).join('');
   }
 
-  /* cart actions */
   function addToCart(id) {
     cart[id] = (cart[id] || 0) + 1;
     saveCart();
@@ -718,18 +556,29 @@
     render();
   }
 
-  function toggleWish(id) {
-    wishlist.has(id) ? wishlist.delete(id) : wishlist.add(id);
+  /* fix #65: toggleFav saves/removes from favourites set and updates sidebar */
+  function toggleFav(id) {
+    if (favourites.has(id)) {
+      favourites.delete(id);
+      showToast('💔 Removed from favourites');
+    } else {
+      favourites.add(id);
+      showToast('❤️ Added to favourites!');
+    }
+    saveFavourites();
+    updateFavBadge();
     render();
   }
 
-  /* category filter — reads data-cat attribute from sidebar buttons */
   function filterCategory(cat, btn) {
-    currentCat = cat;
+    currentCat  = cat;
     currentPage = 1;
     document.querySelectorAll('.cat-item').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    document.getElementById('breadCat').textContent = cat === 'all' ? 'All Products' : cat;
+    /* breadcrumb label */
+    document.getElementById('breadCat').textContent =
+      cat === 'all'             ? 'All Products'  :
+      cat === '__favourites__'  ? 'My Favourites' : cat;
     render();
   }
 
@@ -749,12 +598,6 @@
   }
   function goPage(n) { currentPage = n; render(); }
 
-  /* init */
-  updateCartBadge();
-  loadProducts();
-  loadCategories();
-
-    /* checks localstorage and updates navbar to show username or login/signup */
   function updateNavAuth() {
     const user = JSON.parse(localStorage.getItem('fm_user') || sessionStorage.getItem('fm_user') || 'null');
     const loginBtn  = document.getElementById('nav-login');
@@ -771,15 +614,19 @@
     }
   }
 
-  /* clears session and redirects to login */
   function logout() {
     localStorage.removeItem('fm_user');
     sessionStorage.removeItem('fm_user');
     localStorage.removeItem('fm_basket');
+    localStorage.removeItem('fm_basket_meta');
     window.location.href = 'login.html';
   }
 
+  /* init */
+  updateCartBadge();
+  updateFavBadge();
   updateNavAuth();
+  loadProducts();
 </script>
 </body>
 </html>
