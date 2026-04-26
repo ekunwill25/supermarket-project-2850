@@ -202,7 +202,7 @@
       if (meta[id]) return meta[id];
       /* fallback: fetch from backend if metadata missing */
       try {
-        const res = await fetch(`http://localhost:8080/products/${id}`);
+        const res = await fetch(`https://glowing-space-sniffle-r447pg9677v6fpj5-8080.app.github.dev/products/${id}`);
         if (res.ok) {
           const p = await res.json();
           return { id: p.id, name: p.name, price: p.price, emoji: '🛍️' };
