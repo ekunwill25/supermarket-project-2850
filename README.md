@@ -225,9 +225,8 @@ In the **Ports** tab at the bottom of VS Code:
 **4. Update the API URL**
 
 The frontend needs to point to the codespace backend URL instead of localhost. Run this once (replace the codespace name with yours from the Ports tab):
-```bash
-find /workspaces/supermarket-project-2850/frontend -name "*.html" -exec sed -i \
-  "s|http://localhost:8080|https://YOUR-CODESPACE-NAME-8080.app.github.dev|g" {} \;
+```
+When you press the globe on port 5500, on the new page that is opened, add /frontend/index.html at  the end of it
 ```
 
 **5. Open the frontend**
