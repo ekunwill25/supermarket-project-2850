@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>FreshMart — Management Portal</title>
+
+    <!-- ── Bootstrap CSS ── -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- ── Bootstrap Icons ── -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- ── Google Fonts: Fraunces + DM Sans (same as index.html) ── -->
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!--
+      CSS load order — DO NOT change:
+      1. styles.css    — shared globals (vars, bg-layer, orbs, fonts, animations, ripple)
+      2. warehouse.css — shared layout primitives (sidebar, topbar, glass-card, table, btns…)
+      3. management.css— management-only additions (purple accents, charts, WCAG helpers)
+    -->
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/warehouse.css">
+    <link rel="stylesheet" href="../../css/management.css">
+</head>
+<body>
+
+<!-- WCAG 2.4.1 — Skip navigation link (visible on focus) -->
+<a href="#mgmt-content" class="skip-link">Skip to main content</a>
+
+
+<!-- ── Background atmosphere — identical to index.html ── -->
+<div class="bg-layer" role="presentation" aria-hidden="true"></div>
+<div class="orb orb-1" role="presentation" aria-hidden="true"></div>
+<div class="orb orb-2" role="presentation" aria-hidden="true"></div>
+<div class="orb orb-3" role="presentation" aria-hidden="true"></div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     APP SHELL
+═══════════════════════════════════════════════════════════ -->
+<div class="app-shell">
+
+
+    <!-- ── SIDEBAR ──────────────────────────────────────── -->
+    <nav id="sidebar" aria-label="Management portal navigation">
+
+        <!-- Brand / back to portal selector -->
+        <a href="../../index.html" class="sidebar-brand" aria-label="FreshMart — back to portal selector">
+            <div class="brand-icon" aria-hidden="true">🛒</div>
+            <div>
+                <div class="brand-name">FreshMart</div>
+                <div class="brand-sub brand-sub-mgmt">Management Portal</div>
+            </div>
+        </a>
+
+        <!-- Manager identity -->
+        <div class="sidebar-worker">
+            <div class="worker-avatar" style="background:linear-gradient(135deg,#9333ea,#7e22ce);box-shadow:0 0 14px rgba(147,51,234,0.4);"
+                 aria-hidden="true">SM</div>
+            <div>
+                <div class="worker-name">Sarah Mitchell</div>
+                <div class="worker-shift">Store Manager · All Branches</div>
+            </div>
+        </div>
+
+        <!-- Nav links -->
+        <div class="sidebar-nav">
+            <div class="nav-section-label" id="nav-label-overview">Overview</div>
+            <button class="nav-btn active"
+                    onclick="showPage('dashboard', this)"
+                    aria-describedby="nav-label-overview">
+                <i class="bi bi-speedometer2" aria-hidden="true"></i> Dashboard
+            </button>
+
+            <div class="nav-section-label" id="nav-label-analytics">Analytics</div>
+            <button class="nav-btn"
+                    onclick="showPage('sales', this)"
+                    aria-describedby="nav-label-analytics">
+                <i class="bi bi-graph-up-arrow" aria-hidden="true"></i> Sales Analytics
+            </button>
+            <button class="nav-btn"
+                    onclick="showPage('products', this)"
+                    aria-describedby="nav-label-analytics">
+                <i class="bi bi-bar-chart-line" aria-hidden="true"></i> Product Performance
+            </button>
+            <button class="nav-btn"
+                    onclick="showPage('customers', this)"
+                    aria-describedby="nav-label-analytics">
+                <i class="bi bi-people" aria-hidden="true"></i> Customer Insights
+            </button>
+        </div>
+
+        <!-- Footer -->
+        <div class="sidebar-footer">
+            <button class="nav-btn" onclick="window.location.href='../../index.html'">
+                <i class="bi bi-arrow-left-circle" aria-hidden="true"></i> All Portals
+            </button>
+            <button class="nav-btn nav-btn-danger" aria-label="Sign out">
+                <i class="bi bi-box-arrow-right" aria-hidden="true"></i> Sign Out
+            </button>
+        </div>
+
+    </nav><!-- /#sidebar -->
+
+
+    <!-- ── MAIN ─────────────────────────────────────────── -->
+    <div id="main">
+
+        <!-- TOPBAR -->
+        <header id="topbar" role="banner">
+            <div class="topbar-title">
+                <span id="topbar-title">Dashboard</span>
+                <small id="topbar-breadcrumb">Management · Overview</small>
+            </div>
+
+            <!-- Purple "Live Data" pill -->
+            <div class="mgmt-topbar-pill" role="status" aria-live="polite">
+                <div class="live-dot" aria-hidden="true"></div>
+                Live Data
+            </div>
+
+            <button class="topbar-icon-btn" aria-label="Search">
+                <i class="bi bi-search" aria-hidden="true"></i>
+            </button>
+            <button class="topbar-icon-btn" aria-label="Notifications — 1 new">
+                <i class="bi bi-bell" aria-hidden="true"></i>
+                <span class="notif-dot" aria-hidden="true"></span>
+            </button>
+            <button class="topbar-icon-btn" aria-label="Settings">
+                <i class="bi bi-gear" aria-hidden="true"></i>
+            </button>
+        </header>
+
+
+        <!-- ═══════════════════════════════════════════════════
+             PAGE CONTENT
+        ═══════════════════════════════════════════════════ -->
+        <main id="mgmt-content" tabindex="-1">
+            <div id="wh-content">
+
+
+                <!-- ════════════════════════════════════════════════
+                     PAGE 1 · DASHBOARD
+                ════════════════════════════════════════════════ -->
+                <section id="mgmt-page-dashboard" class="mgmt-page active" aria-label="Management dashboard">
+
+                    <div class="page-heading">Good morning, Sarah 👋</div>
+                    <div class="page-subheading">Store performance overview · Friday 18 Apr 2025</div>
+
+                    <!-- KPI stat cards -->
+                    <div class="row g-3 mb-4" role="list" aria-label="Key performance indicators">
+
+                        <div class="col-6 col-lg-3" role="listitem">
+                            <div class="stat-card s-purple">
+                                <div class="stat-icon si-purple" aria-hidden="true"><i class="bi bi-currency-pound"></i></div>
+                                <div class="stat-value" aria-label="Total revenue £54,290">£54,290</div>
+                                <div class="stat-label">Revenue This Month</div>
+                                <div class="stat-delta delta-up">
+                                    <i class="bi bi-arrow-up-short" aria-hidden="true"></i>
+                                    <span>+8.4% vs last month</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-6 col-lg-3" role="listitem">
+                            <div class="stat-card s-blue">
+                                <div class="stat-icon si-blue" aria-hidden="true"><i class="bi bi-bag-check"></i></div>
+                                <div class="stat-value" aria-label="1,482 orders">1,482</div>
+                                <div class="stat-label">Orders This Month</div>
+                                <div class="stat-delta delta-up">
+                                    <i class="bi bi-arrow-up-short" aria-hidden="true"></i>
+                                    <span>+6.1% vs last month</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-6 col-lg-3" role="listitem">
+                            <div class="stat-card s-green">
+                                <div class="stat-icon si-green" aria-hidden="true"><i class="bi bi-people"></i></div>
+                                <div class="stat-value" aria-label="1,104 customers">1,104</div>
+                                <div class="stat-label">Active Customers</div>
+                                <div class="stat-delta delta-up">
+                                    <i class="bi bi-arrow-up-short" aria-hidden="true"></i>
+                                    <span>+3.2% vs last month</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-6 col-lg-3" role="listitem">
+                            <div class="stat-card s-amber">
+                                <div class="stat-icon si-amber" aria-hidden="true"><i class="bi bi-receipt"></i></div>
+                                <div class="stat-value" aria-label="Average order value £36.63">£36.63</div>
+                                <div class="stat-label">Avg. Order Value</div>
+                                <div class="stat-delta delta-down">
+                                    <i class="bi bi-arrow-down-short" aria-hidden="true"></i>
+                                    <span>-1.2% vs last month</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Revenue chart + top products -->
+                    <div class="row g-3 mb-3">
+
+                        <!-- Revenue chart -->
+                        <div class="col-12 col-lg-8">
+                            <div class="glass-card">
+                                <div class="glass-card-header">
+                                    <i class="bi bi-graph-up-arrow" style="color:#c084fc;" aria-hidden="true"></i>
+                                    <h2 class="glass-card-header-h6" style="font-family:'Fraunces',serif;font-weight:600;font-size:0.95rem;color:#fff;margin:0;">Revenue Overview</h2>
+                                    <!-- Date tabs -->
+                                    <div class="date-tabs ms-auto" role="tablist" aria-label="Revenue date range">
+                                        <button class="date-tab" role="tab" aria-selected="false"
+                                                onclick="setDateRange('7d',this)">7D</button>
+                                        <button class="date-tab active" role="tab" aria-selected="true"
+                                                onclick="setDateRange('30d',this)">30D</button>
+                                        <button class="date-tab" role="tab" aria-selected="false"
+                                                onclick="setDateRange('90d',this)">90D</button>
+                                        <button class="date-tab" role="tab" aria-selected="false"
+                                                onclick="setDateRange('ytd',this)">YTD</button>
+                                    </div>
+                                </div>
+
+                                <!-- Summary metric strip -->
+                                <div class="metric-strip" role="list" aria-label="Revenue summary">
+                                    <div class="metric-strip-item" role="listitem">
+                                        <div class="metric-strip-value" id="kpi-revenue">£54,290</div>
+                                        <div class="metric-strip-label">Total Revenue</div>
+                                    </div>
+                                    <div class="metric-strip-item" role="listitem">
+                                        <div class="metric-strip-value" id="kpi-orders">1,482</div>
+                                        <div class="metric-strip-label">Orders</div>
+                                    </div>
+                                    <div class="metric-strip-item" role="listitem">
+                                        <div class="metric-strip-value" id="kpi-aov">£36.63</div>
+                                        <div class="metric-strip-label">Avg. Order Value</div>
+                                    </div>
+                                    <div class="metric-strip-item" role="listitem">
+                                        <div class="metric-strip-value" id="kpi-customers">1,104</div>
+                                        <div class="metric-strip-label">Customers</div>
+                                    </div>
+                                </div>
+
+                                <div class="glass-card-body">
+                                    <div class="chart-wrap chart-h-260" role="img" aria-label="Revenue trend line chart">
+                                        <canvas id="chart-revenue"></canvas>
+                                    </div>
+                                    <div class="chart-legend mt-3" aria-hidden="true">
+                                        <div class="legend-item">
+                                            <div class="legend-line" style="background:#c084fc;"></div> Revenue
+                                        </div>
+                                        <div class="legend-item">
+                                            <div class="legend-line" style="background:rgba(255,255,255,0.25);border-top:1px dashed rgba(255,255,255,0.25);height:0;"></div> Target
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick insights -->
+                        <div class="col-12 col-lg-4">
+                            <div class="glass-card h-100">
+                                <div class="glass-card-header">
+                                    <i class="bi bi-lightning-charge" style="color:#fbbf24;" aria-hidden="true"></i>
+                                    <h2 style="font-family:'Fraunces',serif;font-weight:600;font-size:0.95rem;color:#fff;margin:0;">Key Insights</h2>
+                                </div>
+                                <div class="glass-card-body d-flex flex-column gap-3">
+
+                                    <div class="insight-box">
+                                        <div class="insight-box-icon" aria-hidden="true">📈</div>
+                                        <div>
+                                            <div class="insight-box-title">Sales Momentum</div>
+                                            <div class="insight-box-text">Revenue is 8.4% above last month. Dairy and Meat categories are the top growth drivers.</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="insight-box">
+                                        <div class="insight-box-icon" aria-hidden="true">🥛</div>
+                                        <div>
+                                            <div class="insight-box-title">Stock Alert</div>
+                                            <div class="insight-box-text">Organic Whole Milk 2L is critically low (4 units). Reorder before the afternoon rush.</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="insight-box">
+                                        <div class="insight-box-icon" aria-hidden="true">🔄</div>
+                                        <div>
+                                            <div class="insight-box-title">Repeat Customers</div>
+                                            <div class="insight-box-text">74% of this month's orders are from returning customers — up from 64% four weeks ago.</div>
+                                        </div>
+                                    </div>
+
+                                    <button class="btn-export w-100" style="justify-content:center;margin-top:auto;"
+                                            onclick="showPage('sales', document.querySelector('[onclick*=\'sales\']'))">
+                                        <i class="bi bi-graph-up" aria-hidden="true"></i> Full Sales Report
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Top products + recent orders -->
+                    <div class="row g-3">
+
+                        <!-- Top 5 products (preview) -->
+                        <div class="col-12 col-lg-7">
+                            <div class="glass-card">
+                                <div class="glass-card-header">
+                                    <i class="bi bi-trophy" style="color:#fbbf24;" aria-hidden="true"></i>
+                                    <h2 style="font-family:'Fraunces',serif;font-weight:600;font-size:0.95rem;color:#fff;margin:0;">Top Products</h2>
+                                    <span class="hdr-muted">This month</span>
+                                    <button class="btn-export ms-2 py-1 px-3" style="font-size:0.74rem;"
+                                            onclick="showPage('products', document.querySelector('[onclick*=\'products\']'))">
+                                        View All
+                                    </button>
+                                </div>
+                                <div class="glass-card-body p-0">
+                                    <table class="wh-table" aria-label="Top 5 products this month">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Product</th>
+                                            <th scope="col">Category</th>
+                                            <th scope="col">Sold</th>
+                                            <th scope="col">Revenue</th>
+                                            <th scope="col">Trend</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="top-products-tbody">
+                                        <!-- Populated by management.js -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Orders by time of day -->
+                        <div class="col-12 col-lg-5">
+                            <div class="glass-card h-100">
+                                <div class="glass-card-header">
+                                    <i class="bi bi-clock-history" style="color:#60a5fa;" aria-hidden="true"></i>
+                                    <h2 style="font-family:'Fraunces',serif;font-weight:600;font-size:0.95rem;color:#fff;margin:0;">Orders by Period</h2>
+                                    <span class="hdr-muted">Today</span>
+                                </div>
+                                <div class="glass-card-body">
+                                    <!-- Period breakdown bars -->
+                                    <div class="d-flex flex-column gap-3">
+                                        <div>
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <span style="font-size:0.8rem;color:rgba(255,255,255,0.6);">Morning (6–12)</span>
+                                                <span style="font-size:0.8rem;font-weight:600;">142 orders</span>
+                                            </div>
+                                            <div class="wh-progress">
+                                                <div class="wh-progress-bar" style="width:64%;background:linear-gradient(90deg,#9333ea,#c084fc);"></div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <span style="font-size:0.8rem;color:rgba(255,255,255,0.6);">Afternoon (12–18)</span>
+                                                <span style="font-size:0.8rem;font-weight:600;">89 orders</span>
+                                            </div>
+                                            <div class="wh-progress">
+                                                <div class="wh-progress-bar" style="width:40%;background:linear-gradient(90deg,#2563eb,#60a5fa);"></div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <span style="font-size:0.8rem;color:rgba(255,255,255,0.6);">Evening (18–22)</span>
+                                                <span style="font-size:0.8rem;font-weight:600;">56 orders</span>
+                                            </div>
+                                            <div class="wh-progress">
+                                                <div class="wh-progress-bar pb-green" style="width:25%;"></div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <span style="font-size:0.8rem;color:rgba(255,255,255,0.6);">Night (22–6)</span>
+                                                <span style="font-size:0.8rem;font-weight:600;">14 orders</span>
+                                            </div>
+                                            <div class="wh-progress">
+                                                <div class="wh-progress-bar pb-amber" style="width:6%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="wh-divider"></div>
+
+                                    <!-- Active alerts -->
+                                    <div class="section-label">Active Alerts</div>
+                                    <div class="d-flex flex-column gap-2">
+                                        <div class="wh-alert wh-alert-amber" role="alert">
+                                            <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
+                                            <div>AOV dropped 1.2% — monitor basket sizes this afternoon.</div>
+                                        </div>
+                                        <div class="wh-alert wh-alert-red" role="alert">
+                                            <i class="bi bi-exclamation-circle-fill" aria-hidden="true"></i>
+                                            <div>3 items below reorder threshold in the Dairy aisle.</div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </section>
+                <!-- /dashboard -->
+
+
+                <!-- ════════════════════════════════════════════════
+                     PAGE 2 · SALES ANALYTICS
+                ════════════════════════════════════════════════ -->
+                <section id="mgmt-page-sales" class="mgmt-page" aria-label="Sales analytics">
+
+                    <div class="d-flex align-items-start justify-content-between flex-wrap gap-2 mb-1">
+                        <div>
+                            <div class="page-heading">Sales Analytics</div>
+                            <div class="page-subheading">Revenue, orders and trends across all time periods</div>
+                        </div>
+                        <button class="btn-export" onclick="exportCSV('sales')" aria-label="Export sales data as CSV">
+                            <i class="bi bi-download" aria-hidden="true"></i> Export CSV
+                        </button>
+                    </div>
+
+                    <!-- Date range selector -->
+                    <div class="glass-card mb-3">
+                        <div class="glass-card-body" style="padding:14px 20px;">
+                            <div class="d-flex align-items-center gap-3 flex-wrap">
+                                <span style="font-size:0.78rem;color:rgba(255,255,255,0.4);font-weight:600;">Date Range:</span>
+                                <div class="date-tabs" role="tablist" aria-label="Select date range">
+                                    <button class="date-tab" role="tab" onclick="setDateRange('7d',this)" aria-selected="false">Last 7 Days</button>
+                                    <button class="date-tab active" role="tab" onclick="setDateRange('30d',this)" aria-selected="true">Last 30 Days</button>
+                                    <button class="date-tab" role="tab" onclick="setDateRange('90d',this)" aria-selected="false">Last 90 Days</button>
+                                    <button class="date-tab" role="tab" onclick="setDateRange('ytd',this)" aria-selected="false">Year to Date</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Revenue chart -->
+                    <div class="glass-card mb-3">
+                        <div class="glass-card-header">
+                            <i class="bi bi-graph-up-arrow" style="color:#c084fc;" aria-hidden="true"></i>
+                            <h2 style="font-family:'Fraunces',serif;font-weight:600;font-size:0.95rem;color:#fff;margin:0;">Revenue vs Target</h2>
+                        </div>
+                        <div class="metric-strip" aria-label="Revenue summary statistics">
+                            <div class="metric-strip-item">
+                                <div class="metric-strip-value" id="kpi-revenue-sales">£54,290</div>
+                                <div class="metric-strip-label">Total Revenue</div>
+                            </div>
+                            <div class="metric-strip-item">
+                                <div class="metric-strip-value" style="color:#4ade80;">+8.4%</div>
+                                <div class="metric-strip-label">vs Last Period</div>
+                            </div>
+                            <div class="metric-strip-item">
+                                <div class="metric-strip-value">£52,000</div>
+                                <div class="metric-strip-label">Target</div>
+                            </div>
+                            <div class="metric-strip-item">
+                                <div class="metric-strip-value" style="color:#4ade80;">104.4%</div>
+                                <div class="metric-strip-label">Target Achieved</div>
+                            </div>
+                        </div>
+                        <div class="glass-card-body">
+                            <div class="chart-wrap chart-h-300" role="img" aria-label="Revenue vs target line chart">
+                                <canvas id="chart-revenue"></canvas>
+                            </div>
+                            <div class="chart-legend mt-3" aria-hidden="true">
+                                <div class="legend-item"><div class="legend-dot" style="background:#c084fc;"></div> Revenue</div>
+                                <div class="legend-item"><div class="legend-dot" style="background:rgba(255,255,255,0.3);"></div> Target</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Orders chart + breakdown -->
+                    <div class="row g-3">
+                        <div class="col-12 col-lg-7">
+                            <div class="glass-card">
+                                <div class="glass-card-header">
+                                    <i class="bi bi-bag-check" style="color:#c084fc;" aria-hidden="true"></i>
+                                    <h2 style="font-family:'Fraunces',serif;font-weight:600;font-size:0.95rem;color:#fff;margin:0;">Order Volume</h2>
+                                </div>
+                                <div class="glass-card-body">
+                                    <div class="chart-wrap chart-h-220" role="img" aria-label="Order volume bar chart">
+                                        <canvas id="chart-orders"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Breakdown table -->
+                        <div class="col-12 col-lg-5">
+                            <div class="glass-card h-100">
+                                <div class="glass-card-header">
+                                    <i class="bi bi-table" style="color:rgba(255,255,255,0.4);" aria-hidden="true"></i>
+                                    <h2 style="font-family:'Fraunces',serif;font-weight:600;font-size:0.95rem;color:#fff;margin:0;">Period Breakdown</h2>
+                                </div>
+                                <div class="glass-card-body p-0">
+                                    <table class="wh-table" aria-label="Sales breakdown by period">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Period</th>
+                                            <th scope="col">Revenue</th>
+                                            <th scope="col">Orders</th>
+                                            <th scope="col">vs Target</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>Week 1</td><td>£12,400</td><td>338</td>
+                                            <td><span class="kpi-pill kpi-down">-4.6%</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Week 2</td><td>£13,800</td><td>378</td>
+                                            <td><span class="kpi-pill kpi-up">+6.2%</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Week 3</td><td>£14,200</td><td>390</td>
+                                            <td><span class="kpi-pill kpi-up">+9.2%</span></td>
+                                        </tr>
+                                        <tr class="top-row">
+                                            <td>Week 4</td><td style="font-weight:700;">£13,890</td><td style="font-weight:700;">376</td>
+                                            <td><span class="kpi-pill kpi-up">+6.8%</span></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Insight callout -->
+                                <div class="glass-card-body" style="padding-top:0;">
+                                    <div class="insight-box">
+                                        <div class="insight-box-icon" aria-hidden="true">💡</div>
+                                        <div>
+                                            <div class="insight-box-title">Peak Trading</div>
+                                            <div class="insight-box-text">Week 3 was the strongest period. Friday orders consistently outperform other days by ~18%.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+                <!-- /sales -->
+
+
+                <!-- ════════════════════════════════════════════════
+                     PAGE 3 · PRODUCT PERFORMANCE
+                ════════════════════════════════════════════════ -->
+                <section id="mgmt-page-products" class="mgmt-page" aria-label="Product performance">
+
+                    <div class="d-flex align-items-start justify-content-between flex-wrap gap-2 mb-1">
+                        <div>
+                            <div class="page-heading">Product Performance</div>
+                            <div class="page-subheading">Best sellers, category breakdown and stock insights</div>
+                        </div>
+                        <button class="btn-export" onclick="exportCSV('products')" aria-label="Export product data as CSV">
+                            <i class="bi bi-download" aria-hidden="true"></i> Export CSV
+                        </button>
+                    </div>
+
+                    <!-- Category donut + top items bars -->
+                    <div class="row g-3 mb-3">
+
+                        <!-- Donut -->
+                        <div class="col-12 col-lg-4">
+                            <div class="glass-card h-100">
+                                <div class="glass-card-header">
+                                    <i class="bi bi-pie-chart" style="color:#c084fc;" aria-hidden="true"></i>
+                                    <h2 style="font-family:'Fraunces',serif;font-weight:600;font-size:0.95rem;color:#fff;margin:0;">Revenue by Category</h2>
+                                </div>
+                                <div class="glass-card-body">
+                                    <div class="donut-wrap" role="img" aria-label="Donut chart showing revenue by product category">
+                                        <canvas id="chart-category-donut"></canvas>
+                                        <div class="donut-centre">
+                                            <div class="donut-centre-value">£122k</div>
+                                            <div class="donut-centre-label">Total</div>
+                                        </div>
+                                    </div>
+                                    <!-- Custom legend -->
+                                    <div class="chart-legend mt-4 justify-content-center" aria-label="Category legend">
+                                        <div class="legend-item"><div class="legend-dot" style="background:#60a5fa;"></div>Dairy</div>
+                                        <div class="legend-item"><div class="legend-dot" style="background:#fbbf24;"></div>Bakery</div>
+                                        <div class="legend-item"><div class="legend-dot" style="background:#4ade80;"></div>Produce</div>
+                                        <div class="legend-item"><div class="legend-dot" style="background:#f87171;"></div>Meat</div>
+                                        <div class="legend-item"><div class="legend-dot" style="background:#c084fc;"></div>Frozen</div>
+                                        <div class="legend-item"><div class="legend-dot" style="background:#34d399;"></div>Beverages</div>
+                                        <div class="legend-item"><div class="legend-dot" style="background:#fb923c;"></div>Snacks</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Units sold bars -->
+                        <div class="col-12 col-lg-8">
+                            <div class="glass-card h-100">
+                                <div class="glass-card-header">
+                                    <i class="bi bi-bar-chart-line" style="color:#c084fc;" aria-hidden="true"></i>
+                                    <h2 style="font-family:'Fraunces',serif;font-weight:600;font-size:0.95rem;color:#fff;margin:0;">Units Sold — Top Products</h2>
+                                    <span class="hdr-muted">This month</span>
+                                </div>
+                                <div class="glass-card-body" id="product-perf-bars" aria-label="Horizontal bar chart of units sold by product">
+                                    <!-- Populated by management.js -->
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Full products table -->
+                    <div class="glass-card">
+                        <div class="glass-card-header">
+                            <i class="bi bi-trophy" style="color:#fbbf24;" aria-hidden="true"></i>
+                            <h2 style="font-family:'Fraunces',serif;font-weight:600;font-size:0.95rem;color:#fff;margin:0;">All Top Products</h2>
+                            <span class="hdr-muted">Ranked by units sold · April 2025</span>
+                        </div>
+                        <div class="glass-card-body p-0">
+                            <table class="wh-table" aria-label="Top products ranked by units sold">
+                                <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Product</th>
+                                    <th scope="col">Category</th>
+                                    <th scope="col">Units Sold</th>
+                                    <th scope="col">Revenue</th>
+                                    <th scope="col">Trend</th>
+                                </tr>
+                                </thead>
+                                <tbody id="top-products-tbody">
+                                <!-- Populated by management.js -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </section>
+                <!-- /products -->
+
+
+                <!-- ════════════════════════════════════════════════
+                     PAGE 4 · CUSTOMER INSIGHTS
+                ════════════════════════════════════════════════ -->
+                <section id="mgmt-page-customers" class="mgmt-page" aria-label="Customer insights">
+
+                    <div class="page-heading">Customer Insights</div>
+                    <div class="page-subheading">Demographics, loyalty and ordering behaviour · April 2025</div>
+
+                    <!-- Segment overview cards -->
+                    <div class="row g-3 mb-3">
+
+                        <div class="col-6 col-lg-3">
+                            <div class="segment-card">
+                                <div class="segment-icon si-purple" aria-hidden="true" style="background:rgba(147,51,234,0.16);">
+                                    <i class="bi bi-people-fill" style="color:#c084fc;"></i>
+                                </div>
+                                <div class="segment-value" aria-label="1,104 total customers">1,104</div>
+                                <div class="segment-label">Total Customers</div>
+                                <div class="segment-delta delta-up">
+                                    <i class="bi bi-arrow-up-short" aria-hidden="true"></i> +36 new this month
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-6 col-lg-3">
+                            <div class="segment-card">
+                                <div class="segment-icon" style="background:rgba(74,222,128,0.14);" aria-hidden="true">
+                                    <i class="bi bi-arrow-repeat" style="color:#4ade80;"></i>
+                                </div>
+                                <div class="segment-value" aria-label="74% repeat customer rate">74%</div>
+                                <div class="segment-label">Repeat Rate</div>
+                                <div class="segment-delta delta-up">
+                                    <i class="bi bi-arrow-up-short" aria-hidden="true"></i> +10pp vs last month
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-6 col-lg-3">
+                            <div class="segment-card">
+                                <div class="segment-icon" style="background:rgba(96,165,250,0.14);" aria-hidden="true">
+                                    <i class="bi bi-calendar-check" style="color:#60a5fa;"></i>
+                                </div>
+                                <div class="segment-value" aria-label="Average 2.8 orders per customer">2.8</div>
+                                <div class="segment-label">Orders / Customer</div>
+                                <div class="segment-delta delta-up">
+                                    <i class="bi bi-arrow-up-short" aria-hidden="true"></i> +0.3 vs last month
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-6 col-lg-3">
+                            <div class="segment-card">
+                                <div class="segment-icon" style="background:rgba(251,191,36,0.14);" aria-hidden="true">
+                                    <i class="bi bi-star-fill" style="color:#fbbf24;"></i>
+                                </div>
+                                <div class="segment-value" aria-label="Customer satisfaction 4.7 out of 5">4.7</div>
+                                <div class="segment-label">Satisfaction Score</div>
+                                <div class="segment-delta delta-flat">
+                                    <i class="bi bi-dash" aria-hidden="true"></i> Unchanged
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Age + location charts -->
+                    <div class="row g-3 mb-3">
+
+                        <!-- Age breakdown -->
+                        <div class="col-12 col-lg-6">
+                            <div class="glass-card">
+                                <div class="glass-card-header">
+                                    <i class="bi bi-person-lines-fill" style="color:#c084fc;" aria-hidden="true"></i>
+                                    <h2 style="font-family:'Fraunces',serif;font-weight:600;font-size:0.95rem;color:#fff;margin:0;">Age Breakdown</h2>
+                                    <span class="hdr-muted">% of customers</span>
+                                </div>
+                                <div class="glass-card-body">
+                                    <div class="chart-wrap chart-h-220" role="img" aria-label="Bar chart of customer age breakdown">
+                                        <canvas id="chart-age"></canvas>
+                                    </div>
+                                    <!-- Text fallback for screen readers (WCAG 1.1.1) -->
+                                    <table class="sr-only" aria-label="Customer age breakdown data">
+                                        <caption>Customer age breakdown</caption>
+                                        <thead><tr><th>Age group</th><th>Percentage</th></tr></thead>
+                                        <tbody>
+                                        <tr><td>18–24</td><td>12%</td></tr>
+                                        <tr><td>25–34</td><td>28%</td></tr>
+                                        <tr><td>35–44</td><td>24%</td></tr>
+                                        <tr><td>45–54</td><td>18%</td></tr>
+                                        <tr><td>55–64</td><td>11%</td></tr>
+                                        <tr><td>65+</td><td>7%</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Location donut -->
+                        <div class="col-12 col-lg-6">
+                            <div class="glass-card">
+                                <div class="glass-card-header">
+                                    <i class="bi bi-geo-alt-fill" style="color:#c084fc;" aria-hidden="true"></i>
+                                    <h2 style="font-family:'Fraunces',serif;font-weight:600;font-size:0.95rem;color:#fff;margin:0;">Customer Locations</h2>
+                                    <span class="hdr-muted">Leeds area</span>
+                                </div>
+                                <div class="glass-card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-7">
+                                            <div class="donut-wrap" style="width:160px;height:160px;"
+                                                 role="img" aria-label="Donut chart showing customer locations in Leeds">
+                                                <canvas id="chart-location"></canvas>
+                                                <div class="donut-centre">
+                                                    <div class="donut-centre-value" style="font-size:1.1rem;">Leeds</div>
+                                                    <div class="donut-centre-label">Area</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-5">
+                                            <div class="d-flex flex-column gap-2">
+                                                <div class="legend-item"><div class="legend-dot" style="background:#c084fc;"></div>City — 34%</div>
+                                                <div class="legend-item"><div class="legend-dot" style="background:#60a5fa;"></div>Headingley — 18%</div>
+                                                <div class="legend-item"><div class="legend-dot" style="background:#4ade80;"></div>Chapel A. — 14%</div>
+                                                <div class="legend-item"><div class="legend-dot" style="background:#fbbf24;"></div>Roundhay — 12%</div>
+                                                <div class="legend-item"><div class="legend-dot" style="background:#f87171;"></div>Meanwood — 10%</div>
+                                                <div class="legend-item"><div class="legend-dot" style="background:rgba(255,255,255,0.3);"></div>Other — 12%</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Screen-reader data table (WCAG 1.1.1) -->
+                                    <table class="sr-only" aria-label="Customer location data">
+                                        <caption>Customer locations in Leeds</caption>
+                                        <thead><tr><th>Area</th><th>Percentage</th></tr></thead>
+                                        <tbody>
+                                        <tr><td>Leeds City Centre</td><td>34%</td></tr>
+                                        <tr><td>Headingley</td><td>18%</td></tr>
+                                        <tr><td>Chapel Allerton</td><td>14%</td></tr>
+                                        <tr><td>Roundhay</td><td>12%</td></tr>
+                                        <tr><td>Meanwood</td><td>10%</td></tr>
+                                        <tr><td>Other</td><td>12%</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Repeat vs new + activity timeline -->
+                    <div class="row g-3">
+
+                        <!-- Repeat vs new chart -->
+                        <div class="col-12 col-lg-7">
+                            <div class="glass-card">
+                                <div class="glass-card-header">
+                                    <i class="bi bi-arrow-repeat" style="color:#c084fc;" aria-hidden="true"></i>
+                                    <h2 style="font-family:'Fraunces',serif;font-weight:600;font-size:0.95rem;color:#fff;margin:0;">Repeat vs New Customers</h2>
+                                    <span class="hdr-muted">Last 4 weeks %</span>
+                                </div>
+                                <div class="glass-card-body">
+                                    <div class="chart-wrap chart-h-220" role="img" aria-label="Line chart comparing repeat versus new customer percentages over 4 weeks">
+                                        <canvas id="chart-repeat"></canvas>
+                                    </div>
+                                    <div class="chart-legend mt-3" aria-hidden="true">
+                                        <div class="legend-item"><div class="legend-dot" style="background:#c084fc;"></div> Repeat</div>
+                                        <div class="legend-item"><div class="legend-dot" style="background:#60a5fa;"></div> New</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Activity timeline -->
+                        <div class="col-12 col-lg-5">
+                            <div class="glass-card h-100">
+                                <div class="glass-card-header">
+                                    <i class="bi bi-activity" style="color:#c084fc;" aria-hidden="true"></i>
+                                    <h2 style="font-family:'Fraunces',serif;font-weight:600;font-size:0.95rem;color:#fff;margin:0;">Recent Activity</h2>
+                                </div>
+                                <div class="glass-card-body">
+                                    <div class="timeline" role="list" aria-label="Recent customer activity">
+
+                                        <div class="timeline-item" role="listitem">
+                                            <div class="timeline-dot timeline-dot-purple" aria-hidden="true"></div>
+                                            <div class="timeline-time">09:42am today</div>
+                                            <div class="timeline-text">New customer registered — <strong>emily.jones@mail.com</strong></div>
+                                        </div>
+
+                                        <div class="timeline-item" role="listitem">
+                                            <div class="timeline-dot timeline-dot-green" aria-hidden="true"></div>
+                                            <div class="timeline-time">09:31am today</div>
+                                            <div class="timeline-text">Order ORD-2847 placed — £54.20 · 14 items</div>
+                                        </div>
+
+                                        <div class="timeline-item" role="listitem">
+                                            <div class="timeline-dot timeline-dot-blue" aria-hidden="true"></div>
+                                            <div class="timeline-time">09:15am today</div>
+                                            <div class="timeline-text">Customer #1042 placed their 10th order — loyalty milestone reached 🎉</div>
+                                        </div>
+
+                                        <div class="timeline-item" role="listitem">
+                                            <div class="timeline-dot timeline-dot-amber" aria-hidden="true"></div>
+                                            <div class="timeline-time">08:58am today</div>
+                                            <div class="timeline-text">Cart abandoned — £23.40 · 6 items — customer #889</div>
+                                        </div>
+
+                                        <div class="timeline-item" role="listitem">
+                                            <div class="timeline-dot timeline-dot-green" aria-hidden="true"></div>
+                                            <div class="timeline-time">08:30am today</div>
+                                            <div class="timeline-text">Order ORD-2829 delivered successfully — 5★ rating received</div>
+                                        </div>
+
+                                        <div class="timeline-item" role="listitem">
+                                            <div class="timeline-dot timeline-dot-purple" aria-hidden="true"></div>
+                                            <div class="timeline-time">Yesterday, 4:12pm</div>
+                                            <div class="timeline-text">4 new customers registered via the mobile app</div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </section>
+                <!-- /customers -->
+
+
+            </div><!-- /#wh-content -->
+        </main>
+    </div><!-- /#main -->
+</div><!-- /.app-shell -->
+
+
+<!-- ── TOAST (same markup as warehouse portal) ── -->
+<div id="wh-toast" role="status" aria-live="polite" aria-atomic="true">
+    <div class="toast-inner">
+        <div class="toast-icon" id="toast-icon" aria-hidden="true"></div>
+        <div>
+            <div class="toast-title" id="toast-title"></div>
+            <div class="toast-msg"   id="toast-msg"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ── MOBILE SIDEBAR TOGGLE ── -->
+<button class="mobile-menu-btn" onclick="toggleSidebar()" aria-label="Toggle navigation menu" aria-controls="sidebar">
+    <i class="bi bi-list" aria-hidden="true"></i>
+</button>
+
+
+<!-- ── Bootstrap JS ── -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- ── Chart.js ── -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+
+<!--
+  Script load order:
+  portal.js    — NOT loaded (landing page only)
+  warehouse.js — NOT loaded (warehouse portal only)
+  management.js— all management interactivity + charts
+-->
+<script src="../../js/management.js"></script>
+
+</body>
+</html>

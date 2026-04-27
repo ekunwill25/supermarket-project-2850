@@ -1,0 +1,524 @@
+/* ============================================================
+   MANAGEMENT PORTAL — management.css
+   Save as: src/css/management.css
+
+   Load order in management/index.html:
+     1. styles.css      (shared globals — variables, bg-layer, orbs,
+                          fonts, fadeUp/fadeDown/drift/ripple)
+     2. warehouse.css   (shared layout primitives — app-shell, sidebar,
+                          topbar, glass-card, wh-table, badges, buttons,
+                          forms, wh-alert, wh-divider, wh-progress,
+                          toast, mobile-btn — ALL reused here)
+     3. management.css  (management-only overrides & new components)
+
+   This file ONLY defines what is unique to the management portal.
+   It never re-declares anything already in styles.css or warehouse.css.
+   ============================================================ */
+
+
+/* ── MG-1. MANAGEMENT ACCENT COLOUR OVERRIDES
+   The management portal uses purple (#9333ea / #c084fc) as its
+   accent, matching card-management and icon-management in index.html.
+   We override the warehouse blue active states here.              */
+
+/* Sidebar active nav button → purple instead of blue */
+#sidebar .nav-btn.active {
+    background: rgba(147, 51, 234, 0.18);
+    color: #c084fc;
+}
+#sidebar .nav-btn.active i { color: #c084fc; }
+
+/* Nav badge → purple */
+#sidebar .nav-badge {
+    background: rgba(147, 51, 234, 0.22);
+    color: #c084fc;
+}
+
+/* Topbar pill → purple tint (overrides green "Shift Active") */
+.mgmt-topbar-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(147, 51, 234, 0.13);
+    border: 1px solid rgba(147, 51, 234, 0.3);
+    color: #c084fc;
+    border-radius: 20px;
+    padding: 5px 13px;
+    font-size: 0.74rem;
+    font-weight: 600;
+}
+
+/* Brand sub-label for management */
+.brand-sub-mgmt {
+    font-size: 0.64rem;
+    color: rgba(255, 255, 255, 0.35);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-top: 2px;
+}
+
+
+/* ── MG-2. STAT CARD PURPLE VARIANT
+   Adds to the s-blue/s-green/s-amber/s-red set in warehouse.css  */
+.stat-card.s-purple:hover {
+    box-shadow: 0 18px 48px rgba(147, 51, 234, 0.22);
+    border-color: rgba(147, 51, 234, 0.35);
+}
+.si-purple {
+    background: rgba(147, 51, 234, 0.16);
+    color: #c084fc;
+}
+
+
+/* ── MG-3. CHART CONTAINERS
+   Wrapper that holds a <canvas> element.
+   chart.js renders into the canvas; we just set dimensions.      */
+.chart-wrap {
+    position: relative;
+    width: 100%;
+}
+.chart-wrap canvas {
+    display: block;
+    width: 100% !important;
+    /* Heights set per-chart with utility classes below */
+}
+.chart-h-200 { height: 200px; }
+.chart-h-260 { height: 260px; }
+.chart-h-300 { height: 300px; }
+.chart-h-220 { height: 220px; }
+
+
+/* ── MG-4. CHART LEGEND (custom — replaces Chart.js default)     */
+.chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 14px;
+}
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.76rem;
+    color: rgba(255, 255, 255, 0.55);
+}
+.legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+.legend-line {
+    width: 18px;
+    height: 3px;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+
+/* ── MG-5. KPI CHANGE PILL
+   Small inline pill shown next to a metric: ▲ 12% vs last week   */
+.kpi-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+}
+.kpi-up   { background: rgba(45,153,96,0.16);  color: #4ade80; }
+.kpi-down { background: rgba(239,68,68,0.16);  color: #f87171; }
+.kpi-flat { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.4); }
+
+
+/* ── MG-6. DATE RANGE PICKER (tab-style)
+   "Today / 7D / 30D / 90D" selector used on multiple pages       */
+.date-tabs {
+    display: flex;
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 4px;
+}
+.date-tab {
+    padding: 5px 13px;
+    border: none;
+    background: transparent;
+    border-radius: 7px;
+    color: rgba(255, 255, 255, 0.4);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.76rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s;
+    white-space: nowrap;
+}
+.date-tab:hover { color: rgba(255, 255, 255, 0.75); }
+.date-tab.active {
+    background: rgba(147, 51, 234, 0.25);
+    color: #c084fc;
+}
+
+
+/* ── MG-7. TOP PRODUCTS TABLE RANK BADGE                          */
+.rank-badge {
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+.rank-1 { background: rgba(251,191,36,0.2);  color: #fbbf24; }
+.rank-2 { background: rgba(203,213,225,0.15); color: #cbd5e1; }
+.rank-3 { background: rgba(180,108,67,0.2);  color: #cd7f32; }
+.rank-n { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.35); }
+
+
+/* ── MG-8. PRODUCT PERFORMANCE BAR (horizontal)
+   Used in ProductPerformance page for category/item breakdown     */
+.perf-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+.perf-bar-label {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.7);
+    min-width: 130px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.perf-bar-track {
+    flex: 1;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: 3px;
+    overflow: hidden;
+}
+.perf-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.7s cubic-bezier(0.34, 1.2, 0.64, 1);
+}
+.perf-bar-value {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.55);
+    min-width: 44px;
+    text-align: right;
+}
+
+
+/* ── MG-9. CUSTOMER INSIGHT CARDS
+   Used in CustomerInsights for segment breakdown                  */
+.segment-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 13px;
+    padding: 16px 18px;
+    transition: border-color 0.2s, transform 0.2s;
+}
+.segment-card:hover {
+    border-color: rgba(147, 51, 234, 0.3);
+    transform: translateY(-2px);
+}
+.segment-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+}
+.segment-value {
+    font-family: 'Fraunces', serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+}
+.segment-label {
+    font-size: 0.76rem;
+    color: rgba(255, 255, 255, 0.38);
+    margin-top: 4px;
+}
+.segment-delta {
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+
+/* ── MG-10. ACTIVITY TIMELINE
+   Vertical list with connecting line — used on CustomerInsights   */
+.timeline {
+    position: relative;
+    padding-left: 24px;
+}
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 6px;
+    bottom: 6px;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.08);
+}
+.timeline-item {
+    position: relative;
+    padding-bottom: 18px;
+}
+.timeline-item:last-child { padding-bottom: 0; }
+.timeline-dot {
+    position: absolute;
+    left: -20px;
+    top: 4px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid;
+    background: #0d1f13;
+}
+.timeline-dot-purple { border-color: #c084fc; }
+.timeline-dot-green  { border-color: #4ade80; }
+.timeline-dot-blue   { border-color: #60a5fa; }
+.timeline-dot-amber  { border-color: #fbbf24; }
+.timeline-time {
+    font-size: 0.68rem;
+    color: rgba(255, 255, 255, 0.28);
+    margin-bottom: 2px;
+}
+.timeline-text {
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.4;
+}
+
+
+/* ── MG-11. SUMMARY METRIC ROW
+   Horizontal strip of 3–4 key numbers inside a glass-card        */
+.metric-strip {
+    display: flex;
+    gap: 0;
+}
+.metric-strip-item {
+    flex: 1;
+    padding: 16px 20px;
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+    text-align: center;
+}
+.metric-strip-item:last-child { border-right: none; }
+.metric-strip-value {
+    font-family: 'Fraunces', serif;
+    font-size: 1.55rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+}
+.metric-strip-label {
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.35);
+    margin-top: 5px;
+}
+
+@media (max-width: 576px) {
+    .metric-strip { flex-wrap: wrap; }
+    .metric-strip-item {
+        flex: 1 1 50%;
+        border-right: none;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .metric-strip-item:nth-child(odd) {
+        border-right: 1px solid rgba(255,255,255,0.06);
+    }
+}
+
+
+/* ── MG-12. EXPORT BUTTON (prominent CTA for reports)             */
+.btn-export {
+    background: rgba(147, 51, 234, 0.15);
+    border: 1px solid rgba(147, 51, 234, 0.3);
+    border-radius: 10px;
+    color: #c084fc;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.84rem;
+    font-weight: 600;
+    padding: 9px 18px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: background 0.2s, transform 0.2s;
+}
+.btn-export:hover {
+    background: rgba(147, 51, 234, 0.28);
+    transform: translateY(-1px);
+}
+
+
+/* ── MG-13. DONUT / PIE CHART WRAPPER
+   Centres the chart canvas + overlaid centre label                */
+.donut-wrap {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    margin: 0 auto;
+}
+.donut-centre {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    pointer-events: none;
+}
+.donut-centre-value {
+    font-family: 'Fraunces', serif;
+    font-size: 1.55rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+}
+.donut-centre-label {
+    font-size: 0.68rem;
+    color: rgba(255, 255, 255, 0.35);
+    margin-top: 3px;
+}
+
+
+/* ── MG-14. SPARKLINE BADGES
+   Tiny inline trend line shown next to a stat value              */
+.sparkline-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+.sparkline-up   { color: #4ade80; }
+.sparkline-down { color: #f87171; }
+.sparkline-flat { color: rgba(255,255,255,0.3); }
+
+
+/* ── MG-15. TABLE ROW HIGHLIGHT for top performer                 */
+.wh-table tbody tr.top-row td {
+    background: rgba(147, 51, 234, 0.06);
+}
+.wh-table tbody tr.top-row:hover td {
+    background: rgba(147, 51, 234, 0.1);
+}
+
+
+/* ── MG-16. INSIGHT CALLOUT BOX
+   Highlighted box pulling out a key insight on the analytics page */
+.insight-box {
+    background: rgba(147, 51, 234, 0.08);
+    border: 1px solid rgba(147, 51, 234, 0.22);
+    border-radius: 12px;
+    padding: 14px 18px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+.insight-box-icon {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+.insight-box-title {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #c084fc;
+    margin-bottom: 3px;
+}
+.insight-box-text {
+    font-size: 0.79rem;
+    color: rgba(255, 255, 255, 0.55);
+    line-height: 1.5;
+}
+
+
+/* ── MG-17. WCAG ACCESSIBILITY HELPERS
+   Focus rings, skip link, screen-reader only text                */
+
+/* Visible focus ring for keyboard navigation — meets WCAG 2.4.7 */
+:focus-visible {
+    outline: 2px solid #c084fc;
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+/* Skip-to-content link — visible only on focus (WCAG 2.4.1)     */
+.skip-link {
+    position: absolute;
+    top: -100px;
+    left: 16px;
+    background: #9333ea;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 0 0 8px 8px;
+    font-size: 0.86rem;
+    font-weight: 600;
+    z-index: 9999;
+    text-decoration: none;
+    transition: top 0.2s;
+}
+.skip-link:focus { top: 0; }
+
+/* Screen-reader-only utility (WCAG — hidden but accessible)      */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Ensure sufficient colour contrast on muted text (WCAG 1.4.3)  */
+.td-muted  { color: rgba(255, 255, 255, 0.52); } /* override warehouse to ≥4.5:1 */
+.stat-label { color: rgba(255, 255, 255, 0.52); }
+
+/* High-contrast focus for inputs (WCAG 1.4.11)                   */
+.wh-input:focus,
+.wh-select:focus,
+.wh-textarea:focus {
+    outline: 2px solid #c084fc;
+    outline-offset: 0;
+}
+
+/* Reduced-motion: disable all animations for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+
+/* ── MG-18. RESPONSIVE TWEAKS (management-specific)              */
+@media (max-width: 768px) {
+    .date-tabs { flex-wrap: wrap; }
+    .donut-wrap { width: 150px; height: 150px; }
+    .metric-strip-item { padding: 12px 14px; }
+    .chart-h-300 { height: 220px; }
+    .chart-h-260 { height: 200px; }
+}
