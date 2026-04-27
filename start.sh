@@ -1,20 +1,14 @@
-# asked AI for this script
-
 #!/bin/bash
-# starts both backend and frontend servers simultaneously
+BACKEND_URL="https://${CODESPACE_NAME}-8080.app.github.dev"
+echo "Setting API URL to $BACKEND_URL"
+find /workspaces/supermarket-project-2850/frontend -name "*.html" -exec sed -i \
+  "s|const API = '.*'|const API = '${BACKEND_URL}'|g" {} \;
 
-echo "Starting backend on port 8080..."
+echo "Starting backend..."
 cd /workspaces/supermarket-project-2850/Backend-SupermarketDatabase
 ./gradlew bootRun &
-BACKEND_PID=$!
 
-echo "Starting frontend on port 5500..."
+echo "Starting frontend..."
 cd /workspaces/supermarket-project-2850
 npx live-server . --port=5500 --no-browser &
-FRONTEND_PID=$!
-
-echo "Both servers running!"
-echo "Backend: https://\$CODESPACE_NAME-8080.app.github.dev"
-echo "Frontend: https://\$CODESPACE_NAME-5500.app.github.dev/frontend/index.html"
-
 wait
