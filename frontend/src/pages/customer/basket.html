@@ -113,7 +113,10 @@
       <div class="logo-icon">🛒</div>
       <div class="logo-text"><strong>FreshMart</strong><span>Online Supermarket</span></div>
     </a>
-    <div class="search-bar"><span style="color:#aaa">🔍</span><input type="text" placeholder="Search for products..."></div>
+    <div class="search-bar">
+      <input type="text" placeholder="Search for products..." id="searchInput" onkeydown="if(event.key==='Enter') searchRedirect()">
+      <button onclick="searchRedirect()" style="background:none;border:none;cursor:pointer;font-size:1rem;color:#aaa;padding:0;">🔍</button>
+    </div>
     <div class="nav-actions">
       <a href="login.html"  id="nav-login"  class="btn-login-nav">Login</a>
       <a href="signup.html" id="nav-signup" class="btn-signup">Sign Up</a>
@@ -360,6 +363,13 @@
     /* init */
     updateNavAuth();
     render();
+
+    
+    function searchRedirect() {
+    const q = document.getElementById('searchInput').value.trim();
+    if (q) window.location.href = 'products.html?q=' + encodeURIComponent(q);
+    }
+  
   </script>
 </body>
 </html>
