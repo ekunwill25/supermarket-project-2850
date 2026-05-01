@@ -39,15 +39,15 @@
     .search-bar:focus-within { border-color: var(--green); background: var(--white); }
     .search-bar input { border: none; background: transparent; outline: none; font-family: inherit; font-size: 14px; width: 100%; }
     .nav-actions { display: flex; align-items: center; gap: 8px; }
-    .btn-ghost { background: none; border: none; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; padding: 8px 12px; border-radius: 8px; color: var(--text); transition: background .15s; text-decoration: none; display: inline-flex; align-items: center; }
+    .btn-ghost { background: none; border: none; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; padding: 8px 12px; border-radius: 8px; color: var(--text); transition: background .15s; text-decoration: none; display: inline-flex; align-items: center; white-space: nowrap; }
     .btn-ghost:hover { background: #f3f4f6; }
-    .btn-primary { background: var(--green); color: #fff; border: none; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; padding: 8px 18px; border-radius: 8px; transition: background .15s; text-decoration: none; display: inline-flex; align-items: center; }
+    .btn-primary { background: var(--green); color: #fff; border: none; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; padding: 8px 18px; border-radius: 8px; transition: background .15s; text-decoration: none; display: inline-flex; align-items: center; white-space: nowrap; }
     .btn-primary:hover { background: var(--green-dark); }
     .icon-btn { background: none; border: none; cursor: pointer; font-size: 20px; padding: 6px; border-radius: 8px; transition: background .15s; position: relative; }
     .icon-btn:hover { background: #f3f4f6; }
     .badge { position: absolute; top: 2px; right: 2px; background: var(--red); color: #fff; font-size: 10px; font-weight: 700; border-radius: 99px; min-width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; padding: 0 4px; }
-    .nav-bottom { display: flex; gap: 4px; padding-bottom: 0; }
-    .nav-tab { font-size: 14px; font-weight: 600; padding: 10px 16px; border: none; background: none; cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent; transition: color .15s, border-color .15s; font-family: inherit; }
+    .nav-bottom { display: flex; gap: 4px; padding-bottom: 0; overflow-x: auto; }
+    .nav-tab { font-size: 14px; font-weight: 600; padding: 10px 16px; border: none; background: none; cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent; transition: color .15s, border-color .15s; font-family: inherit; white-space: nowrap; }
     .nav-tab.active { color: var(--green); border-bottom-color: var(--green); }
     .nav-tab:hover:not(.active) { color: var(--text); }
 
@@ -63,13 +63,9 @@
     .cat-item .cat-emoji { font-size: 18px; width: 24px; text-align: center; }
     .cat-count { margin-left: auto; font-size: 11px; background: var(--border); border-radius: 99px; padding: 1px 7px; color: var(--muted); font-weight: 700; }
     .cat-item.active .cat-count { background: var(--green-mid); color: var(--green-dark); }
-
-    /* favourites sidebar item — red heart accent */
     .cat-item.fav-item:hover { background: #fff0f0; color: var(--red); }
     .cat-item.fav-item.active { background: #fff0f0; color: var(--red); border-left-color: var(--red); }
     .cat-item.fav-item.active .cat-count { background: #fecdd3; color: #b91c1c; }
-
-    /* sidebar divider */
     .sidebar-divider { height: 1px; background: var(--border); margin: 4px 0; }
 
     /* ── MAIN CONTENT ── */
@@ -77,24 +73,22 @@
     .breadcrumb { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
     .breadcrumb a { color: var(--green); text-decoration: none; font-weight: 600; }
     .breadcrumb a:hover { text-decoration: underline; }
-
     .toolbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-    .toolbar-left { display: flex; align-items: center; gap: 8px; flex: 1; }
+    .toolbar-left { display: flex; align-items: center; gap: 8px; flex: 1; flex-wrap: wrap; }
     .result-count { font-size: 14px; font-weight: 700; }
     .result-count span { color: var(--muted); font-weight: 500; }
-    .filter-chip { display: flex; align-items: center; gap: 6px; background: var(--white); border: 1px solid var(--border); border-radius: 99px; padding: 5px 12px; font-size: 12.5px; font-weight: 600; cursor: pointer; color: var(--text); font-family: inherit; transition: border-color .15s, background .15s; }
+    .filter-chip { display: flex; align-items: center; gap: 6px; background: var(--white); border: 1px solid var(--border); border-radius: 99px; padding: 5px 12px; font-size: 12.5px; font-weight: 600; cursor: pointer; color: var(--text); font-family: inherit; transition: border-color .15s, background .15s; white-space: nowrap; }
     .filter-chip:hover { border-color: var(--green); color: var(--green); }
     .filter-chip.active { background: var(--green); color: #fff; border-color: var(--green); }
     .sort-select { margin-left: auto; background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 7px 12px; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; color: var(--text); outline: none; }
     .sort-select:focus { border-color: var(--green); }
 
     .offer-banner { background: linear-gradient(120deg, #1f5a29 0%, #2d7a3a 60%, #3a9a49 100%); border-radius: var(--radius); padding: 18px 24px; display: flex; align-items: center; gap: 16px; color: #fff; }
-    .offer-banner .offer-emoji { font-size: 32px; }
+    .offer-banner .offer-emoji { font-size: 32px; flex-shrink: 0; }
     .offer-banner h3 { font-size: 16px; font-weight: 800; }
     .offer-banner p { font-size: 13px; opacity: .85; margin-top: 2px; }
-    .offer-tag { margin-left: auto; background: var(--accent); color: #fff; font-size: 13px; font-weight: 800; border-radius: 8px; padding: 6px 14px; white-space: nowrap; }
+    .offer-tag { margin-left: auto; background: var(--accent); color: #fff; font-size: 13px; font-weight: 800; border-radius: 8px; padding: 6px 14px; white-space: nowrap; flex-shrink: 0; }
 
-    /* favourites empty state banner */
     .fav-empty { background: #fff0f0; border: 1px dashed #fca5a5; border-radius: var(--radius); padding: 32px; text-align: center; color: var(--muted); }
     .fav-empty span { font-size: 40px; display: block; margin-bottom: 10px; }
     .fav-empty p { font-size: 14px; font-weight: 600; }
@@ -108,12 +102,9 @@
     .badge-new   { background: #dbeafe; color: #1d4ed8; }
     .badge-offer { background: #fef3c7; color: #92400e; }
     .badge-org   { background: #d1fae5; color: #065f46; }
-
-    /* wishlist button — red when active (favourited) */
     .wishlist-btn { position: absolute; top: 8px; right: 8px; background: var(--white); border: 1px solid var(--border); border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; transition: background .15s, border-color .15s; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
     .wishlist-btn:hover { background: #fee2e2; border-color: #fca5a5; }
     .wishlist-btn.active { background: #fee2e2; border-color: #fca5a5; }
-
     .product-img-wrap { padding: 20px 16px 12px; display: flex; align-items: center; justify-content: center; height: 130px; background: #fafafa; }
     .product-img { font-size: 62px; line-height: 1; }
     .product-info { padding: 10px 14px 14px; flex: 1; display: flex; flex-direction: column; }
@@ -143,14 +134,78 @@
     #toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--green-dark); color: #fff; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 700; padding: 12px 22px; border-radius: 99px; box-shadow: 0 6px 24px rgba(0,0,0,.18); pointer-events: none; transition: transform .3s cubic-bezier(.34,1.56,.64,1), opacity .3s; opacity: 0; z-index: 200; white-space: nowrap; }
     #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
+    /* ══════════════════════════════════════════
+       CUSTOM MEDIA QUERIES
+       ══════════════════════════════════════════ */
+
+    /* ── tablet — sidebar collapses to horizontal scroll ── */
     @media (max-width: 768px) {
-      .page { grid-template-columns: 1fr; }
-      .sidebar { position: static; display: flex; flex-wrap: nowrap; overflow-x: auto; border-radius: var(--radius); }
+      .page { grid-template-columns: 1fr; padding: 16px; gap: 16px; }
+
+      /* sidebar becomes a horizontal scrolling strip */
+      .sidebar { position: static; display: flex; flex-wrap: nowrap; overflow-x: auto; border-radius: var(--radius); -webkit-overflow-scrolling: touch; }
       .sidebar-title { display: none; }
       .sidebar-divider { display: none; }
-      .cat-item { white-space: nowrap; flex-shrink: 0; border-left: none; border-bottom: 3px solid transparent; }
+      .cat-item { white-space: nowrap; flex-shrink: 0; border-left: none; border-bottom: 3px solid transparent; padding: 10px 14px; }
       .cat-item.active { border-bottom-color: var(--green); border-left: none; }
       .cat-item.fav-item.active { border-bottom-color: var(--red); }
+
+      /* offer banner — hide description text on mobile */
+      .offer-banner p { display: none; }
+      .offer-banner { padding: 14px 16px; }
+
+      /* toolbar wraps properly */
+      .toolbar { gap: 8px; }
+      .toolbar-left { gap: 6px; }
+      .sort-select { width: 100%; margin-left: 0; }
+
+      /* product grid — 2 columns */
+      .product-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+
+      /* nav */
+      nav { padding: 0 16px; }
+      .nav-top { gap: 10px; padding: 10px 0; }
+      .logo-text span { display: none; }
+    }
+
+    /* ── large phone — 480px ── */
+    @media (max-width: 480px) {
+      nav { padding: 0 12px; }
+      .nav-top { gap: 8px; padding: 8px 0; }
+
+      /* hide search bar — use category sidebar filtering instead */
+      .search-bar { display: none; }
+
+      /* smaller nav buttons */
+      .btn-ghost   { padding: 6px 8px; font-size: 13px; }
+      .btn-primary { padding: 6px 12px; font-size: 13px; }
+
+      /* hide orders button text */
+      .icon-btn[onclick*="orders"] { font-size: 16px; padding: 4px; }
+
+      .page { padding: 12px; }
+
+      /* offer banner compact */
+      .offer-banner h3 { font-size: 13px; }
+      .offer-tag { font-size: 11px; padding: 4px 10px; }
+
+      /* filter chips smaller */
+      .filter-chip { font-size: 11px; padding: 4px 10px; }
+      .result-count { font-size: 13px; }
+
+      /* product grid stays 2 col but tighter */
+      .product-grid { gap: 8px; }
+      .product-img-wrap { height: 100px; }
+      .product-img { font-size: 48px; }
+      .product-name { font-size: 12px; }
+      .price-main { font-size: 14px; }
+      .product-info { padding: 8px 10px 10px; }
+    }
+
+    /* ── small phone — 360px — single column products ── */
+    @media (max-width: 360px) {
+      .product-grid { grid-template-columns: 1fr; }
+      .btn-primary { display: none; } /* hide sign up to save space */
     }
   </style>
 </head>
@@ -166,8 +221,10 @@
       </div>
     </a>
     <div class="search-bar">
-      <svg width="16" height="16" fill="none" stroke="#9ca3af" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input type="text" placeholder="Search for products..." id="searchInput" oninput="handleSearch(this.value)" />
+      <input type="text" placeholder="Search for products..." id="searchInput" oninput="handleSearch(this.value)" onkeydown="if(event.key==='Enter') handleSearch(this.value)" />
+      <button onclick="handleSearch(document.getElementById('searchInput').value)" style="background:none;border:none;cursor:pointer;padding:0;display:flex;align-items:center;">
+        <svg width="16" height="16" fill="none" stroke="#9ca3af" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
     </div>
     <div class="nav-actions">
       <a href="login.html" id="nav-login" class="btn-ghost">Login</a>
@@ -176,7 +233,6 @@
         <span id="nav-username" style="font-size:14px;font-weight:600;color:#1a1a1a;"></span>
         <button onclick="logout()" class="btn-ghost" style="color:#e53e3e;">Logout</button>
       </div>
-      <!-- heart icon shows favourites count -->
       <button class="icon-btn" onclick="filterToFavourites()" title="My Favourites">
         ❤️ <span class="badge" id="favCount" style="display:none;background:#e53e3e">0</span>
       </button>
@@ -198,14 +254,10 @@
 
   <aside class="sidebar">
     <div class="sidebar-title">Categories</div>
-
-    <!-- favourites as a special category at the top -->
     <button class="cat-item fav-item" data-cat="__favourites__" id="favSidebarBtn" onclick="filterCategory('__favourites__', this)">
       <span class="cat-emoji">❤️</span> My Favourites <span class="cat-count" id="cnt-fav">0</span>
     </button>
-
     <div class="sidebar-divider"></div>
-
     <button class="cat-item active" data-cat="all" onclick="filterCategory('all', this)">
       <span class="cat-emoji">🏪</span> All Products <span class="cat-count" id="cnt-all">0</span>
     </button>
@@ -248,11 +300,9 @@
   </aside>
 
   <main class="main">
-
     <div class="breadcrumb">
       <a href="index.html">Home</a> › <span id="breadCat">All Products</span>
     </div>
-
     <div class="offer-banner">
       <div class="offer-emoji">🚚</div>
       <div>
@@ -261,7 +311,6 @@
       </div>
       <div class="offer-tag">Shop Now</div>
     </div>
-
     <div class="toolbar">
       <div class="toolbar-left">
         <span class="result-count" id="resultCount">0 <span>products found</span></span>
@@ -277,9 +326,7 @@
         <option value="name">Name A–Z</option>
       </select>
     </div>
-
     <div class="product-grid" id="productGrid"></div>
-
     <div class="pagination">
       <button class="page-btn" id="prevBtn" onclick="changePage(-1)">‹</button>
       <button class="page-btn active" id="p1" onclick="goPage(1)">1</button>
@@ -287,18 +334,15 @@
       <button class="page-btn" id="p3" onclick="goPage(3)">3</button>
       <button class="page-btn" id="nextBtn" onclick="changePage(1)">›</button>
     </div>
-
   </main>
 </div>
 
 <div id="toast"></div>
 
 <script>
-  const API = 'http://localhost:8080';
+  const API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:8080' : `https://${window.location.hostname.replace(/-5500\./, '-8080.')}`;
 
-  /* state */
-  let cart     = JSON.parse(localStorage.getItem('fm_basket') || '{}');
-  /* fix #65: favourites stored in localstorage as a set of product ids */
+  let cart       = JSON.parse(localStorage.getItem('fm_basket') || '{}');
   let favourites = new Set(JSON.parse(localStorage.getItem('fm_favourites') || '[]'));
   let currentCat    = 'all';
   let currentFilters = { inStock: true, onSale: false, organic: false };
@@ -306,39 +350,28 @@
   let currentPage   = 1;
   const PER_PAGE    = 16;
 
-  /* fix #67: read both 'q' and 'cat' from url params on page load */
   const urlParams = new URLSearchParams(window.location.search);
   let searchQuery = urlParams.get('q') || '';
   if (searchQuery) document.getElementById('searchInput').value = searchQuery;
-
-  /* cat param is applied after products load — stored here temporarily */
   const urlCat = urlParams.get('cat') || '';
 
-  /* save favourites to localstorage */
-  function saveFavourites() {
-    localStorage.setItem('fm_favourites', JSON.stringify([...favourites]));
-  }
+  function saveFavourites() { localStorage.setItem('fm_favourites', JSON.stringify([...favourites])); }
 
-  /* update the heart badge and sidebar count */
   function updateFavBadge() {
     const n = favourites.size;
     const badge = document.getElementById('favCount');
     badge.textContent = n;
     badge.style.display = n === 0 ? 'none' : 'flex';
-    /* update sidebar count */
     const countEl = document.getElementById('cnt-fav');
     if (countEl) countEl.textContent = n;
   }
 
-  /* clicking the heart icon in the navbar jumps straight to favourites category */
   function filterToFavourites() {
     const btn = document.getElementById('favSidebarBtn');
     filterCategory('__favourites__', btn);
   }
 
-  function getBasketMeta() {
-    return JSON.parse(localStorage.getItem('fm_basket_meta') || '{}');
-  }
+  function getBasketMeta() { return JSON.parse(localStorage.getItem('fm_basket_meta') || '{}'); }
 
   function saveCart() {
     localStorage.setItem('fm_basket', JSON.stringify(cart));
@@ -374,7 +407,7 @@
       if (!res.ok) throw new Error(`Status ${res.status}`);
       const data = await res.json();
       window.PRODUCTS = data
-        .filter(p => p.isActive !== false)
+        .filter(p => p.active !== false)
         .map(p => ({
           id:      p.id,
           name:    p.name,
@@ -389,14 +422,10 @@
           badge:   null,
           organic: (p.category?.name ?? '').toLowerCase().includes('organic'),
         }));
-
       updateSidebarCounts();
       updateFavBadge();
-
-      /* fix #67: apply ?cat= param from url after products are loaded */
       if (urlCat) {
         currentCat = urlCat;
-        /* highlight the matching sidebar button */
         document.querySelectorAll('.cat-item').forEach(btn => {
           if (btn.dataset.cat === urlCat) {
             btn.classList.add('active');
@@ -406,7 +435,6 @@
           }
         });
       }
-
       render();
     } catch (err) {
       console.error('Failed to load products:', err);
@@ -432,14 +460,11 @@
   function getFiltered() {
     if (!window.PRODUCTS) return [];
     let list = window.PRODUCTS.slice();
-
-    /* fix #65: favourites acts as a special filter */
     if (currentCat === '__favourites__') {
       list = list.filter(p => favourites.has(p.id));
     } else if (currentCat !== 'all') {
       list = list.filter(p => p.cat === currentCat);
     }
-
     if (currentFilters.onSale)  list = list.filter(p => p.orig !== null);
     if (currentFilters.organic) list = list.filter(p => p.organic);
     if (searchQuery) {
@@ -477,7 +502,6 @@
     document.getElementById('prevBtn').disabled = currentPage <= 1;
     document.getElementById('nextBtn').disabled = currentPage >= pages;
 
-    /* fix #65: show empty favourites state */
     if (currentCat === '__favourites__' && total === 0) {
       document.getElementById('productGrid').innerHTML = `
         <div class="fav-empty" style="grid-column:1/-1">
@@ -501,9 +525,7 @@
     grid.innerHTML = slice.map(p => {
       const qty    = cart[p.id] || 0;
       const inFav  = favourites.has(p.id);
-      const badgeHTML = p.badge
-        ? `<span class="product-badge badge-${p.badge}">${p.badge === 'sale' ? 'Sale' : p.badge === 'org' ? 'Organic' : 'New'}</span>`
-        : '';
+      const badgeHTML = p.badge ? `<span class="product-badge badge-${p.badge}">${p.badge === 'sale' ? 'Sale' : p.badge === 'org' ? 'Organic' : 'New'}</span>` : '';
       const origHTML  = p.orig ? `<div class="price-orig">£${p.orig.toFixed(2)}</div>` : '';
       const priceClass = p.orig ? 'price-main sale' : 'price-main';
       const imgHTML   = (p.emoji && p.emoji.startsWith('http'))
@@ -516,10 +538,8 @@
             <span class="qty-num">${qty}</span>
             <button class="qty-btn" onclick="addToCart(${p.id})">+</button>
           </div>`;
-
       return `<div class="product-card" id="card-${p.id}">
         ${badgeHTML}
-        <!-- fix #65: wishlist btn toggles favourites and updates sidebar count -->
         <button class="wishlist-btn ${inFav ? 'active' : ''}" onclick="toggleFav(${p.id})" title="${inFav ? 'Remove from favourites' : 'Add to favourites'}">${inFav ? '❤️' : '🤍'}</button>
         <div class="product-img-wrap">${imgHTML}</div>
         <div class="product-info">
@@ -539,63 +559,28 @@
     }).join('');
   }
 
-  function addToCart(id) {
-    cart[id] = (cart[id] || 0) + 1;
-    saveCart();
-    updateCartBadge();
-    showToast('🛒 Added to basket!');
-    render();
-  }
+  function addToCart(id) { cart[id] = (cart[id] || 0) + 1; saveCart(); updateCartBadge(); showToast('🛒 Added to basket!'); render(); }
+  function removeFromCart(id) { if (!cart[id]) return; cart[id]--; if (cart[id] === 0) delete cart[id]; saveCart(); updateCartBadge(); render(); }
 
-  function removeFromCart(id) {
-    if (!cart[id]) return;
-    cart[id]--;
-    if (cart[id] === 0) delete cart[id];
-    saveCart();
-    updateCartBadge();
-    render();
-  }
-
-  /* fix #65: toggleFav saves/removes from favourites set and updates sidebar */
   function toggleFav(id) {
-    if (favourites.has(id)) {
-      favourites.delete(id);
-      showToast('💔 Removed from favourites');
-    } else {
-      favourites.add(id);
-      showToast('❤️ Added to favourites!');
-    }
-    saveFavourites();
-    updateFavBadge();
-    render();
+    if (favourites.has(id)) { favourites.delete(id); showToast('💔 Removed from favourites'); }
+    else { favourites.add(id); showToast('❤️ Added to favourites!'); }
+    saveFavourites(); updateFavBadge(); render();
   }
 
   function filterCategory(cat, btn) {
-    currentCat  = cat;
-    currentPage = 1;
+    currentCat = cat; currentPage = 1;
     document.querySelectorAll('.cat-item').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    /* breadcrumb label */
     document.getElementById('breadCat').textContent =
-      cat === 'all'             ? 'All Products'  :
-      cat === '__favourites__'  ? 'My Favourites' : cat;
+      cat === 'all' ? 'All Products' : cat === '__favourites__' ? 'My Favourites' : cat;
     render();
   }
 
-  function toggleFilter(btn, key) {
-    currentFilters[key] = !currentFilters[key];
-    btn.classList.toggle('active', currentFilters[key]);
-    currentPage = 1;
-    render();
-  }
-
+  function toggleFilter(btn, key) { currentFilters[key] = !currentFilters[key]; btn.classList.toggle('active', currentFilters[key]); currentPage = 1; render(); }
   function sortProducts(val) { currentSort = val; currentPage = 1; render(); }
   function handleSearch(val) { searchQuery = val; currentPage = 1; render(); }
-  function changePage(dir) {
-    const pages = Math.ceil(getFiltered().length / PER_PAGE);
-    currentPage = Math.max(1, Math.min(pages, currentPage + dir));
-    render();
-  }
+  function changePage(dir) { const pages = Math.ceil(getFiltered().length / PER_PAGE); currentPage = Math.max(1, Math.min(pages, currentPage + dir)); render(); }
   function goPage(n) { currentPage = n; render(); }
 
   function updateNavAuth() {
@@ -615,18 +600,12 @@
   }
 
   function logout() {
-    localStorage.removeItem('fm_user');
-    sessionStorage.removeItem('fm_user');
-    localStorage.removeItem('fm_basket');
-    localStorage.removeItem('fm_basket_meta');
+    localStorage.removeItem('fm_user'); sessionStorage.removeItem('fm_user');
+    localStorage.removeItem('fm_basket'); localStorage.removeItem('fm_basket_meta');
     window.location.href = 'login.html';
   }
 
-  /* init */
-  updateCartBadge();
-  updateFavBadge();
-  updateNavAuth();
-  loadProducts();
+  updateCartBadge(); updateFavBadge(); updateNavAuth(); loadProducts();
 </script>
 </body>
 </html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>FreshMart — Sales Analytics</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="../../css/management.css">
+</head>
+<body>
+
+<header id="topbar">
+    <a href="../../../index.html" class="topbar-brand">
+        <div class="brand-logo"><i class="bi bi-bar-chart-fill"></i></div>
+        <div>
+            <div class="brand-text-name">FreshMart</div>
+            <div class="brand-text-sub">Management Portal</div>
+        </div>
+    </a>
+    <div class="topbar-spacer"></div>
+    <button class="btn-export-report"><i class="bi bi-download"></i> Export Report</button>
+    <div class="topbar-user">
+        <div class="topbar-user-info">
+            <div class="topbar-user-name">Emma Thompson</div>
+            <div class="topbar-user-role">Marketing Manager</div>
+        </div>
+        <button class="topbar-signout"><i class="bi bi-box-arrow-right"></i></button>
+    </div>
+</header>
+
+<div class="app-shell">
+    <nav id="sidebar">
+        <div class="sidebar-nav">
+            <a href="index.html" class="nav-btn"><i class="bi bi-bar-chart"></i> Dashboard</a>
+            <a href="sales.html" class="nav-btn active"><i class="bi bi-graph-up-arrow"></i> Sales Analytics</a>
+            <a href="products.html" class="nav-btn"><i class="bi bi-box-seam"></i> Product Performance</a>
+            <a href="customers.html" class="nav-btn"><i class="bi bi-people"></i> Customer Insights</a>
+            <a href="export.html" class="nav-btn"><i class="bi bi-download"></i> Export Reports</a>
+        </div>
+        <div class="sidebar-stats">
+            <div class="sidebar-stats-title">Quick Stats</div>
+            <div class="stat-row"><div class="stat-row-label">Today's Sales</div><div class="stat-row-value">£12,450</div></div>
+            <div class="stat-row"><div class="stat-row-label">Active Orders</div><div class="stat-row-value">284</div></div>
+            <div class="stat-row"><div class="stat-row-label">Trend Score</div><div class="stat-row-value green">+24%</div></div>
+        </div>
+    </nav>
+
+    <main id="main">
+        <div class="page-topbar">
+            <div>
+                <div class="page-heading">Sales Analytics</div>
+                <div class="page-subheading" style="margin-bottom:0;">Detailed sales performance and revenue trends</div>
+            </div>
+            <div class="page-topbar-actions">
+                <button class="btn-outline"><i class="bi bi-calendar3"></i> Last 30 Days</button>
+                <button class="btn-purple"><i class="bi bi-download"></i> Export Report</button>
+            </div>
+        </div>
+
+        <!-- Stat Cards -->
+        <div class="row g-3 mb-4">
+            <div class="col-6 col-lg-3">
+                <div class="stat-card">
+                    <div class="stat-card-top">
+                        <div class="stat-icon si-green"><i class="bi bi-currency-pound"></i></div>
+                        <span class="stat-delta delta-up"><i class="bi bi-graph-up-arrow"></i> +12.5%</span>
+                    </div>
+                    <div class="stat-label">Revenue (MTD)</div>
+                    <div class="stat-value">£73,000</div>
+                    <div class="stat-sub">vs £64,867 last month</div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="stat-card">
+                    <div class="stat-card-top">
+                        <div class="stat-icon si-blue"><i class="bi bi-cart3"></i></div>
+                        <span class="stat-delta delta-up"><i class="bi bi-graph-up-arrow"></i> +8.2%</span>
+                    </div>
+                    <div class="stat-label">Orders (MTD)</div>
+                    <div class="stat-value">1,823</div>
+                    <div class="stat-sub">vs 1,685 last month</div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="stat-card">
+                    <div class="stat-card-top">
+                        <div class="stat-icon si-purple"><i class="bi bi-currency-pound"></i></div>
+                        <span class="stat-delta delta-up"><i class="bi bi-graph-up-arrow"></i> +3.9%</span>
+                    </div>
+                    <div class="stat-label">Avg Order Value</div>
+                    <div class="stat-value">£40.04</div>
+                    <div class="stat-sub">vs £38.53 last month</div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="stat-card">
+                    <div class="stat-card-top">
+                        <div class="stat-icon si-orange"><i class="bi bi-graph-up-arrow"></i></div>
+                        <span class="stat-delta delta-up"><i class="bi bi-graph-up-arrow"></i> +7.3%</span>
+                    </div>
+                    <div class="stat-label">Conversion Rate</div>
+                    <div class="stat-value">3.42%</div>
+                    <div class="stat-sub">vs 3.19% last month</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Revenue Trend + Daily Sales -->
+        <div class="row g-3 mb-4">
+            <div class="col-12 col-lg-6">
+                <div class="card-white">
+                    <div class="card-white-header">
+                        <span class="card-white-title">Monthly Revenue Trend</span>
+                    </div>
+                    <div class="card-white-body">
+                        <canvas id="monthlyRevenueChart" height="220"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="card-white">
+                    <div class="card-white-header">
+                        <span class="card-white-title">Daily Sales (Last 14 Days)</span>
+                    </div>
+                    <div class="card-white-body">
+                        <canvas id="dailySalesChart" height="220"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Performance -->
+        <div class="card-white mb-4">
+            <div class="card-white-header">
+                <span class="card-white-title">Category Performance</span>
+            </div>
+            <div class="card-white-body">
+                <div class="row g-3">
+                    <div class="col-6 col-lg-3">
+                        <div class="cat-card">
+                            <div class="cat-top">
+                                <span class="cat-name">Snacks</span>
+                                <span class="trend-up"><i class="bi bi-graph-up-arrow"></i> 12.5%</span>
+                            </div>
+                            <div class="cat-val">£24,500</div>
+                            <div class="cat-bar"><div class="cat-bar-fill" style="width:72%;"></div></div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="cat-card">
+                            <div class="cat-top">
+                                <span class="cat-name">Dairy</span>
+                                <span class="trend-up"><i class="bi bi-graph-up-arrow"></i> 8.2%</span>
+                            </div>
+                            <div class="cat-val">£18,300</div>
+                            <div class="cat-bar"><div class="cat-bar-fill" style="width:54%;"></div></div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="cat-card">
+                            <div class="cat-top">
+                                <span class="cat-name">Meat</span>
+                                <span class="trend-up"><i class="bi bi-graph-up-arrow"></i> 15.7%</span>
+                            </div>
+                            <div class="cat-val">£32,100</div>
+                            <div class="cat-bar"><div class="cat-bar-fill" style="width:94%;"></div></div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="cat-card">
+                            <div class="cat-top">
+                                <span class="cat-name">Seafood</span>
+                                <span class="trend-down"><i class="bi bi-graph-down-arrow"></i> 3.4%</span>
+                            </div>
+                            <div class="cat-val">£15,200</div>
+                            <div class="cat-bar"><div class="cat-bar-fill" style="width:45%;"></div></div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="cat-card">
+                            <div class="cat-top">
+                                <span class="cat-name">Organic</span>
+                                <span class="trend-up"><i class="bi bi-graph-up-arrow"></i> 18.9%</span>
+                            </div>
+                            <div class="cat-val">£21,400</div>
+                            <div class="cat-bar"><div class="cat-bar-fill" style="width:63%;"></div></div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="cat-card">
+                            <div class="cat-top">
+                                <span class="cat-name">Household</span>
+                                <span class="trend-up"><i class="bi bi-graph-up-arrow"></i> 6.5%</span>
+                            </div>
+                            <div class="cat-val">£19,800</div>
+                            <div class="cat-bar"><div class="cat-bar-fill" style="width:58%;"></div></div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="cat-card">
+                            <div class="cat-top">
+                                <span class="cat-name">Laundry</span>
+                                <span class="trend-up"><i class="bi bi-graph-up-arrow"></i> 11.2%</span>
+                            </div>
+                            <div class="cat-val">£16,700</div>
+                            <div class="cat-bar"><div class="cat-bar-fill" style="width:49%;"></div></div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="cat-card">
+                            <div class="cat-top">
+                                <span class="cat-name">Paper &amp; Plastic</span>
+                                <span class="trend-up"><i class="bi bi-graph-up-arrow"></i> 14.8%</span>
+                            </div>
+                            <div class="cat-val">£22,300</div>
+                            <div class="cat-bar"><div class="cat-bar-fill" style="width:66%;"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Methods -->
+        <div class="card-white">
+            <div class="card-white-header">
+                <span class="card-white-title">Payment Methods Distribution</span>
+            </div>
+            <div class="card-white-body">
+                <div class="row g-4 justify-content-center">
+                    <div class="col-6 col-md-3">
+                        <div class="donut-wrap">
+                            <canvas id="donut1" width="140" height="140"></canvas>
+                            <div class="donut-label">Credit Card</div>
+                            <div class="donut-sub">3,245 transactions</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="donut-wrap">
+                            <canvas id="donut2" width="140" height="140"></canvas>
+                            <div class="donut-label">Debit Card</div>
+                            <div class="donut-sub">1,678 transactions</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="donut-wrap">
+                            <canvas id="donut3" width="140" height="140"></canvas>
+                            <div class="donut-label">PayPal</div>
+                            <div class="donut-sub">456 transactions</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="donut-wrap">
+                            <canvas id="donut4" width="140" height="140"></canvas>
+                            <div class="donut-label">Other</div>
+                            <div class="donut-sub">223 transactions</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Monthly Revenue - area chart
+new Chart(document.getElementById('monthlyRevenueChart'), {
+    type: 'line',
+    data: {
+        labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+        datasets: [{
+            data: [46000,52000,61000,58000,67000,74000],
+            borderColor: '#7c3aed',
+            backgroundColor: 'rgba(124,58,237,0.12)',
+            fill: true, borderWidth: 2.5,
+            pointBackgroundColor: '#7c3aed', pointRadius: 4, tension: 0.4
+        }]
+    },
+    options: {
+        plugins: { legend: { display: false } },
+        scales: {
+            x: { grid: { color: '#f3f4f6' }, ticks: { color: '#9ca3af', font: { family:'DM Sans' } } },
+            y: { grid: { color: '#f3f4f6', borderDash:[4,4] }, ticks: { color: '#9ca3af', font: { family:'DM Sans' } } }
+        }
+    }
+});
+
+// Daily Sales - bar chart green
+new Chart(document.getElementById('dailySalesChart'), {
+    type: 'bar',
+    data: {
+        labels: ['Wed 6','Fri 8','Mon 11','Thu 14','Sun 17'],
+        datasets: [{
+            data: [3200,3800,4100,3600,4400,3900,4600,3300,4200,3700,4800,3500,4300,6200],
+            backgroundColor: '#10b981', borderRadius: 4
+        }]
+    },
+    options: {
+        plugins: { legend: { display: false } },
+        scales: {
+            x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { family:'DM Sans' } } },
+            y: { grid: { color: '#f3f4f6', borderDash:[4,4] }, ticks: { color: '#9ca3af', font: { family:'DM Sans' } } }
+        }
+    }
+});
+
+// Donut charts
+function makeDonut(id, pct) {
+    new Chart(document.getElementById(id), {
+        type: 'doughnut',
+        data: {
+            datasets: [{
+                data: [pct, 100-pct],
+                backgroundColor: ['#7c3aed','#e5e7eb'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            cutout: '72%',
+            plugins: {
+                legend: { display: false },
+                tooltip: { enabled: false }
+            }
+        },
+        plugins: [{
+            id: 'centerText',
+            beforeDraw(chart) {
+                const { width, height, ctx } = chart;
+                ctx.restore();
+                ctx.font = 'bold 18px DM Sans';
+                ctx.fillStyle = '#111827';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(pct + '%', width/2, height/2);
+                ctx.save();
+            }
+        }]
+    });
+}
+makeDonut('donut1', 58);
+makeDonut('donut2', 30);
+makeDonut('donut3', 8);
+makeDonut('donut4', 4);
+</script>
+</body>
+</html>

@@ -9,14 +9,12 @@ data class Customer(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
-
-    val firstName: String,
-    val lastName: String,
-
+    val firstName: String = "",
+    val lastName: String = "",
     @Column(unique = true, nullable = false)
-    val email: String,
-
-    val phone: String?,
-
+    val email: String = "",
+    val phone: String? = null,
+    @Column(nullable = false)
+    val password: String = "",
     val createdAt: LocalDateTime = LocalDateTime.now()
 )
