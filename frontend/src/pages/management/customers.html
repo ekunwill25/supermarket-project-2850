@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>FreshMart — Customer Insights</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="../../css/management.css">
+</head>
+<body>
+
+<header id="topbar">
+    <a href="../../../index.html" class="topbar-brand">
+        <div class="brand-logo"><i class="bi bi-bar-chart-fill"></i></div>
+        <div>
+            <div class="brand-text-name">FreshMart</div>
+            <div class="brand-text-sub">Management Portal</div>
+        </div>
+    </a>
+    <div class="topbar-spacer"></div>
+    <button class="btn-export-report"><i class="bi bi-download"></i> Export Report</button>
+    <div class="topbar-user">
+        <div class="topbar-user-info">
+            <div class="topbar-user-name">Emma Thompson</div>
+            <div class="topbar-user-role">Marketing Manager</div>
+        </div>
+        <button class="topbar-signout"><i class="bi bi-box-arrow-right"></i></button>
+    </div>
+</header>
+
+<div class="app-shell">
+    <nav id="sidebar">
+        <div class="sidebar-nav">
+            <a href="index.html" class="nav-btn"><i class="bi bi-bar-chart"></i> Dashboard</a>
+            <a href="sales.html" class="nav-btn"><i class="bi bi-graph-up-arrow"></i> Sales Analytics</a>
+            <a href="products.html" class="nav-btn"><i class="bi bi-box-seam"></i> Product Performance</a>
+            <a href="customers.html" class="nav-btn active"><i class="bi bi-people"></i> Customer Insights</a>
+        </div>
+        <div class="sidebar-stats">
+            <div class="sidebar-stats-title">Quick Stats</div>
+            <div class="stat-row"><div class="stat-row-label">Today's Sales</div><div class="stat-row-value">£12,450</div></div>
+            <div class="stat-row"><div class="stat-row-label">Active Orders</div><div class="stat-row-value">284</div></div>
+            <div class="stat-row"><div class="stat-row-label">Trend Score</div><div class="stat-row-value green">+24%</div></div>
+        </div>
+    </nav>
+
+    <main id="main">
+        <div class="page-topbar">
+            <div>
+                <div class="page-heading">Customer Insights</div>
+                <div class="page-subheading" style="margin-bottom:0;">Understand your customer base and behavior patterns</div>
+            </div>
+            <div class="page-topbar-actions">
+                <button class="btn-export-report"><i class="bi bi-download"></i> Export Report</button>
+            </div>
+        </div>
+
+        <!-- Stat Cards -->
+        <div class="row g-3 mb-4">
+            <div class="col-6 col-lg-3">
+                <div class="stat-card">
+                    <div class="stat-card-top">
+                        <div class="stat-icon si-purple"><i class="bi bi-people"></i></div>
+                        <span class="stat-delta delta-up"><i class="bi bi-graph-up-arrow"></i> +15.8%</span>
+                    </div>
+                    <div class="stat-label">Total Customers</div>
+                    <div class="stat-value">6,730</div>
+                    <div class="stat-sub">+892 this month</div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="stat-card">
+                    <div class="stat-card-top">
+                        <div class="stat-icon si-green"><i class="bi bi-award"></i></div>
+                        <span class="stat-delta delta-up"><i class="bi bi-graph-up-arrow"></i> +8.4%</span>
+                    </div>
+                    <div class="stat-label">Loyal Customers</div>
+                    <div class="stat-value">2,340</div>
+                    <div class="stat-sub">35% of total</div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="stat-card">
+                    <div class="stat-card-top">
+                        <div class="stat-icon si-blue"><i class="bi bi-bag-check"></i></div>
+                        <span class="stat-delta delta-up"><i class="bi bi-graph-up-arrow"></i> +12.3%</span>
+                    </div>
+                    <div class="stat-label">Avg Orders/Customer</div>
+                    <div class="stat-value">6.4</div>
+                    <div class="stat-sub">vs 5.7 last month</div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="stat-card">
+                    <div class="stat-card-top">
+                        <div class="stat-icon si-orange"><i class="bi bi-graph-up-arrow"></i></div>
+                        <span class="stat-delta delta-up"><i class="bi bi-graph-up-arrow"></i> +18.7%</span>
+                    </div>
+                    <div class="stat-label">Customer Lifetime Value</div>
+                    <div class="stat-value">£256</div>
+                    <div class="stat-sub">vs £215 last month</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Segments + Acquisition Trend -->
+        <div class="row g-3 mb-4">
+            <div class="col-12 col-lg-6">
+                <div class="card-white">
+                    <div class="card-white-header">
+                        <span class="card-white-title">Customer Segments</span>
+                    </div>
+                    <div class="card-white-body">
+                        <div class="d-flex justify-content-center mb-3">
+                            <canvas id="segmentDonut" width="220" height="220"></canvas>
+                        </div>
+                        <div class="row g-2 mt-2">
+                            <div class="col-6">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div style="width:12px;height:12px;border-radius:3px;background:#7c3aed;flex-shrink:0;"></div>
+                                    <div>
+                                        <div style="font-size:0.8rem;font-weight:600;color:#374151;">Loyal Customers</div>
+                                        <div style="font-size:0.72rem;color:#9ca3af;">2,340 (35%)</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div style="width:12px;height:12px;border-radius:3px;background:#3b82f6;flex-shrink:0;"></div>
+                                    <div>
+                                        <div style="font-size:0.8rem;font-weight:600;color:#374151;">Regular Customers</div>
+                                        <div style="font-size:0.72rem;color:#9ca3af;">1,890 (28%)</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div style="width:12px;height:12px;border-radius:3px;background:#10b981;flex-shrink:0;"></div>
+                                    <div>
+                                        <div style="font-size:0.8rem;font-weight:600;color:#374151;">Occasional Buyers</div>
+                                        <div style="font-size:0.72rem;color:#9ca3af;">1,560 (23%)</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div style="width:12px;height:12px;border-radius:3px;background:#f59e0b;flex-shrink:0;"></div>
+                                    <div>
+                                        <div style="font-size:0.8rem;font-weight:600;color:#374151;">New Customers</div>
+                                        <div style="font-size:0.72rem;color:#9ca3af;">940 (14%)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="card-white h-100">
+                    <div class="card-white-header">
+                        <span class="card-white-title">Customer Acquisition Trend</span>
+                    </div>
+                    <div class="card-white-body">
+                        <canvas id="acquisitionChart" height="220"></canvas>
+                        <div class="d-flex gap-4 mt-3">
+                            <div class="d-flex align-items-center gap-2">
+                                <div style="width:24px;height:2px;background:#10b981;border-radius:2px;"></div>
+                                <span style="font-size:0.78rem;color:#6b7280;">New Customers</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <div style="width:24px;height:2px;background:#7c3aed;border-radius:2px;"></div>
+                                <span style="font-size:0.78rem;color:#6b7280;">Returning Customers</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Customers -->
+        <div class="card-white mb-4">
+            <div class="card-white-header">
+                <span class="card-white-title">Top Customers</span>
+                <a href="#" class="card-white-link">View All →</a>
+            </div>
+            <div class="card-white-body">
+                <div class="customer-item">
+                    <div class="rank-num">1</div>
+                    <div class="customer-avatar">🧑</div>
+                    <div class="customer-info">
+                        <div class="customer-name">Dave Thompson</div>
+                        <div class="customer-sub">Member since Jan 2024</div>
+                    </div>
+                    <div class="customer-right">
+                        <div class="customer-orders">47 orders</div>
+                        <div class="customer-spent">£3,845 spent</div>
+                    </div>
+                    <span class="badge-mg badge-purple" style="margin-right:8px;">Loyal</span>
+                    <div class="customer-actions">
+                        <div class="action-icon"><i class="bi bi-envelope"></i></div>
+                        <div class="action-icon"><i class="bi bi-telephone"></i></div>
+                    </div>
+                </div>
+                <div class="customer-item">
+                    <div class="rank-num">2</div>
+                    <div class="customer-avatar">👩</div>
+                    <div class="customer-info">
+                        <div class="customer-name">Sarah Johnson</div>
+                        <div class="customer-sub">Member since Feb 2024</div>
+                    </div>
+                    <div class="customer-right">
+                        <div class="customer-orders">42 orders</div>
+                        <div class="customer-spent">£3,520 spent</div>
+                    </div>
+                    <span class="badge-mg badge-purple" style="margin-right:8px;">Loyal</span>
+                    <div class="customer-actions">
+                        <div class="action-icon"><i class="bi bi-envelope"></i></div>
+                        <div class="action-icon"><i class="bi bi-telephone"></i></div>
+                    </div>
+                </div>
+                <div class="customer-item">
+                    <div class="rank-num">3</div>
+                    <div class="customer-avatar">🧑</div>
+                    <div class="customer-info">
+                        <div class="customer-name">Mike Williams</div>
+                        <div class="customer-sub">Member since Mar 2024</div>
+                    </div>
+                    <div class="customer-right">
+                        <div class="customer-orders">38 orders</div>
+                        <div class="customer-spent">£3,190 spent</div>
+                    </div>
+                    <span class="badge-mg badge-purple" style="margin-right:8px;">Loyal</span>
+                    <div class="customer-actions">
+                        <div class="action-icon"><i class="bi bi-envelope"></i></div>
+                        <div class="action-icon"><i class="bi bi-telephone"></i></div>
+                    </div>
+                </div>
+                <div class="customer-item">
+                    <div class="rank-num">4</div>
+                    <div class="customer-avatar">👩</div>
+                    <div class="customer-info">
+                        <div class="customer-name">Emma Davis</div>
+                        <div class="customer-sub">Member since Apr 2024</div>
+                    </div>
+                    <div class="customer-right">
+                        <div class="customer-orders">35 orders</div>
+                        <div class="customer-spent">£2,980 spent</div>
+                    </div>
+                    <span class="badge-mg badge-blue" style="margin-right:8px;">Regular</span>
+                    <div class="customer-actions">
+                        <div class="action-icon"><i class="bi bi-envelope"></i></div>
+                        <div class="action-icon"><i class="bi bi-telephone"></i></div>
+                    </div>
+                </div>
+                <div class="customer-item">
+                    <div class="rank-num">5</div>
+                    <div class="customer-avatar">🧑</div>
+                    <div class="customer-info">
+                        <div class="customer-name">James Brown</div>
+                        <div class="customer-sub">Member since May 2024</div>
+                    </div>
+                    <div class="customer-right">
+                        <div class="customer-orders">31 orders</div>
+                        <div class="customer-spent">£2,675 spent</div>
+                    </div>
+                    <span class="badge-mg badge-blue" style="margin-right:8px;">Regular</span>
+                    <div class="customer-actions">
+                        <div class="action-icon"><i class="bi bi-envelope"></i></div>
+                        <div class="action-icon"><i class="bi bi-telephone"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Age Demographics + Shopping Time -->
+        <div class="row g-3 mb-4">
+            <div class="col-12 col-lg-6">
+                <div class="card-white">
+                    <div class="card-white-header"><span class="card-white-title">Age Demographics</span></div>
+                    <div class="card-white-body">
+                        <canvas id="ageChart" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="card-white">
+                    <div class="card-white-header"><span class="card-white-title">Shopping Time Preferences</span></div>
+                    <div class="card-white-body">
+                        <canvas id="timeChart" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customer Location Distribution -->
+        <div class="card-white">
+            <div class="card-white-header"><span class="card-white-title">Customer Location Distribution</span></div>
+            <div class="card-white-body">
+                <div class="row g-4">
+                    <div class="col-12 col-md-4">
+                        <div class="location-item">
+                            <div class="location-header">
+                                <div class="location-icon"><i class="bi bi-geo-alt-fill"></i></div>
+                                <div>
+                                    <div class="location-name">London</div>
+                                    <div class="location-count">2,450 customers</div>
+                                </div>
+                            </div>
+                            <div class="location-bar"><div class="location-bar-fill" style="width:37%;"></div></div>
+                            <div class="location-pct">37%</div>
+                        </div>
+                        <div class="location-item">
+                            <div class="location-header">
+                                <div class="location-icon"><i class="bi bi-geo-alt-fill"></i></div>
+                                <div>
+                                    <div class="location-name">Leeds</div>
+                                    <div class="location-count">820 customers</div>
+                                </div>
+                            </div>
+                            <div class="location-bar"><div class="location-bar-fill" style="width:12%;"></div></div>
+                            <div class="location-pct">12%</div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="location-item">
+                            <div class="location-header">
+                                <div class="location-icon"><i class="bi bi-geo-alt-fill"></i></div>
+                                <div>
+                                    <div class="location-name">Manchester</div>
+                                    <div class="location-count">1,230 customers</div>
+                                </div>
+                            </div>
+                            <div class="location-bar"><div class="location-bar-fill" style="width:18%;"></div></div>
+                            <div class="location-pct">18%</div>
+                        </div>
+                        <div class="location-item">
+                            <div class="location-header">
+                                <div class="location-icon"><i class="bi bi-geo-alt-fill"></i></div>
+                                <div>
+                                    <div class="location-name">Glasgow</div>
+                                    <div class="location-count">670 customers</div>
+                                </div>
+                            </div>
+                            <div class="location-bar"><div class="location-bar-fill" style="width:10%;"></div></div>
+                            <div class="location-pct">10%</div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="location-item">
+                            <div class="location-header">
+                                <div class="location-icon"><i class="bi bi-geo-alt-fill"></i></div>
+                                <div>
+                                    <div class="location-name">Birmingham</div>
+                                    <div class="location-count">980 customers</div>
+                                </div>
+                            </div>
+                            <div class="location-bar"><div class="location-bar-fill" style="width:15%;"></div></div>
+                            <div class="location-pct">15%</div>
+                        </div>
+                        <div class="location-item">
+                            <div class="location-header">
+                                <div class="location-icon"><i class="bi bi-geo-alt-fill"></i></div>
+                                <div>
+                                    <div class="location-name">Other</div>
+                                    <div class="location-count">580 customers</div>
+                                </div>
+                            </div>
+                            <div class="location-bar"><div class="location-bar-fill" style="width:8%;"></div></div>
+                            <div class="location-pct">8%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Segment donut
+new Chart(document.getElementById('segmentDonut'), {
+    type: 'doughnut',
+    data: {
+        datasets: [{
+            data: [35,28,23,14],
+            backgroundColor: ['#7c3aed','#3b82f6','#10b981','#f59e0b'],
+            borderWidth: 3, borderColor: '#fff'
+        }]
+    },
+    options: { cutout: '60%', plugins: { legend: { display: false } } }
+});
+
+// Acquisition trend
+new Chart(document.getElementById('acquisitionChart'), {
+    type: 'line',
+    data: {
+        labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+        datasets: [
+            {
+                label: 'New Customers',
+                data: [120,145,160,138,170,190],
+                borderColor: '#10b981', backgroundColor: 'transparent',
+                borderWidth: 2, pointRadius: 4, tension: 0.3
+            },
+            {
+                label: 'Returning Customers',
+                data: [180,195,210,195,220,240],
+                borderColor: '#7c3aed', backgroundColor: 'transparent',
+                borderWidth: 2, pointRadius: 4, tension: 0.3, borderDash: [4,4]
+            }
+        ]
+    },
+    options: {
+        plugins: { legend: { display: false } },
+        scales: {
+            x: { grid: { color: '#f3f4f6' }, ticks: { color: '#9ca3af', font: { family:'DM Sans' } } },
+            y: { grid: { color: '#f3f4f6', borderDash:[4,4] }, ticks: { color: '#9ca3af', font: { family:'DM Sans' } } }
+        }
+    }
+});
+
+// Age demographics
+new Chart(document.getElementById('ageChart'), {
+    type: 'bar',
+    data: {
+        labels: ['18-24','25-34','35-44','45-54','55-64','65+'],
+        datasets: [{
+            data: [820,1890,2380,1440,890,650],
+            backgroundColor: '#7c3aed', borderRadius: 4
+        }]
+    },
+    options: {
+        plugins: { legend: { display: false } },
+        scales: {
+            x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { family:'DM Sans' } } },
+            y: { grid: { color: '#f3f4f6', borderDash:[4,4] }, ticks: { color: '#9ca3af', font: { family:'DM Sans' } } }
+        }
+    }
+});
+
+// Shopping time
+new Chart(document.getElementById('timeChart'), {
+    type: 'bar',
+    data: {
+        labels: ['Morning (6-12)','Afternoon (12-18)','Evening (18-24)','Night (0-6)'],
+        datasets: [{
+            data: [1050,2750,3580,120],
+            backgroundColor: '#10b981', borderRadius: 4
+        }]
+    },
+    options: {
+        plugins: { legend: { display: false } },
+        scales: {
+            x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { family:'DM Sans', size: 11 } } },
+            y: { grid: { color: '#f3f4f6', borderDash:[4,4] }, ticks: { color: '#9ca3af', font: { family:'DM Sans' } } }
+        }
+    }
+});
+</script>
+</body>
+</html>
