@@ -3,40 +3,40 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <!-- tells browser make the page width match screen width and page is shown at natural zoom-->
   <title>FreshMart — Welcome</title>
 
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  <!-- google fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
-  <!-- custom styles — loads last so if Bootstrap needs to be overriden, it is here -->
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="src/css/styles.css">
 </head>
 <body>
 
-  <!-- Background atmosphere layers, styled in styles.css -->
+  <!-- Background -->
   <div class="bg-layer"></div>
   <div class="orb orb-1"></div>
   <div class="orb orb-2"></div>
   <div class="orb orb-3"></div>
 
-  <!-- Main page content, which is centred vertically and horizontally -->
   <div class="page">
 
-  <!-- logo and title -->
+    <!-- Logo -->
     <div class="logo-wrap">
-      <div class="logo-icon">🛒</div>
-      <h1 class="logo-name">Fresh<span>Mart</span></h1>
-      <p class="logo-tagline">Professional Supermarket Shopping and Management System</p>
+      <div class="logo-icon">
+        <i class="bi bi-cart3"></i>
+      </div>
+      <h1 class="logo-name">FreshMart</h1>
+      <p class="logo-subtitle">Professional Supermarket Management System</p>
+      <p class="logo-tagline">Select your portal to continue</p>
     </div>
 
-    <!-- section label -->
-    <p class="cards-label">Select the portal you wish to enter</p>
-
-    <!-- three portal cards + ootstrap rows and column grid -->
+    <!-- Portal Cards -->
     <div class="container-fluid px-0" style="max-width: 1100px;">
       <div class="row g-4">
 
@@ -45,12 +45,13 @@
           <a class="portal-card card-customer text-decoration-none d-flex flex-column h-100"
              href="src/pages/customer/index.html"
              onclick="rippleEffect(event)">
-            <div class="card-icon-wrap icon-customer">🛍️</div>
+            <div class="card-icon-wrap icon-customer">
+              <i class="bi bi-cart3"></i>
+            </div>
             <div class="card-title">Customer Portal</div>
-            <div class="card-desc">Browse products, manage your basket, checkout, and track your orders.</div>
+            <div class="card-desc">Browse and shop for groceries online</div>
             <div class="card-divider"></div>
             <div class="card-cta">
-              <span class="cta-customer">Shop now</span>
               <div class="cta-arrow arrow-customer">→</div>
             </div>
           </a>
@@ -61,12 +62,13 @@
           <a class="portal-card card-warehouse text-decoration-none d-flex flex-column h-100"
              href="src/pages/warehouse/index.html"
              onclick="rippleEffect(event)">
-            <div class="card-icon-wrap icon-warehouse">📦</div>
+            <div class="card-icon-wrap icon-warehouse">
+              <i class="bi bi-box-seam"></i>
+            </div>
             <div class="card-title">Warehouse Portal</div>
-            <div class="card-desc">Access picking lists, manage stock levels, and process incoming deliveries.</div>
+            <div class="card-desc">Order picking and inventory management</div>
             <div class="card-divider"></div>
             <div class="card-cta">
-              <span class="cta-warehouse">Open portal</span>
               <div class="cta-arrow arrow-warehouse">→</div>
             </div>
           </a>
@@ -77,31 +79,30 @@
           <a class="portal-card card-management text-decoration-none d-flex flex-column h-100"
              href="src/pages/management/index.html"
              onclick="rippleEffect(event)">
-            <div class="card-icon-wrap icon-management">📊</div>
+            <div class="card-icon-wrap icon-management">
+              <i class="bi bi-bar-chart-fill"></i>
+            </div>
             <div class="card-title">Management Portal</div>
-            <div class="card-desc">View sales metrics, trending products, and export business insights.</div>
+            <div class="card-desc">Sales analytics and business insights</div>
             <div class="card-divider"></div>
             <div class="card-cta">
-              <span class="cta-management">View dashboard</span>
               <div class="cta-arrow arrow-management">→</div>
             </div>
           </a>
         </div>
- 
+
       </div>
     </div>
   </div>
 
-  <!-- footer -->
+  <!-- Footer -->
   <footer>
-    <span>FreshMart</span> · Professional Supermarket University Project · COMP2850
+    Professional University Project · ISO 9241-210 Compliant<br>
+    <span>Built with React, TypeScript &amp; Tailwind CSS</span>
   </footer>
- 
-  <!-- bootstrap JS for interactive Bootstrap components -->
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
- 
-  <!-- custom scripts -->
   <script src="src/js/portal.js"></script>
- 
+
 </body>
 </html>

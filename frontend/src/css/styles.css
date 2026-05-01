@@ -1,17 +1,25 @@
-/* Section 1 - CSS Variables 
-Defines the colour pallet in one place */
+/* ============================================================
+   FRESHMART — styles.css
+   Landing page styles matching the Figma design.
+   Dark navy background, white logo card, three portal cards.
+   ============================================================ */
+
+/* ── 1. CSS VARIABLES ── */
 :root {
-  --green:       #1a6b3c;              /* dark forest green */
-  --green-mid:   #2d9960;              /* mid green (buttons, accents) */
-  --green-light: #e8f5ee;              /* pale green (backgrounds) */
-  --green-glow:  rgba(45,153,96,0.35); /* glow effect colour */
-  --cream:       #faf8f3;              /* off-white */
-  --dark:        #0d1f13;              /* near-black page background */
-  --muted:       #6b7c6e;              /* grey for secondary text */
-  --border:      rgba(255,255,255,0.1);/* subtle white border */
+  --navy:        #0f1b2d;
+  --navy-mid:    #162032;
+  --navy-card:   #1a2740;
+  --navy-border: rgba(255,255,255,0.08);
+  --green:       #16a34a;
+  --green-mid:   #22c55e;
+  --blue:        #2563eb;
+  --purple:      #7c3aed;
+  --white:       #ffffff;
+  --muted:       rgba(255,255,255,0.5);
+  --border:      rgba(255,255,255,0.08);
 }
 
-/* Section 2 - BASE to prevent layout breaking */
+/* ── 2. BASE ── */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -20,70 +28,66 @@ Defines the colour pallet in one place */
 
 body {
   font-family: 'DM Sans', sans-serif;
-  background: var(--dark);
-  color: #fff;
+  background: var(--navy);
+  color: var(--white);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
 }
 
-/* ── 3. BACKGROUND LAYER ── */
+/* ── 3. BACKGROUND ── */
 .bg-layer {
   position: fixed;
   inset: 0;
   z-index: 0;
   background:
-    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(26,107,60,0.45) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 40% at 10% 80%,  rgba(45,153,96,0.15) 0%, transparent 60%),
-    radial-gradient(ellipse 30% 30% at 90% 70%,  rgba(26,107,60,0.12) 0%, transparent 60%),
-    #0d1f13;
+    radial-gradient(ellipse 70% 50% at 50% -5%, rgba(30,60,100,0.6) 0%, transparent 70%),
+    #0f1b2d;
 }
 
+/* Subtle grain texture */
 .bg-layer::after {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-  opacity: 0.4;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity: 0.3;
   pointer-events: none;
 }
 
-/* ── 4. FLOATING ORBS ── */
+/* ── 4. ORBS ── */
 .orb {
   position: fixed;
   border-radius: 50%;
   filter: blur(80px);
   pointer-events: none;
   z-index: 0;
-  animation: drift 12s ease-in-out infinite alternate;
+  animation: drift 14s ease-in-out infinite alternate;
 }
-
 .orb-1 {
-  width: 500px; height: 500px;
-  background: radial-gradient(circle, rgba(45,153,96,0.2), transparent 70%);
-  top: -150px; left: -100px;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(37,99,235,0.12), transparent 70%);
+  top: -100px; left: -80px;
   animation-delay: 0s;
 }
-
 .orb-2 {
-  width: 400px; height: 400px;
-  background: radial-gradient(circle, rgba(26,107,60,0.18), transparent 70%);
-  bottom: -100px; right: -80px;
-  animation-delay: -4s;
+  width: 350px; height: 350px;
+  background: radial-gradient(circle, rgba(124,58,237,0.1), transparent 70%);
+  bottom: -80px; right: -60px;
+  animation-delay: -5s;
 }
-
 .orb-3 {
   width: 250px; height: 250px;
-  background: radial-gradient(circle, rgba(100,220,140,0.1), transparent 70%);
-  top: 40%; left: 50%;
-  transform: translate(-50%, -50%);
-  animation-delay: -8s;
+  background: radial-gradient(circle, rgba(22,163,74,0.08), transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  animation-delay: -10s;
 }
 
 @keyframes drift {
-  from { transform: translate(0, 0) scale(1); }
-  to   { transform: translate(30px, 20px) scale(1.05); }
+  from { transform: translate(0,0) scale(1); }
+  to   { transform: translate(24px,16px) scale(1.04); }
 }
 
 /* ── 5. PAGE LAYOUT ── */
@@ -95,207 +99,158 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2rem 1.5rem;
+  padding: 3rem 1.5rem 2rem;
   min-height: 100vh;
 }
 
-/* ── 6. LOGO SECTION
-   H1 level — FreshMart is the most dominant element on the page.
-   Reduced bottom margin to tighten the space between logo and cards. */
+/* ── 6. LOGO SECTION ── */
 .logo-wrap {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 2rem; /* reduced from 3.5rem — less dead space */
-  animation: fadeDown 0.7s ease both;
+  margin-bottom: 3rem;
+  animation: fadeDown 0.6s ease both;
 }
 
 .logo-icon {
   width: 72px; height: 72px;
-  background: linear-gradient(135deg, var(--green-mid), var(--green));
-  border-radius: 20px;
+  background: #ffffff;
+  border-radius: 18px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 2rem;
+  font-size: 1.8rem;
+  color: var(--green);
   margin-bottom: 1.25rem;
-  box-shadow: 0 0 40px var(--green-glow), 0 8px 24px rgba(0,0,0,0.4);
-  position: relative;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.25);
 }
 
-.logo-icon::after {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  border-radius: 21px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
-  pointer-events: none;
-}
-
-/* H1 — largest text, immediately draws the eye */
 .logo-name {
-  font-family: 'Fraunces', serif;
-  font-size: clamp(2.8rem, 6vw, 4rem);
+  font-family: 'DM Sans', sans-serif;
+  font-size: clamp(2.2rem, 5vw, 3rem);
   font-weight: 700;
-  letter-spacing: -1px;
-  color: #fff;
-  line-height: 1;
-  margin-bottom: 0.6rem;
-}
-
-.logo-name span { color: var(--green-mid); }
-
-/* tagline — clearly smaller than the H1 */
-.logo-tagline {
-  font-size: 0.95rem;
-  color: rgba(255,255,255,0.9);
-  letter-spacing: 0.3px;
-  font-weight: 300;
-}
-
-/* ── 7. "SELECT YOUR PORTAL" LABEL
-   Acts as a section heading between the logo and the cards.
-   Decorative lines either side signal a transition. */
-.cards-label {
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
   color: #ffffff;
-  margin-bottom: 1.5rem;
-  animation: fadeDown 0.7s 0.15s ease both;
-  /* decorative line either side to frame it as a section label */
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-  white-space: nowrap;
+  letter-spacing: -0.5px;
+  line-height: 1;
+  margin-bottom: 0.5rem;
 }
 
-.cards-label::before,
-.cards-label::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: rgba(255,255,255,0.12);
-  max-width: 72px;
+.logo-subtitle {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 0.3rem;
+  font-weight: 400;
 }
 
-/* ── 8. PORTAL CARDS ── */
+.logo-tagline {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.4);
+  font-weight: 400;
+}
+
+/* ── 7. PORTAL CARDS ── */
 .portal-card {
   position: relative;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 20px;
-  padding: 2.5rem 2.25rem;
+  border-radius: 16px;
+  padding: 2rem;
   cursor: pointer;
   color: inherit;
   overflow: hidden;
-  transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1),
-              border-color 0.25s,
-              box-shadow 0.25s,
-              background 0.25s;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1),
+              box-shadow 0.22s;
+  animation: fadeUp 0.5s ease both;
+  text-decoration: none !important;
 }
 
-.portal-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 20px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 60%);
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.25s;
-}
+.portal-card:nth-child(1) { animation-delay: 0.1s; }
+.portal-card:nth-child(2) { animation-delay: 0.2s; }
+.portal-card:nth-child(3) { animation-delay: 0.3s; }
 
 .portal-card:hover {
-  transform: translateY(-6px) scale(1.02);
-  border-color: rgba(255,255,255,0.18);
-  background: rgba(255,255,255,0.07);
+  transform: translateY(-4px);
 }
 
-.portal-card:hover::before { opacity: 1; }
+/* Card colour themes — matching Figma light-tinted cards */
+.card-customer {
+  background: #e8f5ee;
+  border: 1px solid rgba(22,163,74,0.15);
+}
+.card-customer:hover {
+  box-shadow: 0 12px 40px rgba(22,163,74,0.2);
+}
 
-.card-customer:hover  { box-shadow: 0 20px 60px rgba(45,153,96,0.25),  0 0 0 1px rgba(45,153,96,0.3); }
-.card-warehouse:hover { box-shadow: 0 20px 60px rgba(59,130,246,0.2),   0 0 0 1px rgba(59,130,246,0.25); }
-.card-management:hover{ box-shadow: 0 20px 60px rgba(168,85,247,0.2),   0 0 0 1px rgba(168,85,247,0.25); }
+.card-warehouse {
+  background: #e8f0fb;
+  border: 1px solid rgba(37,99,235,0.15);
+}
+.card-warehouse:hover {
+  box-shadow: 0 12px 40px rgba(37,99,235,0.2);
+}
 
-.portal-card { animation: fadeUp 0.6s ease both; }
-.portal-card:nth-child(1) { animation-delay: 0.25s; }
-.portal-card:nth-child(2) { animation-delay: 0.38s; }
-.portal-card:nth-child(3) { animation-delay: 0.51s; }
+.card-management {
+  background: #f0ebfb;
+  border: 1px solid rgba(124,58,237,0.15);
+}
+.card-management:hover {
+  box-shadow: 0 12px 40px rgba(124,58,237,0.2);
+}
 
-/* ── 9. CARD ICON ── */
+/* ── 8. CARD ICON ── */
 .card-icon-wrap {
-  width: 64px; height: 64px;
+  width: 56px; height: 56px;
   border-radius: 14px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 1.85rem;
-  margin-bottom: 1.1rem;
+  font-size: 1.5rem;
+  margin-bottom: 1.25rem;
   flex-shrink: 0;
-}
-
-.icon-customer   { background: linear-gradient(135deg, #16a34a, #15803d); box-shadow: 0 4px 20px rgba(22,163,74,0.4); }
-.icon-warehouse  { background: linear-gradient(135deg, #2563eb, #1d4ed8); box-shadow: 0 4px 20px rgba(37,99,235,0.4); }
-.icon-management { background: linear-gradient(135deg, #9333ea, #7e22ce); box-shadow: 0 4px 20px rgba(147,51,234,0.4); }
-
-/* ── 10. CARD TEXT
-   Three clear levels of hierarchy inside each card:
-   1. card-title  — large, bold, white  (H2 level)
-   2. card-desc   — small, dim, light   (body copy)
-   3. card-cta    — medium, coloured    (action label) */
-
-/* H2 level — portal name dominates the card */
-.card-title {
-  font-family: 'Fraunces', serif;
-  font-size: 1.5rem;        /* increased from 1.2rem/1.45rem */
-  font-weight: 700;
   color: #fff;
-  margin-bottom: 0.6rem;
-  line-height: 1.15;
 }
 
-/* Body copy — clearly smaller and dimmer than title */
+.icon-customer   { background: #16a34a; }
+.icon-warehouse  { background: #2563eb; }
+.icon-management { background: #7c3aed; }
+
+/* ── 9. CARD TEXT ── */
+.card-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 0.4rem;
+  line-height: 1.2;
+}
+
 .card-desc {
-  font-size: 0.85rem;       /* reduced from 0.95rem — bigger gap from title */
-  color: rgba(255,255,255,0.9);
-  line-height: 1.6;
-  font-weight: 300;         /* lighter weight reinforces hierarchy */
+  font-size: 0.88rem;
+  color: #6b7280;
+  line-height: 1.55;
   flex: 1;
 }
 
-/* Thin divider between description and CTA */
+/* ── 10. CARD DIVIDER ── */
 .card-divider {
   height: 1px;
-  background: rgba(255,255,255,0.07);
-  margin: 1.1rem 0;
+  background: rgba(0,0,0,0.08);
+  margin: 1.25rem 0;
 }
 
-/* ── 11. CARD CTA ROW
-   Action label — medium size, clearly coloured per portal.
-   Acts as a visual call to action at the bottom of each card. */
+/* ── 11. CARD CTA ── */
 .card-cta {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  font-size: 0.875rem;      /* between desc and title — clear middle tier */
-  font-weight: 700;         /* bold so it reads as an action */
+  justify-content: flex-end;
 }
-
-.cta-customer   { color: #4ade80; }
-.cta-warehouse  { color: #60a5fa; }
-.cta-management { color: #c084fc; }
 
 .cta-arrow {
   width: 28px; height: 28px;
   border-radius: 8px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 0.9rem;
+  font-size: 1rem;
+  font-weight: 700;
   transition: transform 0.2s;
 }
 
-.arrow-customer   { background: rgba(74,222,128,0.12); }
-.arrow-warehouse  { background: rgba(96,165,250,0.12); }
-.arrow-management { background: rgba(192,132,252,0.12); }
+.arrow-customer   { background: rgba(22,163,74,0.12);  color: #16a34a; }
+.arrow-warehouse  { background: rgba(37,99,235,0.12);  color: #2563eb; }
+.arrow-management { background: rgba(124,58,237,0.12); color: #7c3aed; }
 
 .portal-card:hover .cta-arrow { transform: translateX(4px); }
 
@@ -306,11 +261,11 @@ footer {
   text-align: center;
   padding: 1.5rem;
   font-size: 0.75rem;
-  color: rgba(255,255,255,0.6);
-  letter-spacing: 0.5px;
+  color: rgba(255,255,255,0.25);
+  line-height: 1.8;
 }
 
-footer span { color: rgba(255,255,255,0.8); }
+footer span { color: rgba(255,255,255,0.2); }
 
 /* ── 13. ANIMATIONS ── */
 @keyframes fadeDown {
@@ -319,16 +274,16 @@ footer span { color: rgba(255,255,255,0.8); }
 }
 
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(24px); }
+  from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── 14. RIPPLE EFFECT ── */
+/* ── 14. RIPPLE ── */
 .portal-card .ripple {
   position: absolute;
   border-radius: 50%;
   transform: scale(0);
-  background: rgba(255,255,255,0.06);
+  background: rgba(0,0,0,0.06);
   animation: ripple 0.6s linear;
   pointer-events: none;
 }

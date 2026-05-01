@@ -17,6 +17,8 @@
     .search-bar { flex: 1; max-width: 580px; display: flex; align-items: center; border: 1.5px solid #ddd; border-radius: 8px; padding: 0.45rem 0.9rem; gap: 0.5rem; }
     .search-bar input { border: none; outline: none; font-size: 0.9rem; color: #333; width: 100%; font-family: 'Inter', sans-serif; }
     .search-bar input::placeholder { color: #aaa; }
+    .search-bar button { background: none; border: none; cursor: pointer; color: #aaa; font-size: 1rem; padding: 0; }
+    .search-bar button:hover { color: #2e7d32; }
     .nav-actions { display: flex; align-items: center; gap: 0.75rem; margin-left: auto; }
     .btn-login-nav { background: none; border: none; font-size: 0.9rem; color: #333; cursor: pointer; font-family: 'Inter', sans-serif; font-weight: 500; text-decoration: none; }
     .btn-login-nav:hover { color: #2e7d32; }
@@ -93,6 +95,8 @@
     .btn-continue { background: #2e7d32; color: #fff; border: none; border-radius: 10px; padding: 0.75rem 2rem; font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: background 0.15s; text-decoration: none; display: inline-block; }
     .btn-continue:hover { background: #1b5e20; color: #fff; }
     @keyframes popIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+
+    /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
       .checkout-layout { grid-template-columns: 1fr; }
       .summary-panel { position: static; }
@@ -102,7 +106,6 @@
       .page-wrap { padding: 1.25rem 1rem; }
       .section-card { padding: 1.25rem; }
     }
-
     @media (max-width: 480px) {
       .top-nav { padding: 0.5rem 0.75rem; }
       .logo-text span { display: none; }
@@ -114,7 +117,6 @@
       .btn-place { padding: 0.75rem; font-size: 0.88rem; }
       .confirm-card { padding: 2rem 1.25rem; }
     }
-
     @media (max-width: 360px) {
       .btn-signup-nav { display: none; }
       .form-input { font-size: 0.85rem; }
@@ -123,7 +125,6 @@
 </head>
 <body>
 
-  <!-- navbar -->
   <nav class="top-nav">
     <a href="../../../index.html" class="logo-block">
       <div class="logo-icon">🛒</div>
@@ -131,42 +132,34 @@
     </a>
     <div class="search-bar">
       <input type="text" placeholder="Search for products..." id="searchInput" onkeydown="if(event.key==='Enter') searchRedirect()">
-      <button onclick="searchRedirect()" style="background:none;border:none;cursor:pointer;font-size:1rem;color:#aaa;padding:0;">🔍</button>
+      <button onclick="searchRedirect()">🔍</button>
     </div>
     <div class="nav-actions">
-    <!-- shown when not logged in -->
-    <a href="login.html"  id="nav-login"  class="btn-login-nav">Login</a>
-    <a href="signup.html" id="nav-signup" class="btn-signup-nav">Sign Up</a>
-    <!-- shown when logged in -->
-    <div id="nav-user" style="display:none;align-items:center;gap:0.5rem;">
-      <span id="nav-username" style="font-size:0.9rem;font-weight:600;color:#1a1a1a;"></span>
-      <button onclick="logout()" style="background:#f5f5f5;border:1.5px solid #ddd;border-radius:8px;padding:0.4rem 0.85rem;font-family:'Inter',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;color:#e53935;">Logout</button>
+      <a href="login.html"  id="nav-login"  class="btn-login-nav">Login</a>
+      <a href="signup.html" id="nav-signup" class="btn-signup-nav">Sign Up</a>
+      <div id="nav-user" style="display:none;align-items:center;gap:0.5rem;">
+        <span id="nav-username" style="font-size:0.9rem;font-weight:600;color:#1a1a1a;"></span>
+        <button onclick="logout()" style="background:#f5f5f5;border:1.5px solid #ddd;border-radius:8px;padding:0.4rem 0.85rem;font-family:'Inter',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;color:#e53935;">Logout</button>
+      </div>
+      <button style="background:none;border:none;font-size:1.2rem;cursor:pointer">🤍</button>
+      <button style="background:none;border:none;font-size:0.85rem;color:#333;cursor:pointer;font-family:'Inter',sans-serif">🎁 Orders</button>
+      <div class="cart-btn-wrap">
+        <a href="basket.html" class="cart-btn">🛒</a>
+        <span class="cart-badge" id="cartBadge">0</span>
+      </div>
     </div>
-    <button style="background:none;border:none;font-size:1.2rem;cursor:pointer">🤍</button>
-    <button style="background:none;border:none;font-size:0.85rem;color:#333;cursor:pointer;font-family:'Inter',sans-serif">🎁 Orders</button>
-    <div class="cart-btn-wrap">
-      <a href="basket.html" class="cart-btn">🛒</a>
-      <span class="cart-badge" id="cartBadge">0</span>
-    </div>
-  </div>
   </nav>
 
-  <!-- secondary nav -->
   <div class="sub-nav">
     <a href="index.html">Shop</a>
     <a href="products.html">Offers</a>
     <a href="products.html">Categories</a>
   </div>
 
-  <!-- page content -->
   <div class="page-wrap">
     <h1 class="page-title">Checkout</h1>
-
     <div class="checkout-layout">
-
-      <!-- left: form sections -->
       <div>
-
         <!-- delivery address -->
         <div class="section-card">
           <div class="section-head">
@@ -253,10 +246,9 @@
             <div class="option-info"><div class="option-name">🅿️ PayPal</div></div>
           </div>
         </div>
-
       </div>
 
-      <!-- right: order summary -->
+      <!-- order summary -->
       <div class="summary-panel">
         <div class="summary-title">Order Summary</div>
         <div id="summaryItems"><div style="color:#aaa;font-size:0.85rem">Loading...</div></div>
@@ -268,7 +260,6 @@
         <a href="basket.html" class="btn-back">Back to Cart</a>
         <div class="secure-notice"><span>🔒</span><p><strong>Secure Checkout</strong><br>Your payment information is encrypted</p></div>
       </div>
-
     </div>
   </div>
 
@@ -279,23 +270,20 @@
       <h2>Order Placed!</h2>
       <p>Thank you for your order. We'll send a confirmation to your email.</p>
       <div class="confirm-num" id="confirmNum">Order #FM-0000</div>
-      <a href="index.html" class="btn-continue" onclick="clearBasket()">Continue Shopping</a>
+      <a href="orders.html" class="btn-continue" onclick="clearBasket()">View My Orders</a>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    /* backend base url — update if port changes */
-    const API = 'https://glowing-space-sniffle-r447pg9677v6fpj5-8080.app.github.dev';
+    const API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      ? 'http://localhost:8080'
+      : `https://${window.location.hostname.replace(/-5500\./, '-8080.')}`;
 
-    /* tracks delivery and payment selections */
     let deliveryMethod = 'standard';
     let paymentMethod  = 'card';
-
-    /* cached products from backend — used to build the summary panel */
     let PRODUCTS = [];
 
-    /* reads basket from localstorage */
     const getBasket = () => JSON.parse(localStorage.getItem('fm_basket') || '{}');
 
     function updateNavAuth() {
@@ -314,72 +302,66 @@
       }
     }
 
-  function logout() {
-    localStorage.removeItem('fm_user');
-    sessionStorage.removeItem('fm_user');
-    localStorage.removeItem('fm_basket');
-    window.location.href = 'login.html';
-  }
+    function logout() {
+      localStorage.removeItem('fm_user');
+      sessionStorage.removeItem('fm_user');
+      localStorage.removeItem('fm_basket');
+      window.location.href = 'login.html';
+    }
 
-  updateNavAuth();
+    function searchRedirect() {
+      const q = document.getElementById('searchInput').value.trim();
+      if (q) window.location.href = 'products.html?q=' + encodeURIComponent(q);
+    }
 
-    /* fetches all products from the backend so we can look up names and prices
-       falls back to showing just the product id if the backend is not running */
     async function loadProducts() {
       try {
         const res = await fetch(`${API}/products`);
         if (!res.ok) throw new Error(`Status ${res.status}`);
         PRODUCTS = await res.json();
       } catch (err) {
-        console.warn('Could not load products from backend, using basket ids only:', err);
+        console.warn('Could not load products from backend:', err);
       }
       renderSummary();
     }
 
-    /* looks up a product by id — works whether backend data or fallback */
     function getProduct(id) {
       return PRODUCTS.find(p => p.id == id) || { id, name: `Product #${id}`, price: 0, imageUrl: null };
     }
 
-    /* builds the product image element — uses imageUrl if backend provides one */
-    const productImg = p => p.imageUrl
-      ? `<img src="${p.imageUrl}" alt="${p.name}">`
-      : `🛍️`;
+    const productImg = p => p.imageUrl ? `<img src="${p.imageUrl}" alt="${p.name}">` : `🛍️`;
 
-    /* selects delivery method and updates totals */
     function selectDelivery(method) {
       deliveryMethod = method;
       ['standard','nextday'].forEach(m => document.getElementById(`del-${m}`).classList.toggle('selected', m === method));
       renderSummary();
     }
 
-    /* selects payment method and shows/hides card fields */
     function selectPayment(method) {
       paymentMethod = method;
       ['card','paypal'].forEach(m => document.getElementById(`pay-${m}`).classList.toggle('selected', m === method));
       document.getElementById('cardFields').classList.toggle('show', method === 'card');
     }
 
-    /* formats card number as 1234 5678 9012 3456 */
     function formatCard(input) {
       input.value = input.value.replace(/\D/g,'').replace(/(.{4})/g,'$1 ').trim();
     }
 
-    /* formats expiry as MM/YY */
     function formatExpiry(input) {
       const v = input.value.replace(/\D/g,'');
       input.value = v.length >= 2 ? v.slice(0,2) + '/' + v.slice(2,4) : v;
     }
 
-    /* builds and injects order summary using live backend product data */
     function renderSummary() {
       const basket  = getBasket();
       const entries = Object.entries(basket);
       const panel   = document.getElementById('summaryItems');
+      const meta    = JSON.parse(localStorage.getItem('fm_basket_meta') || '{}');
 
       const subtotal = entries.reduce((s, [id, qty]) => {
+        const m = meta[id];
         const p = getProduct(id);
-        return s + (p.price ?? 0) * qty;
+        return s + ((m?.price ?? p.price ?? 0) * qty);
       }, 0);
 
       const delCost = deliveryMethod === 'nextday' ? 5.99 : 0;
@@ -389,14 +371,18 @@
       panel.innerHTML = entries.length === 0
         ? `<div style="color:#aaa;font-size:0.85rem;padding:0.5rem 0">Your basket is empty</div>`
         : entries.map(([id, qty]) => {
+            const m = meta[id];
             const p = getProduct(id);
+            const name  = m?.name  ?? p.name;
+            const price = m?.price ?? p.price ?? 0;
+            const emoji = m?.emoji ?? '🛍️';
             return `<div class="summary-item">
-              <div class="si-img">${productImg(p)}</div>
+              <div class="si-img">${emoji}</div>
               <div class="si-info">
-                <div class="si-name">${p.name}</div>
+                <div class="si-name">${name}</div>
                 <div class="si-qty">Qty: ${qty}</div>
               </div>
-              <div class="si-price">£${((p.price ?? 0) * qty).toFixed(2)}</div>
+              <div class="si-price">£${(price * qty).toFixed(2)}</div>
             </div>`;
           }).join('');
 
@@ -409,19 +395,46 @@
       del.className   = delCost === 0 ? 'val-free' : '';
     }
 
-    /* shows a field error */
-    function showErr(id, errId) {
-      document.getElementById(id).classList.add('invalid');
-      document.getElementById(errId).classList.add('show');
+    function showErr(id, errId) { document.getElementById(id).classList.add('invalid'); document.getElementById(errId).classList.add('show'); }
+    function clearErr(id, errId) { document.getElementById(id).classList.remove('invalid'); document.getElementById(errId).classList.remove('show'); }
+
+    /* saves the completed order to localStorage so orders.html can display it */
+    function saveOrderToLocalStorage(orderNum) {
+      const user = JSON.parse(localStorage.getItem('fm_user') || sessionStorage.getItem('fm_user') || 'null');
+      if (!user || !user.email) return;
+
+      const basket   = getBasket();
+      const meta     = JSON.parse(localStorage.getItem('fm_basket_meta') || '{}');
+      const total    = parseFloat(document.getElementById('summaryTotal').textContent.replace('£','')) || 0;
+      const delCost  = deliveryMethod === 'nextday' ? 5.99 : 0;
+
+      const newOrder = {
+        id:       orderNum,
+        date:     new Date().toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' }),
+        status:   'processing',
+        total:    total,
+        delivery: deliveryMethod === 'nextday' ? 'Next Day' : 'Standard',
+        address:  `${document.getElementById('address').value}, ${document.getElementById('city').value}, ${document.getElementById('postcode').value}`,
+        payment:  paymentMethod === 'card' ? 'Credit Card' : 'PayPal',
+        items:    Object.entries(basket).map(([id, qty]) => {
+          const m = meta[id];
+          return {
+            emoji: m?.emoji || '🛍️',
+            name:  m?.name  || `Product #${id}`,
+            qty,
+            price: m?.price || 0
+          };
+        }),
+        progress: 10,
+        tracking: 'Order confirmed — being prepared'
+      };
+
+      const key = `fm_orders_${user.email}`;
+      const existing = JSON.parse(localStorage.getItem(key) || '[]');
+      existing.unshift(newOrder); /* newest first */
+      localStorage.setItem(key, JSON.stringify(existing));
     }
 
-    /* clears a field error */
-    function clearErr(id, errId) {
-      document.getElementById(id).classList.remove('invalid');
-      document.getElementById(errId).classList.remove('show');
-    }
-
-    /* validates form then posts the order to the backend */
     async function placeOrder() {
       let valid = true;
       const fields = [
@@ -433,7 +446,6 @@
         ['postcode', 'postcodeErr', v => v.trim().length >= 5],
       ];
 
-      /* only validate card fields when card payment is selected */
       if (paymentMethod === 'card') {
         fields.push(
           ['cardNumber', 'cardNumErr', v => v.replace(/\s/g,'').length === 16],
@@ -454,7 +466,6 @@
       btn.textContent = 'Placing order...';
       btn.classList.add('loading');
 
-      /* build the order payload using the real product ids from the basket */
       const basket = getBasket();
       const user   = JSON.parse(localStorage.getItem('fm_user') || sessionStorage.getItem('fm_user') || 'null');
 
@@ -468,61 +479,49 @@
           city:     document.getElementById('city').value,
           postcode: document.getElementById('postcode').value,
         },
-        /* maps basket {id: qty} to array of {productId, quantity} */
-        items: Object.entries(basket).map(([id, qty]) => ({
-          productId: parseInt(id),
-          quantity:  qty
-        }))
+        items: Object.entries(basket).map(([id, qty]) => ({ productId: parseInt(id), quantity: qty }))
       };
 
+      let orderNum = '#FM-' + Math.floor(1000 + Math.random() * 9000);
+
       try {
-        /* post order to backend — replace /orders with the real endpoint once geoffrey builds it */
         const res = await fetch(`${API}/orders`, {
           method:  'POST',
           headers: { 'Content-Type': 'application/json' },
           body:    JSON.stringify(orderPayload)
         });
-
-        if (!res.ok) throw new Error(`Order failed: ${res.status}`);
-
-        const order = await res.json();
-        /* use the real order id returned from the backend */
-        document.getElementById('confirmNum').textContent = `Order #FM-${order.id}`;
-        document.getElementById('confirmOverlay').classList.add('show');
-
+        if (res.ok) {
+          const order = await res.json();
+          orderNum = `#FM-${order.id}`;
+        }
       } catch (err) {
-        /* if backend not ready, fall back to a random order number so the ui still works */
-        console.warn('Order endpoint not ready, using fallback:', err);
-        const fallbackNum = '#FM-' + Math.floor(1000 + Math.random() * 9000);
-        document.getElementById('confirmNum').textContent = `Order ${fallbackNum}`;
-        setTimeout(() => document.getElementById('confirmOverlay').classList.add('show'), 800);
+        console.warn('Order endpoint not ready, using fallback order number:', err);
       }
+
+      /* save to localStorage regardless of backend status */
+      saveOrderToLocalStorage(orderNum);
+
+      document.getElementById('confirmNum').textContent = `Order ${orderNum}`;
+      document.getElementById('confirmOverlay').classList.add('show');
 
       btn.textContent = 'Place Order';
       btn.classList.remove('loading');
     }
 
-    /* clears the basket from localstorage after the order is confirmed */
     function clearBasket() {
       localStorage.removeItem('fm_basket');
+      localStorage.removeItem('fm_basket_meta');
     }
 
-    /* pre-fill name and email from localstorage if user is already logged in */
+    /* pre-fill from session if logged in */
     const user = JSON.parse(localStorage.getItem('fm_user') || sessionStorage.getItem('fm_user') || 'null');
     if (user) {
       document.getElementById('email').value    = user.email || '';
       document.getElementById('fullName').value = user.name  || '';
     }
 
-    /* fetch products from backend then render summary on page load */
+    updateNavAuth();
     loadProducts();
-
-    
-    function searchRedirect() {
-    const q = document.getElementById('searchInput').value.trim();
-    if (q) window.location.href = 'products.html?q=' + encodeURIComponent(q);
-    }
-  
   </script>
 </body>
 </html>
