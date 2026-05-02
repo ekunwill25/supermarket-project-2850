@@ -115,31 +115,9 @@
             <div class="row g-3">
                 <div class="col-12 col-lg-7">
                     <div class="glass-card">
-                        <div class="glass-card-header"><h6>Recent Orders</h6></div>
-                        <div class="glass-card-body">
-                            <a href="pick.html" class="recent-order-item text-decoration-none">
-                                <div><div class="recent-order-id">ORD-2847</div><div class="recent-order-meta">14 items · 5 min ago</div></div>
-                                <div class="text-end"><span class="badge-wh badge-red">High</span><div class="td-muted mt-1" style="font-size:0.72rem;">Ready to Pick</div></div>
-                            </a>
-                            <a href="pick.html" class="recent-order-item text-decoration-none">
-                                <div><div class="recent-order-id">ORD-2846</div><div class="recent-order-meta">8 items · 12 min ago</div></div>
-                                <div class="text-end"><span class="badge-wh badge-grey">Normal</span><div class="td-muted mt-1" style="font-size:0.72rem;">Picking</div></div>
-                            </a>
-                            <a href="pick.html" class="recent-order-item text-decoration-none">
-                                <div><div class="recent-order-id">ORD-2845</div><div class="recent-order-meta">15 items · 18 min ago</div></div>
-                                <div class="text-end"><span class="badge-wh badge-red">High</span><div class="td-muted mt-1" style="font-size:0.72rem;">Ready to Pick</div></div>
-                            </a>
-                            <a href="dispatch.html" class="recent-order-item text-decoration-none">
-                                <div><div class="recent-order-id">ORD-2844</div><div class="recent-order-meta">6 items · 25 min ago</div></div>
-                                <div class="text-end"><span class="badge-wh badge-grey">Normal</span><div class="td-muted mt-1" style="font-size:0.72rem;">Packed</div></div>
-                            </a>
-                            <a href="pick.html" class="recent-order-item text-decoration-none">
-                                <div><div class="recent-order-id">ORD-2843</div><div class="recent-order-meta">20 items · 32 min ago</div></div>
-                                <div class="text-end"><span class="badge-wh badge-grey">Normal</span><div class="td-muted mt-1" style="font-size:0.72rem;">Ready to Pick</div></div>
-                            </a>
-                            <div class="text-center mt-3">
-                                <a href="pick.html" style="font-size:0.85rem;color:#2563eb;font-weight:600;text-decoration:none;">View All Orders →</a>
-                            </div>
+                        <div class="glass-card-header"><h6>Recent Orders</h6><span class="hdr-muted" id="recent-orders-count"></span></div>
+                        <div class="glass-card-body" id="recent-orders-list">
+                            <!-- populated by renderRecentOrders() -->
                         </div>
                     </div>
                 </div>
@@ -192,5 +170,68 @@
 <button class="mobile-menu-btn" onclick="toggleSidebar()"><i class="bi bi-list"></i></button>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../../js/warehouse.js"></script>
+
+<script>
+/* ── RECENT ORDERS FROM CUSTOMER PORTAL ──────────────────────
+   Reads fm_orders from localStorage (saved by checkout.html)
+   and renders them in the Recent Orders card on the dashboard.
+   Falls back to static demo orders if nothing is saved yet.
+──────────────────────────────────────────────────────────────*/
+function renderRecentOrders() {
+    const list = document.getElementById('recent-orders-list');
+    const countEl = document.getElementById('recent-orders-count');
+    if (!list) return;
+
+    const stored = JSON.parse(localStorage.getItem('fm_orders') || '[]');
+
+    const DEMO = [
+        { id: 'FM-3821', items: 5, priority: 'Normal', minsAgo: 5,  warehouseStatus: 'Ready to Pick' },
+        { id: 'FM-3756', items: 3, priority: 'Normal', minsAgo: 18, warehouseStatus: 'Picking'       },
+        { id: 'FM-3701', items: 8, priority: 'High',   minsAgo: 32, warehouseStatus: 'Ready to Pick' },
+    ];
+
+    const orders = stored.length > 0
+        ? stored.slice().reverse().slice(0, 5)
+        : DEMO;
+
+    if (countEl) countEl.textContent = orders.length + ' order' + (orders.length !== 1 ? 's' : '');
+
+    function timeAgo(isoString) {
+        if (!isoString) return '—';
+        const diff = Math.floor((Date.now() - new Date(isoString)) / 60000);
+        if (diff < 1)  return 'just now';
+        if (diff < 60) return diff + ' min ago';
+        const h = Math.floor(diff / 60);
+        return h + ' hr' + (h > 1 ? 's' : '') + ' ago';
+    }
+
+    function priorityBadge(priority) {
+        if (priority === 'High') return '<span class="badge-wh badge-red">High</span>';
+        return '<span class="badge-wh badge-grey">Normal</span>';
+    }
+
+    list.innerHTML = orders.map(function(o) {
+        var id       = o.id || '—';
+        var items    = o.itemCount || o.items || 0;
+        var ago      = o.placedAt ? timeAgo(o.placedAt) : (o.minsAgo ? o.minsAgo + ' min ago' : '—');
+        var priority = o.priority || 'Normal';
+        var status   = o.warehouseStatus || 'Ready to Pick';
+        return '<a href="pick.html" class="recent-order-item text-decoration-none">'
+            + '<div>'
+            + '<div class="recent-order-id">#' + id + '</div>'
+            + '<div class="recent-order-meta">' + items + ' item' + (items !== 1 ? 's' : '') + ' · ' + ago + '</div>'
+            + '</div>'
+            + '<div class="text-end">'
+            + priorityBadge(priority)
+            + '<div class="td-muted mt-1" style="font-size:0.72rem;">' + status + '</div>'
+            + '</div>'
+            + '</a>';
+    }).join('') + '<div class="text-center mt-3"><a href="pick.html" style="font-size:0.85rem;color:#2563eb;font-weight:600;text-decoration:none;">View All Orders →</a></div>';
+}
+
+renderRecentOrders();
+setInterval(renderRecentOrders, 30000);
+</script>
+
 </body>
 </html>

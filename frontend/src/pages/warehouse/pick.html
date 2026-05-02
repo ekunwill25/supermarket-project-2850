@@ -16,7 +16,7 @@
 
 <div class="app-shell">
     <nav id="sidebar">
-        <a href="../../../index.html" class="sidebar-brand">
+        <a href="../../index.html" class="sidebar-brand">
             <div class="brand-icon">🛒</div>
             <div><div class="brand-name">FreshMart</div><div class="brand-sub">Warehouse Portal</div></div>
         </a>
@@ -43,7 +43,7 @@
             <div class="progress-row"><span>Issues</span><span class="val-red">3</span></div>
         </div>
         <div class="sidebar-footer">
-            <a href="../../../index.html" class="nav-btn"><i class="bi bi-arrow-left-circle"></i> All Portals</a>
+            <a href="../../index.html" class="nav-btn"><i class="bi bi-arrow-left-circle"></i> All Portals</a>
             <button class="nav-btn nav-btn-danger"><i class="bi bi-box-arrow-right"></i> Sign Out</button>
         </div>
     </nav>
@@ -62,7 +62,7 @@
 
         <div id="wh-content">
             <div class="page-heading">Pick Orders</div>
-            <div class="page-subheading">8 orders to fulfil this shift — sorted by dispatch priority</div>
+            <div class="page-subheading" id="pick-subheading">Loading orders...</div>
 
             <div class="row g-3">
                 <div class="col-12 col-lg-4">
@@ -70,34 +70,10 @@
                         <div class="glass-card-header">
                             <i class="bi bi-list-ol" style="color:#2563eb;"></i>
                             <h6>Order Queue</h6>
-                            <span class="hdr-muted">8 pending</span>
+                            <span class="hdr-muted" id="queue-count">0 pending</span>
                         </div>
                         <div class="glass-card-body d-flex flex-column gap-2" id="pick-queue">
-                            <div class="order-card active-order">
-                                <div class="d-flex align-items-center justify-content-between mb-1">
-                                    <span class="order-id">ORD-2847</span>
-                                    <span class="badge-wh badge-blue">Active</span>
-                                </div>
-                                <div class="order-meta">14 items · Due 10:30am · High Priority</div>
-                                <div class="wh-progress"><div class="wh-progress-bar pb-blue" id="pick-progress-bar" style="width:36%"></div></div>
-                                <div class="td-muted" id="pick-progress-label" style="font-size:0.7rem;margin-top:4px;">5 of 14 items picked</div>
-                            </div>
-                            <div class="order-card priority-amber" onclick="selectOrder(this,'ORD-2855','3 items · Due 10:45am')">
-                                <div class="d-flex align-items-center justify-content-between mb-1"><span class="order-id">ORD-2855</span><span class="badge-wh badge-amber">Priority</span></div>
-                                <div class="order-meta">3 items · Due 10:45am</div>
-                            </div>
-                            <div class="order-card" onclick="selectOrder(this,'ORD-2851','7 items · Due 11:00am')">
-                                <div class="d-flex align-items-center justify-content-between mb-1"><span class="order-id">ORD-2851</span><span class="badge-wh badge-grey">Queued</span></div>
-                                <div class="order-meta">7 items · Due 11:00am</div>
-                            </div>
-                            <div class="order-card" onclick="selectOrder(this,'ORD-2853','10 items · Due 11:15am')">
-                                <div class="d-flex align-items-center justify-content-between mb-1"><span class="order-id">ORD-2853</span><span class="badge-wh badge-grey">Queued</span></div>
-                                <div class="order-meta">10 items · Due 11:15am</div>
-                            </div>
-                            <div class="order-card" onclick="selectOrder(this,'ORD-2860','9 items · Due 12:00pm')">
-                                <div class="d-flex align-items-center justify-content-between mb-1"><span class="order-id">ORD-2860</span><span class="badge-wh badge-grey">Queued</span></div>
-                                <div class="order-meta">9 items · Due 12:00pm</div>
-                            </div>
+                            <!-- dynamically populated by renderPickQueue() -->
                         </div>
                     </div>
                 </div>
@@ -115,20 +91,11 @@
                                 <div>Pick in route order to save time: <strong>Aisle 1 → 2 → 3 → Cold Store</strong></div>
                             </div>
                             <div id="pick-items">
-                                <div class="pick-item done"><div class="pick-check checked" onclick="togglePick(this)">✓</div><div style="flex:1;"><div class="pick-name">Broccoli (each)</div><div class="pick-loc"><i class="bi bi-geo-alt"></i> Aisle 1D · Display</div></div><div class="pick-qty">× 3</div></div>
-                                <div class="pick-item done"><div class="pick-check checked" onclick="togglePick(this)">✓</div><div style="flex:1;"><div class="pick-name">Sourdough Bread 800g</div><div class="pick-loc"><i class="bi bi-geo-alt"></i> Aisle 1A · Shelf 1</div></div><div class="pick-qty">× 1</div></div>
-                                <div class="pick-item done"><div class="pick-check checked" onclick="togglePick(this)">✓</div><div style="flex:1;"><div class="pick-name">Orange Juice 1L</div><div class="pick-loc"><i class="bi bi-geo-alt"></i> Aisle 2A · Shelf 1</div></div><div class="pick-qty">× 2</div></div>
-                                <div class="pick-item done"><div class="pick-check checked" onclick="togglePick(this)">✓</div><div style="flex:1;"><div class="pick-name">Free Range Eggs × 12</div><div class="pick-loc"><i class="bi bi-geo-alt"></i> Aisle 2C · Shelf 3</div></div><div class="pick-qty">× 2</div></div>
-                                <div class="pick-item done"><div class="pick-check checked" onclick="togglePick(this)">✓</div><div style="flex:1;"><div class="pick-name">Cheddar Cheese 400g</div><div class="pick-loc"><i class="bi bi-geo-alt"></i> Aisle 3B · Shelf 4</div></div><div class="pick-qty">× 1</div></div>
-                                <div class="pick-item"><div class="pick-check" onclick="togglePick(this)"></div><div style="flex:1;"><div class="pick-name">Organic Whole Milk 2L</div><div class="pick-loc"><i class="bi bi-geo-alt"></i> Aisle 3B · Shelf 2 &nbsp;<span class="badge-wh badge-red">Low Stock</span></div></div><div class="pick-qty">× 2</div></div>
-                                <div class="pick-item"><div class="pick-check" onclick="togglePick(this)"></div><div style="flex:1;"><div class="pick-name">Greek Yoghurt 500g</div><div class="pick-loc"><i class="bi bi-geo-alt"></i> Aisle 3B · Shelf 3</div></div><div class="pick-qty">× 1</div></div>
-                                <div class="pick-item"><div class="pick-check" onclick="togglePick(this)"></div><div style="flex:1;"><div class="pick-name">Pasta 500g Penne</div><div class="pick-loc"><i class="bi bi-geo-alt"></i> Aisle 4C · Shelf 2</div></div><div class="pick-qty">× 3</div></div>
-                                <div class="pick-item"><div class="pick-check" onclick="togglePick(this)"></div><div style="flex:1;"><div class="pick-name">Tinned Tomatoes 400g</div><div class="pick-loc"><i class="bi bi-geo-alt"></i> Aisle 4A · Shelf 1</div></div><div class="pick-qty">× 4</div></div>
-                                <div class="pick-item"><div class="pick-check" onclick="togglePick(this)"></div><div style="flex:1;"><div class="pick-name">Chicken Breast 500g</div><div class="pick-loc"><i class="bi bi-geo-alt"></i> Cold Store · Bay 2</div></div><div class="pick-qty">× 2</div></div>
+                                <!-- populated by renderPickItems() -->
                             </div>
                             <div class="wh-divider"></div>
                             <div class="d-flex gap-2 flex-wrap align-items-center">
-                                <span class="td-muted" id="pick-count-label">5 / 14 items picked</span>
+                                <span class="td-muted" id="pick-count-label">0 / 0 items picked</span>
                                 <button class="btn-wh btn-wh-success ms-auto" onclick="completeOrder()"><i class="bi bi-check-circle"></i> Mark Order Complete</button>
                                 <a href="report.html" class="btn-wh btn-wh-danger"><i class="bi bi-exclamation-triangle"></i> Report Issue</a>
                             </div>
@@ -144,5 +111,201 @@
 <button class="mobile-menu-btn" onclick="toggleSidebar()"><i class="bi bi-list"></i></button>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../../js/warehouse.js"></script>
+
+<script>
+/* ── PICK QUEUE + PICK LIST FROM LOCALSTORAGE ─────────────────
+   Loads orders saved by checkout.html (fm_orders).
+   Falls back to demo data if no real orders exist.
+──────────────────────────────────────────────────────────────*/
+
+// Demo fallback orders
+var DEMO_ORDERS = [
+    { id: 'FM-2847', itemCount: 14, priority: 'High',   warehouseStatus: 'Active', demoMeta: '14 items · Due 10:30am · High Priority' },
+    { id: 'FM-2855', itemCount: 3,  priority: 'High',   warehouseStatus: 'Queued', demoMeta: '3 items · Due 10:45am'  },
+    { id: 'FM-2851', itemCount: 7,  priority: 'Normal', warehouseStatus: 'Queued', demoMeta: '7 items · Due 11:00am'  },
+    { id: 'FM-2853', itemCount: 10, priority: 'Normal', warehouseStatus: 'Queued', demoMeta: '10 items · Due 11:15am' },
+    { id: 'FM-2860', itemCount: 9,  priority: 'Normal', warehouseStatus: 'Queued', demoMeta: '9 items · Due 12:00pm'  },
+];
+
+// Demo pick list items
+var DEMO_ITEMS = [
+    { name: 'Broccoli (each)',       loc: 'Aisle 1D · Display', quantity: 3,  done: true  },
+    { name: 'Sourdough Bread 800g',  loc: 'Aisle 1A · Shelf 1', quantity: 1,  done: true  },
+    { name: 'Orange Juice 1L',       loc: 'Aisle 2A · Shelf 1', quantity: 2,  done: true  },
+    { name: 'Free Range Eggs × 12',  loc: 'Aisle 2C · Shelf 3', quantity: 2,  done: true  },
+    { name: 'Cheddar Cheese 400g',   loc: 'Aisle 3B · Shelf 4', quantity: 1,  done: true  },
+    { name: 'Organic Whole Milk 2L', loc: 'Aisle 3B · Shelf 2', quantity: 2,  done: false, lowStock: true },
+    { name: 'Greek Yoghurt 500g',    loc: 'Aisle 3B · Shelf 3', quantity: 1,  done: false },
+    { name: 'Pasta 500g Penne',      loc: 'Aisle 4C · Shelf 2', quantity: 3,  done: false },
+    { name: 'Tinned Tomatoes 400g',  loc: 'Aisle 4A · Shelf 1', quantity: 4,  done: false },
+    { name: 'Chicken Breast 500g',   loc: 'Cold Store · Bay 2', quantity: 2,  done: false },
+];
+
+function timeAgo(iso) {
+    if (!iso) return null;
+    var diff = Math.floor((Date.now() - new Date(iso)) / 60000);
+    if (diff < 1)  return 'just now';
+    if (diff < 60) return diff + ' min ago';
+    return Math.floor(diff / 60) + ' hr ago';
+}
+
+function getOrders() {
+    var stored = JSON.parse(localStorage.getItem('fm_orders') || '[]');
+    return stored.length > 0 ? stored.slice().reverse() : null;
+}
+
+/* ── RENDER ORDER QUEUE ── */
+function renderPickQueue() {
+    var queue   = document.getElementById('pick-queue');
+    var countEl = document.getElementById('queue-count');
+    var subEl   = document.getElementById('pick-subheading');
+    if (!queue) return;
+
+    var realOrders = getOrders();
+    var orders     = realOrders || DEMO_ORDERS;
+    var total      = orders.length;
+
+    if (countEl) countEl.textContent = total + ' pending';
+    if (subEl)   subEl.textContent   = total + ' order' + (total !== 1 ? 's' : '') + ' to fulfil this shift — sorted by dispatch priority';
+
+    queue.innerHTML = orders.map(function(o, i) {
+        var id       = o.id || '—';
+        var items    = o.itemCount || (o.items ? o.items.length : 0) || 0;
+        var priority = o.priority || 'Normal';
+        var ago      = o.placedAt ? timeAgo(o.placedAt) : null;
+        var isFirst  = (i === 0);
+        var meta     = o.demoMeta || (items + ' item' + (items !== 1 ? 's' : '') + (ago ? ' · ' + ago : '') + (priority === 'High' ? ' · High Priority' : ''));
+        var cardCls  = isFirst ? 'order-card active-order' : (priority === 'High' ? 'order-card priority-amber' : 'order-card');
+        var badge    = isFirst ? '<span class="badge-wh badge-blue">Active</span>'
+                     : priority === 'High' ? '<span class="badge-wh badge-amber">Priority</span>'
+                     : '<span class="badge-wh badge-grey">Queued</span>';
+        var onclick  = isFirst ? '' : 'onclick="selectPickOrder(' + i + ')"';
+        var progress = isFirst
+            ? '<div class="wh-progress"><div class="wh-progress-bar pb-blue" id="pick-progress-bar" style="width:0%"></div></div>'
+            + '<div class="td-muted" id="pick-progress-label" style="font-size:0.7rem;margin-top:4px;">0 of ' + items + ' items picked</div>'
+            : '';
+
+        return '<div class="' + cardCls + '" ' + onclick + '>'
+            + '<div class="d-flex align-items-center justify-content-between mb-1">'
+            + '<span class="order-id">#' + id + '</span>' + badge
+            + '</div>'
+            + '<div class="order-meta">' + meta + '</div>'
+            + progress
+            + '</div>';
+    }).join('');
+
+    // Render pick list for first order
+    renderPickItems(orders[0], realOrders !== null);
+}
+
+/* ── RENDER PICK LIST ── */
+function renderPickItems(order, isReal) {
+    var container  = document.getElementById('pick-items');
+    var lbl        = document.getElementById('active-order-label');
+    var metaTopbar = document.getElementById('active-order-meta-topbar');
+    var countLabel = document.getElementById('pick-count-label');
+    if (!container) return;
+
+    if (!isReal) {
+        // Show demo items
+        if (lbl)        lbl.textContent        = 'ORD-2847';
+        if (metaTopbar) metaTopbar.textContent  = '14 items · Bay 3A';
+        if (countLabel) countLabel.textContent  = '5 / 14 items picked';
+        var bar = document.getElementById('pick-progress-bar');
+        var pbl = document.getElementById('pick-progress-label');
+        if (bar) bar.style.width = '36%';
+        if (pbl) pbl.textContent = '5 of 14 items picked';
+
+        container.innerHTML = DEMO_ITEMS.map(function(item) {
+            var locHtml = '<i class="bi bi-geo-alt"></i> ' + item.loc
+                + (item.lowStock ? ' &nbsp;<span class="badge-wh badge-red">Low Stock</span>' : '');
+            return '<div class="pick-item' + (item.done ? ' done' : '') + '">'
+                + '<div class="pick-check' + (item.done ? ' checked' : '') + '" onclick="togglePick(this)">'
+                + (item.done ? '✓' : '') + '</div>'
+                + '<div style="flex:1;"><div class="pick-name">' + item.name + '</div>'
+                + '<div class="pick-loc">' + locHtml + '</div></div>'
+                + '<div class="pick-qty">× ' + item.quantity + '</div>'
+                + '</div>';
+        }).join('');
+        return;
+    }
+
+    // Real order
+    var id    = '#' + (order.id || '—');
+    var itemsArr  = (order.items && order.items.length > 0) ? order.items : null;
+    var itemCount = itemsArr ? itemsArr.length : (order.itemCount || 0);
+    var ago   = order.placedAt ? timeAgo(order.placedAt) : '';
+
+    if (lbl)        lbl.textContent        = id;
+    if (metaTopbar) metaTopbar.textContent  = itemCount + ' item' + (itemCount !== 1 ? 's' : '') + (ago ? ' · ' + ago : '');
+    if (countLabel) countLabel.textContent  = '0 / ' + itemCount + ' items picked';
+
+    var bar = document.getElementById('pick-progress-bar');
+    var pbl = document.getElementById('pick-progress-label');
+    if (bar) bar.style.width = '0%';
+    if (pbl) pbl.textContent = '0 of ' + itemCount + ' items picked';
+
+    if (itemsArr) {
+        // We have actual item names from checkout
+        container.innerHTML = itemsArr.map(function(item) {
+            return '<div class="pick-item">'
+                + '<div class="pick-check" onclick="togglePick(this)"></div>'
+                + '<div style="flex:1;"><div class="pick-name">' + (item.name || 'Product #' + item.productId) + '</div>'
+                + '<div class="pick-loc"><i class="bi bi-geo-alt"></i> Scan item to confirm location</div></div>'
+                + '<div class="pick-qty">× ' + (item.quantity || item.qty || 1) + '</div>'
+                + '</div>';
+        }).join('');
+    } else {
+        // Only item count known — show numbered placeholders
+        var rows = '';
+        for (var i = 0; i < itemCount; i++) {
+            rows += '<div class="pick-item">'
+                + '<div class="pick-check" onclick="togglePick(this)"></div>'
+                + '<div style="flex:1;"><div class="pick-name">Item ' + (i + 1) + '</div>'
+                + '<div class="pick-loc"><i class="bi bi-geo-alt"></i> Scan item to reveal location</div></div>'
+                + '<div class="pick-qty">× 1</div>'
+                + '</div>';
+        }
+        container.innerHTML = rows;
+    }
+}
+
+/* ── SELECT A DIFFERENT ORDER FROM QUEUE ── */
+function selectPickOrder(index) {
+    var realOrders = getOrders();
+    var orders     = realOrders || DEMO_ORDERS;
+    var order      = orders[index];
+    if (!order) return;
+
+    // Update active highlight in queue
+    document.querySelectorAll('#pick-queue .order-card').forEach(function(c, i) {
+        c.classList.toggle('active-order', i === index);
+    });
+
+    renderPickItems(order, realOrders !== null);
+}
+
+renderPickQueue();
+
+// Reset warehouse.js pick counters to match real order
+(function() {
+    var orders = JSON.parse(localStorage.getItem('fm_orders') || '[]');
+    if (orders.length > 0) {
+        var latest    = orders[orders.length - 1];
+        var itemCount = latest.itemCount || (latest.items ? latest.items.length : 0) || 0;
+        // Override the hardcoded values from warehouse.js
+        if (typeof window._pickChecked !== 'undefined') window._pickChecked = 0;
+        if (typeof window._pickTotal   !== 'undefined') window._pickTotal   = itemCount;
+        // Also directly reset the counter label and bar in case warehouse.js already ran
+        var bar = document.getElementById('pick-progress-bar');
+        var pbl = document.getElementById('pick-progress-label');
+        var lbl = document.getElementById('pick-count-label');
+        if (bar) bar.style.width   = '0%';
+        if (pbl) pbl.textContent   = '0 of ' + itemCount + ' items picked';
+        if (lbl) lbl.textContent   = '0 / '  + itemCount + ' items picked';
+    }
+})();
+</script>
+
 </body>
 </html>
