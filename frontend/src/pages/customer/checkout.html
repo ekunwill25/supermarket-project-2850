@@ -95,8 +95,6 @@
     .btn-continue { background: #2e7d32; color: #fff; border: none; border-radius: 10px; padding: 0.75rem 2rem; font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: background 0.15s; text-decoration: none; display: inline-block; }
     .btn-continue:hover { background: #1b5e20; color: #fff; }
     @keyframes popIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
-
-    /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
       .checkout-layout { grid-template-columns: 1fr; }
       .summary-panel { position: static; }
@@ -142,7 +140,7 @@
         <button onclick="logout()" style="background:#f5f5f5;border:1.5px solid #ddd;border-radius:8px;padding:0.4rem 0.85rem;font-family:'Inter',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;color:#e53935;">Logout</button>
       </div>
       <button style="background:none;border:none;font-size:1.2rem;cursor:pointer">🤍</button>
-      <button style="background:none;border:none;font-size:0.85rem;color:#333;cursor:pointer;font-family:'Inter',sans-serif">🎁 Orders</button>
+      <button style="background:none;border:none;font-size:0.85rem;color:#333;cursor:pointer;font-family:'Inter',sans-serif" onclick="location.href='orders.html'">🎁 Orders</button>
       <div class="cart-btn-wrap">
         <a href="basket.html" class="cart-btn">🛒</a>
         <span class="cart-badge" id="cartBadge">0</span>
@@ -160,7 +158,7 @@
     <h1 class="page-title">Checkout</h1>
     <div class="checkout-layout">
       <div>
-        <!-- delivery address -->
+
         <div class="section-card">
           <div class="section-head">
             <div class="section-icon">📍</div>
@@ -200,7 +198,6 @@
           </div>
         </div>
 
-        <!-- delivery method -->
         <div class="section-card">
           <div class="section-head"><div class="section-icon">🚚</div><div class="section-title">Delivery Method</div></div>
           <div class="option-card selected" id="del-standard" onclick="selectDelivery('standard')">
@@ -215,7 +212,6 @@
           </div>
         </div>
 
-        <!-- payment method -->
         <div class="section-card">
           <div class="section-head"><div class="section-icon">💳</div><div class="section-title">Payment Method</div></div>
           <div class="option-card selected" id="pay-card" onclick="selectPayment('card')">
@@ -246,9 +242,9 @@
             <div class="option-info"><div class="option-name">🅿️ PayPal</div></div>
           </div>
         </div>
+
       </div>
 
-      <!-- order summary -->
       <div class="summary-panel">
         <div class="summary-title">Order Summary</div>
         <div id="summaryItems"><div style="color:#aaa;font-size:0.85rem">Loading...</div></div>
@@ -263,7 +259,6 @@
     </div>
   </div>
 
-  <!-- confirmation overlay -->
   <div class="confirm-overlay" id="confirmOverlay">
     <div class="confirm-card">
       <div class="confirm-icon">✅</div>
@@ -285,6 +280,22 @@
     let PRODUCTS = [];
 
     const getBasket = () => JSON.parse(localStorage.getItem('fm_basket') || '{}');
+    const getMeta   = () => JSON.parse(localStorage.getItem('fm_basket_meta') || '{}');
+
+    /* ── resolve a basket item's display data
+       Priority: 1. fm_basket_meta (always written when adding to cart)
+                 2. PRODUCTS from backend
+                 3. bare fallback                                    */
+    function resolveItem(id) {
+      const meta    = getMeta();
+      const m       = meta[id];
+      const backend = PRODUCTS.find(p => String(p.id) === String(id));
+      return {
+        name:  m?.name  ?? backend?.name  ?? `Product #${id}`,
+        price: m?.price ?? backend?.price ?? 0,
+        emoji: m?.emoji ?? '🛍️',
+      };
+    }
 
     function updateNavAuth() {
       const user = JSON.parse(localStorage.getItem('fm_user') || sessionStorage.getItem('fm_user') || 'null');
@@ -320,16 +331,11 @@
         if (!res.ok) throw new Error(`Status ${res.status}`);
         PRODUCTS = await res.json();
       } catch (err) {
-        console.warn('Could not load products from backend:', err);
+        console.warn('Backend unavailable, using basket meta only:', err);
       }
+      /* render immediately using meta — no need to wait for backend */
       renderSummary();
     }
-
-    function getProduct(id) {
-      return PRODUCTS.find(p => p.id == id) || { id, name: `Product #${id}`, price: 0, imageUrl: null };
-    }
-
-    const productImg = p => p.imageUrl ? `<img src="${p.imageUrl}" alt="${p.name}">` : `🛍️`;
 
     function selectDelivery(method) {
       deliveryMethod = method;
@@ -356,39 +362,33 @@
       const basket  = getBasket();
       const entries = Object.entries(basket);
       const panel   = document.getElementById('summaryItems');
-      const meta    = JSON.parse(localStorage.getItem('fm_basket_meta') || '{}');
 
+      /* use resolveItem so meta is always the primary source */
       const subtotal = entries.reduce((s, [id, qty]) => {
-        const m = meta[id];
-        const p = getProduct(id);
-        return s + ((m?.price ?? p.price ?? 0) * qty);
+        return s + resolveItem(id).price * qty;
       }, 0);
 
       const delCost = deliveryMethod === 'nextday' ? 5.99 : 0;
       const total   = subtotal + delCost;
-      const qty     = entries.reduce((s, [,v]) => s + v, 0);
+      const totalQty = entries.reduce((s, [, v]) => s + v, 0);
 
       panel.innerHTML = entries.length === 0
         ? `<div style="color:#aaa;font-size:0.85rem;padding:0.5rem 0">Your basket is empty</div>`
         : entries.map(([id, qty]) => {
-            const m = meta[id];
-            const p = getProduct(id);
-            const name  = m?.name  ?? p.name;
-            const price = m?.price ?? p.price ?? 0;
-            const emoji = m?.emoji ?? '🛍️';
+            const item = resolveItem(id);
             return `<div class="summary-item">
-              <div class="si-img">${emoji}</div>
+              <div class="si-img">${item.emoji}</div>
               <div class="si-info">
-                <div class="si-name">${name}</div>
+                <div class="si-name">${item.name}</div>
                 <div class="si-qty">Qty: ${qty}</div>
               </div>
-              <div class="si-price">£${(price * qty).toFixed(2)}</div>
+              <div class="si-price">£${(item.price * qty).toFixed(2)}</div>
             </div>`;
           }).join('');
 
       document.getElementById('summarySubtotal').textContent = `£${subtotal.toFixed(2)}`;
       document.getElementById('summaryTotal').textContent    = `£${total.toFixed(2)}`;
-      document.getElementById('cartBadge').textContent       = qty;
+      document.getElementById('cartBadge').textContent       = totalQty;
 
       const del = document.getElementById('summaryDelivery');
       del.textContent = delCost === 0 ? 'FREE' : `£${delCost.toFixed(2)}`;
@@ -398,15 +398,13 @@
     function showErr(id, errId) { document.getElementById(id).classList.add('invalid'); document.getElementById(errId).classList.add('show'); }
     function clearErr(id, errId) { document.getElementById(id).classList.remove('invalid'); document.getElementById(errId).classList.remove('show'); }
 
-    /* saves the completed order to localStorage so orders.html can display it */
+    /* saves order to localStorage so orders.html can display it */
     function saveOrderToLocalStorage(orderNum) {
       const user = JSON.parse(localStorage.getItem('fm_user') || sessionStorage.getItem('fm_user') || 'null');
-      if (!user || !user.email) return;
+      if (!user?.email) return;
 
-      const basket   = getBasket();
-      const meta     = JSON.parse(localStorage.getItem('fm_basket_meta') || '{}');
-      const total    = parseFloat(document.getElementById('summaryTotal').textContent.replace('£','')) || 0;
-      const delCost  = deliveryMethod === 'nextday' ? 5.99 : 0;
+      const basket = getBasket();
+      const total  = parseFloat(document.getElementById('summaryTotal').textContent.replace('£','')) || 0;
 
       const newOrder = {
         id:       orderNum,
@@ -417,22 +415,33 @@
         address:  `${document.getElementById('address').value}, ${document.getElementById('city').value}, ${document.getElementById('postcode').value}`,
         payment:  paymentMethod === 'card' ? 'Credit Card' : 'PayPal',
         items:    Object.entries(basket).map(([id, qty]) => {
-          const m = meta[id];
-          return {
-            emoji: m?.emoji || '🛍️',
-            name:  m?.name  || `Product #${id}`,
-            qty,
-            price: m?.price || 0
-          };
+          const item = resolveItem(id);
+          return { emoji: item.emoji, name: item.name, qty, price: item.price };
         }),
         progress: 10,
-        tracking: 'Order confirmed — being prepared'
+        tracking: 'Order confirmed — being prepared',
       };
 
-      const key = `fm_orders_${user.email}`;
+      const key      = `fm_orders_${user.email}`;
       const existing = JSON.parse(localStorage.getItem(key) || '[]');
-      existing.unshift(newOrder); /* newest first */
+      existing.unshift(newOrder);
       localStorage.setItem(key, JSON.stringify(existing));
+
+      /* also save to fm_orders for warehouse portal */
+      const whOrders = JSON.parse(localStorage.getItem('fm_orders') || '[]');
+      whOrders.push({
+        id:              orderNum.replace(/#?FM-?/gi, 'FM-'),
+        placedAt:        new Date().toISOString(),
+        itemCount:       Object.values(basket).reduce((s, v) => s + v, 0),
+        total:           total.toFixed(2),
+        priority:        Object.values(basket).reduce((s, v) => s + v, 0) > 8 ? 'High' : 'Normal',
+        warehouseStatus: 'Ready to Pick',
+        items:           newOrder.items,
+        address:         newOrder.address,
+        delivery:        deliveryMethod,
+        payment:         paymentMethod,
+      });
+      localStorage.setItem('fm_orders', JSON.stringify(whOrders));
     }
 
     async function placeOrder() {
@@ -445,7 +454,6 @@
         ['city',     'cityErr',     v => v.trim().length > 1],
         ['postcode', 'postcodeErr', v => v.trim().length >= 5],
       ];
-
       if (paymentMethod === 'card') {
         fields.push(
           ['cardNumber', 'cardNumErr', v => v.replace(/\s/g,'').length === 16],
@@ -453,13 +461,11 @@
           ['cardCvc',    'cvcErr',     v => v.length === 3]
         );
       }
-
       fields.forEach(([id, errId, test]) => {
         const val = document.getElementById(id).value;
         if (!test(val)) { showErr(id, errId); valid = false; }
         else clearErr(id, errId);
       });
-
       if (!valid) return;
 
       const btn = document.getElementById('placeBtn');
@@ -468,39 +474,34 @@
 
       const basket = getBasket();
       const user   = JSON.parse(localStorage.getItem('fm_user') || sessionStorage.getItem('fm_user') || 'null');
-
-      const orderPayload = {
-        customerId:     user?.id ?? null,
-        deliveryMethod: deliveryMethod,
-        paymentMethod:  paymentMethod,
-        address: {
-          fullName: document.getElementById('fullName').value,
-          street:   document.getElementById('address').value,
-          city:     document.getElementById('city').value,
-          postcode: document.getElementById('postcode').value,
-        },
-        items: Object.entries(basket).map(([id, qty]) => ({ productId: parseInt(id), quantity: qty }))
-      };
-
       let orderNum = '#FM-' + Math.floor(1000 + Math.random() * 9000);
 
       try {
         const res = await fetch(`${API}/orders`, {
-          method:  'POST',
+          method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body:    JSON.stringify(orderPayload)
+          body: JSON.stringify({
+            customerId:     user?.id ?? null,
+            deliveryMethod: deliveryMethod,
+            paymentMethod:  paymentMethod,
+            address: {
+              fullName: document.getElementById('fullName').value,
+              street:   document.getElementById('address').value,
+              city:     document.getElementById('city').value,
+              postcode: document.getElementById('postcode').value,
+            },
+            items: Object.entries(basket).map(([id, qty]) => ({ productId: parseInt(id), quantity: qty }))
+          })
         });
         if (res.ok) {
           const order = await res.json();
           orderNum = `#FM-${order.id}`;
         }
       } catch (err) {
-        console.warn('Order endpoint not ready, using fallback order number:', err);
+        console.warn('Order endpoint not ready, using fallback:', err);
       }
 
-      /* save to localStorage regardless of backend status */
       saveOrderToLocalStorage(orderNum);
-
       document.getElementById('confirmNum').textContent = `Order ${orderNum}`;
       document.getElementById('confirmOverlay').classList.add('show');
 
@@ -521,6 +522,9 @@
     }
 
     updateNavAuth();
+    /* render immediately from meta — don't wait for backend */
+    renderSummary();
+    /* then try to enrich with backend data in the background */
     loadProducts();
   </script>
 </body>
