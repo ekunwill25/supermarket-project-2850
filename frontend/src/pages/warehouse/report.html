@@ -13,10 +13,11 @@
 <body>
 <div class="bg-layer"></div>
 <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
+
 <div class="app-shell">
     <nav id="sidebar">
-        <a href="../../../../index.html" class="sidebar-brand">
-            <div class="brand-icon">&#128722;</div>
+        <a href="../../../index.html" class="sidebar-brand">
+            <div class="brand-icon">🛒</div>
             <div><div class="brand-name">FreshMart</div><div class="brand-sub">Warehouse Portal</div></div>
         </a>
         <div class="sidebar-worker">
@@ -33,7 +34,7 @@
             <a href="substitution.html" class="nav-btn"><i class="bi bi-arrow-left-right"></i> Substitution</a>
             <a href="dispatch.html" class="nav-btn"><i class="bi bi-truck"></i> Dispatch <span class="nav-badge">3</span></a>
             <div class="nav-section-label">Issues</div>
-            <a href="report.html" class="nav-btn"><i class="bi bi-exclamation-circle"></i> Report <span class="nav-badge-red">2</span></a>
+            <a href="report.html" class="nav-btn active"><i class="bi bi-exclamation-circle"></i> Report <span class="nav-badge-red">2</span></a>
         </div>
         <div class="progress-section">
             <div class="progress-section-title">Today's Progress</div>
@@ -42,66 +43,42 @@
             <div class="progress-row"><span>Issues</span><span class="val-red">3</span></div>
         </div>
         <div class="sidebar-footer">
-            <a href="../../../../index.html" class="nav-btn"><i class="bi bi-arrow-left-circle"></i> All Portals</a>
+            <a href="../../../index.html" class="nav-btn"><i class="bi bi-arrow-left-circle"></i> All Portals</a>
             <button class="nav-btn nav-btn-danger"><i class="bi bi-box-arrow-right"></i> Sign Out</button>
         </div>
     </nav>
+
     <div id="main">
         <header id="topbar">
-            <div class="topbar-title"><span>FreshMart Warehouse System</span><small>Device: Tablet with Barcode Scanner (UK)</small></div>
-            <div class="topbar-right-info"><strong>Distribution Centre - Zone 1</strong> Worker ID: FM-2847</div>
+            <div class="topbar-title">
+                <span>FreshMart Warehouse System</span>
+                <small>Device: Tablet with Barcode Scanner (UK)</small>
+            </div>
+            <div class="topbar-right-info">
+                <strong>Distribution Centre - Zone 1</strong>
+                Worker ID: FM-2847
+            </div>
         </header>
+
         <div id="wh-content">
             <div class="page-heading">Report Issue</div>
             <div class="page-subheading">Flag a stock, product, or operational problem to the management team</div>
+
             <div class="row g-3">
                 <div class="col-12 col-lg-7">
                     <div class="glass-card">
                         <div class="glass-card-header">
-                            <i class="bi bi-exclamation-triangle" style="color:#f87171;"></i>
+                            <i class="bi bi-exclamation-triangle" style="color:#dc2626;"></i>
                             <h6>New Issue Report</h6>
                         </div>
                         <div class="glass-card-body">
                             <div class="row g-3">
-                                <div class="col-12 col-md-6">
-                                    <label class="wh-label">Issue Type</label>
-                                    <select class="wh-input" id="issue-type">
-                                        <option value="">— Select type —</option>
-                                        <option value="stock">Out of Stock</option>
-                                        <option value="damaged">Damaged Product</option>
-                                        <option value="expiry">Near / Past Expiry</option>
-                                        <option value="misplace">Misplaced Item</option>
-                                        <option value="label">Incorrect Label / Price</option>
-                                        <option value="equipment">Equipment Fault</option>
-                                        <option value="safety">Safety Hazard</option>
-                                        <option value="other">Other</option>
-                                    </select>
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <label class="wh-label">Priority</label>
-                                    <select class="wh-input" id="issue-priority">
-                                        <option>Low &mdash; no immediate impact</option>
-                                        <option selected>Medium &mdash; needs attention today</option>
-                                        <option>High &mdash; urgent, affects orders</option>
-                                        <option>Critical &mdash; stop everything</option>
-                                    </select>
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <label class="wh-label">Product / SKU (if applicable)</label>
-                                    <input type="text" class="wh-input" id="issue-sku" placeholder="e.g. SKU-00142 or product name">
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <label class="wh-label">Location</label>
-                                    <input type="text" class="wh-input" id="issue-location" placeholder="e.g. Aisle 3B, Cold Store, Bay 2">
-                                </div>
-                                <div class="col-12">
-                                    <label class="wh-label">Description</label>
-                                    <textarea class="wh-textarea" id="issue-desc" placeholder="Describe what you found, when you found it, and any immediate steps already taken&hellip;"></textarea>
-                                </div>
-                                <div class="col-12">
-                                    <label class="wh-label">Reported By</label>
-                                    <input type="text" class="wh-input" value="John Davies &middot; Morning Shift &middot; Bay 3" readonly>
-                                </div>
+                                <div class="col-12 col-md-6"><label class="wh-label">Issue Type</label><select class="wh-input" id="issue-type"><option value="">— Select type —</option><option value="stock">Out of Stock</option><option value="damaged">Damaged Product</option><option value="expiry">Near / Past Expiry</option><option value="misplace">Misplaced Item</option><option value="label">Incorrect Label / Price</option><option value="equipment">Equipment Fault</option><option value="safety">Safety Hazard</option><option value="other">Other</option></select></div>
+                                <div class="col-12 col-md-6"><label class="wh-label">Priority</label><select class="wh-input" id="issue-priority"><option>Low — no immediate impact</option><option selected>Medium — needs attention today</option><option>High — urgent, affects orders</option><option>Critical — stop everything</option></select></div>
+                                <div class="col-12 col-md-6"><label class="wh-label">Product / SKU (if applicable)</label><input type="text" class="wh-input" id="issue-sku" placeholder="e.g. SKU-00142 or product name"></div>
+                                <div class="col-12 col-md-6"><label class="wh-label">Location</label><input type="text" class="wh-input" id="issue-location" placeholder="e.g. Aisle 3B, Cold Store, Bay 2"></div>
+                                <div class="col-12"><label class="wh-label">Description</label><textarea class="wh-textarea" id="issue-desc" placeholder="Describe what you found, when you found it, and any immediate steps already taken…"></textarea></div>
+                                <div class="col-12"><label class="wh-label">Reported By</label><input type="text" class="wh-input" value="John Davies · Morning Shift · Bay 3" readonly></div>
                                 <div class="col-12">
                                     <div class="d-flex gap-2 flex-wrap">
                                         <button class="btn-wh btn-wh-danger" onclick="submitIssue()"><i class="bi bi-send"></i> Submit Report</button>
@@ -115,18 +92,18 @@
                 <div class="col-12 col-lg-5">
                     <div class="glass-card">
                         <div class="glass-card-header">
-                            <i class="bi bi-clipboard-x" style="color:#f87171;"></i>
+                            <i class="bi bi-clipboard-x" style="color:#dc2626;"></i>
                             <h6>Open Issues</h6>
                             <span class="nav-badge-red ms-auto">2 open</span>
                         </div>
                         <div class="glass-card-body d-flex flex-column gap-2" id="open-issues-list">
                             <div class="issue-card issue-card-red">
                                 <div class="d-flex align-items-center justify-content-between mb-1">
-                                    <span style="font-weight:600;font-size:0.88rem;">Out of Stock</span>
+                                    <span style="font-weight:600;font-size:0.88rem;color:#111827;">Out of Stock</span>
                                     <span class="badge-wh badge-red">Critical</span>
                                 </div>
-                                <div style="font-size:0.8rem;color:rgba(255,255,255,0.6);">Organic Whole Milk 2L &mdash; SKU-00142</div>
-                                <div class="td-muted" style="margin-top:5px;"><i class="bi bi-clock"></i> Reported 09:14am &middot; Aisle 3B</div>
+                                <div style="font-size:0.8rem;color:#6b7280;">Organic Whole Milk 2L — SKU-00142</div>
+                                <div class="td-muted" style="margin-top:5px;"><i class="bi bi-clock"></i> Reported 09:14am · Aisle 3B</div>
                                 <div class="d-flex gap-2 mt-2">
                                     <button class="btn-icon" onclick="resolveIssue(this)" title="Resolve"><i class="bi bi-check-circle"></i></button>
                                     <button class="btn-icon" title="Escalate"><i class="bi bi-arrow-up-circle"></i></button>
@@ -134,17 +111,17 @@
                             </div>
                             <div class="issue-card issue-card-amber">
                                 <div class="d-flex align-items-center justify-content-between mb-1">
-                                    <span style="font-weight:600;font-size:0.88rem;">Damaged Product</span>
+                                    <span style="font-weight:600;font-size:0.88rem;color:#111827;">Damaged Product</span>
                                     <span class="badge-wh badge-amber">Medium</span>
                                 </div>
-                                <div style="font-size:0.8rem;color:rgba(255,255,255,0.6);">Sourdough Bread 800g &mdash; torn packaging</div>
-                                <div class="td-muted" style="margin-top:5px;"><i class="bi bi-clock"></i> Reported 08:42am &middot; Aisle 1A</div>
+                                <div style="font-size:0.8rem;color:#6b7280;">Sourdough Bread 800g — torn packaging</div>
+                                <div class="td-muted" style="margin-top:5px;"><i class="bi bi-clock"></i> Reported 08:42am · Aisle 1A</div>
                                 <div class="d-flex gap-2 mt-2">
                                     <button class="btn-icon" onclick="resolveIssue(this)" title="Resolve"><i class="bi bi-check-circle"></i></button>
                                     <button class="btn-icon" title="Escalate"><i class="bi bi-arrow-up-circle"></i></button>
                                 </div>
                             </div>
-                            <div id="no-issues-placeholder" style="text-align:center;padding:16px;color:rgba(255,255,255,0.2);font-size:0.8rem;">No other open issues</div>
+                            <div id="no-issues-placeholder" style="text-align:center;padding:16px;color:#9ca3af;font-size:0.8rem;">No other open issues</div>
                         </div>
                     </div>
                 </div>
@@ -152,6 +129,7 @@
         </div>
     </div>
 </div>
+
 <div id="wh-toast"><div class="toast-inner"><div class="toast-icon" id="toast-icon"></div><div><div class="toast-title" id="toast-title"></div><div class="toast-msg" id="toast-msg"></div></div></div></div>
 <button class="mobile-menu-btn" onclick="toggleSidebar()"><i class="bi bi-list"></i></button>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
