@@ -3,117 +3,57 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>FreshMart — Warehouse Portal</title>
-
-    <!-- Bootstrap CSS -->
+    <title>FreshMart — Warehouse Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="../../css/styles.css">
     <link rel="stylesheet" href="../../css/warehouse.css">
 </head>
 <body>
-
-<!-- bg-layer and orbs kept in DOM but hidden by warehouse.css -->
 <div class="bg-layer"></div>
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
-<div class="orb orb-3"></div>
+<div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
 
 <div class="app-shell">
-
-    <!-- ── SIDEBAR ── -->
     <nav id="sidebar">
-
         <a href="../../../index.html" class="sidebar-brand">
             <div class="brand-icon">🛒</div>
-            <div>
-                <div class="brand-name">FreshMart</div>
-                <div class="brand-sub">Warehouse Portal</div>
-            </div>
+            <div><div class="brand-name">FreshMart</div><div class="brand-sub">Warehouse Portal</div></div>
         </a>
-
         <div class="sidebar-worker">
             <div class="worker-avatar">JD</div>
-            <div>
-                <div class="worker-name">John Davies</div>
-                <div class="worker-shift">Morning Shift · Bay 3</div>
-            </div>
+            <div><div class="worker-name">John Davies</div><div class="worker-shift">Morning Shift · Bay 3</div></div>
         </div>
-
         <div class="sidebar-nav">
             <div class="nav-section-label">Overview</div>
-            <button class="nav-btn active" onclick="showPage('dashboard', this)">
-                <i class="bi bi-speedometer2"></i> Dashboard
-            </button>
-
+            <a href="index.html" class="nav-btn active"><i class="bi bi-speedometer2"></i> Dashboard</a>
             <div class="nav-section-label">Operations</div>
-            <button class="nav-btn" onclick="showPage('scan', this)">
-                <i class="bi bi-upc-scan"></i> Scan
-            </button>
-            <button class="nav-btn" onclick="showPage('inventory', this)">
-                <i class="bi bi-boxes"></i> Inventory
-            </button>
-            <button class="nav-btn" onclick="showPage('pick', this)">
-                <i class="bi bi-list-check"></i> Pick
-                <span class="nav-badge">8</span>
-            </button>
-            <button class="nav-btn" onclick="showPage('substitution', this)">
-                <i class="bi bi-arrow-left-right"></i> Substitution
-            </button>
-            <button class="nav-btn" onclick="showPage('dispatch', this)">
-                <i class="bi bi-truck"></i> Dispatch
-                <span class="nav-badge">3</span>
-            </button>
-
+            <a href="scan.html" class="nav-btn"><i class="bi bi-upc-scan"></i> Scan</a>
+            <a href="inventory.html" class="nav-btn"><i class="bi bi-boxes"></i> Inventory</a>
+            <a href="pick.html" class="nav-btn"><i class="bi bi-list-check"></i> Pick <span class="nav-badge">8</span></a>
+            <a href="substitution.html" class="nav-btn"><i class="bi bi-arrow-left-right"></i> Substitution</a>
+            <a href="dispatch.html" class="nav-btn"><i class="bi bi-truck"></i> Dispatch <span class="nav-badge">3</span></a>
             <div class="nav-section-label">Issues</div>
-            <button class="nav-btn" onclick="showPage('report-issue', this)">
-                <i class="bi bi-exclamation-circle"></i> Report
-                <span class="nav-badge-red">2</span>
-            </button>
+            <a href="report.html" class="nav-btn"><i class="bi bi-exclamation-circle"></i> Report <span class="nav-badge-red">2</span></a>
         </div>
-
-        <!-- Today's Progress -->
         <div class="progress-section">
             <div class="progress-section-title">Today's Progress</div>
-            <div class="progress-row">
-                <span>Picked</span>
-                <span class="val">142/180</span>
-            </div>
-            <div class="progress-row">
-                <span>Dispatched</span>
-                <span class="val">98/120</span>
-            </div>
-            <div class="progress-row">
-                <span>Issues</span>
-                <span class="val-red">3</span>
-            </div>
+            <div class="progress-row"><span>Picked</span><span class="val">142/180</span></div>
+            <div class="progress-row"><span>Dispatched</span><span class="val">98/120</span></div>
+            <div class="progress-row"><span>Issues</span><span class="val-red">3</span></div>
         </div>
-
         <div class="sidebar-footer">
-            <button class="nav-btn" onclick="window.location.href='../../index.html'">
-                <i class="bi bi-arrow-left-circle"></i> All Portals
-            </button>
-            <button class="nav-btn nav-btn-danger">
-                <i class="bi bi-box-arrow-right"></i> Sign Out
-            </button>
+            <a href="../../../index.html" class="nav-btn"><i class="bi bi-arrow-left-circle"></i> All Portals</a>
+            <button class="nav-btn nav-btn-danger"><i class="bi bi-box-arrow-right"></i> Sign Out</button>
         </div>
-
     </nav>
 
-    <!-- ── MAIN CONTENT ── -->
     <div id="main">
-
-        <!-- TOPBAR -->
         <header id="topbar">
             <div class="topbar-title">
-                <span id="topbar-title">FreshMart Warehouse System</span>
-                <small id="topbar-breadcrumb">Device: Tablet with Barcode Scanner (UK)</small>
+                <span>FreshMart Warehouse System</span>
+                <small>Device: Tablet with Barcode Scanner (UK)</small>
             </div>
-
             <div class="topbar-right-info">
                 <strong>Distribution Centre - Zone 1</strong>
                 Worker ID: FM-2847
@@ -121,866 +61,177 @@
         </header>
 
         <div id="wh-content">
+            <div class="page-heading">Warehouse Dashboard</div>
+            <div class="page-subheading">Overview of warehouse operations and quick actions</div>
 
-            <!-- ══ PAGE 1 · DASHBOARD ══ -->
-            <section id="wh-page-dashboard" class="wh-page active">
+            <!-- Stat cards -->
+            <div class="row g-3 mb-4">
+                <div class="col-6 col-lg-3">
+                    <div class="stat-card s-blue">
+                        <div class="stat-icon si-blue"><i class="bi bi-clock"></i></div>
+                        <div class="stat-card-text"><div class="stat-value">38</div><div class="stat-label">Pending Orders</div></div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="stat-card s-green">
+                        <div class="stat-icon si-blue"><i class="bi bi-box-seam"></i></div>
+                        <div class="stat-card-text"><div class="stat-value">12,847</div><div class="stat-label">Items in Stock</div></div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="stat-card s-amber">
+                        <div class="stat-icon si-green"><i class="bi bi-check-circle"></i></div>
+                        <div class="stat-card-text"><div class="stat-value">98</div><div class="stat-label">Completed Today</div></div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="stat-card s-red">
+                        <div class="stat-icon si-purple"><i class="bi bi-graph-up-arrow"></i></div>
+                        <div class="stat-card-text"><div class="stat-value">94%</div><div class="stat-label">Productivity</div></div>
+                    </div>
+                </div>
+            </div>
 
-                <div class="page-heading">Warehouse Dashboard</div>
-                <div class="page-subheading">Overview of warehouse operations and quick actions</div>
-
-                <!-- Stat cards -->
-                <div class="row g-3 mb-4">
+            <!-- Quick Actions -->
+            <div class="mb-4">
+                <div style="font-weight:700;color:#111827;font-size:0.95rem;margin-bottom:12px;">Quick Actions</div>
+                <div class="row g-3">
                     <div class="col-6 col-lg-3">
-                        <div class="stat-card s-blue">
-                            <div class="stat-icon si-blue"><i class="bi bi-clock"></i></div>
-                            <div class="stat-card-text">
-                                <div class="stat-value">38</div>
-                                <div class="stat-label">Pending Orders</div>
-                            </div>
-                        </div>
+                        <a href="scan.html" class="quick-action-btn qa-blue"><i class="bi bi-box-seam"></i>Scan Item</a>
                     </div>
                     <div class="col-6 col-lg-3">
-                        <div class="stat-card s-green">
-                            <div class="stat-icon si-blue"><i class="bi bi-box-seam"></i></div>
-                            <div class="stat-card-text">
-                                <div class="stat-value">12,847</div>
-                                <div class="stat-label">Items in Stock</div>
-                            </div>
-                        </div>
+                        <a href="pick.html" class="quick-action-btn qa-green"><i class="bi bi-clipboard-check"></i>Pick Orders</a>
                     </div>
                     <div class="col-6 col-lg-3">
-                        <div class="stat-card s-amber">
-                            <div class="stat-icon si-green"><i class="bi bi-check-circle"></i></div>
-                            <div class="stat-card-text">
-                                <div class="stat-value">98</div>
-                                <div class="stat-label">Completed Today</div>
-                            </div>
-                        </div>
+                        <a href="dispatch.html" class="quick-action-btn qa-purple"><i class="bi bi-truck"></i>Dispatch</a>
                     </div>
                     <div class="col-6 col-lg-3">
-                        <div class="stat-card s-red">
-                            <div class="stat-icon si-purple"><i class="bi bi-graph-up-arrow"></i></div>
-                            <div class="stat-card-text">
-                                <div class="stat-value">94%</div>
-                                <div class="stat-label">Productivity</div>
+                        <a href="report.html" class="quick-action-btn qa-red"><i class="bi bi-exclamation-circle"></i>Report Issue</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Orders + Low Stock -->
+            <div class="row g-3">
+                <div class="col-12 col-lg-7">
+                    <div class="glass-card">
+                        <div class="glass-card-header"><h6>Recent Orders</h6><span class="hdr-muted" id="recent-orders-count"></span></div>
+                        <div class="glass-card-body" id="recent-orders-list">
+                            <!-- populated by renderRecentOrders() -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-5">
+                    <div class="glass-card">
+                        <div class="glass-card-header"><h6>Low Stock Alerts</h6></div>
+                        <div class="glass-card-body">
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-start mb-1">
+                                    <div><div style="font-weight:600;font-size:0.85rem;color:#111827;">SKU-00142</div><div style="font-size:0.75rem;color:#6b7280;">Organic Whole Milk 2L</div></div>
+                                    <span class="badge-wh badge-red">Critical</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2 mt-2">
+                                    <div class="stock-bar" style="flex:1;"><div class="stock-bar-fill" style="width:8%;background:#dc2626;"></div></div>
+                                    <span style="font-size:0.75rem;color:#6b7280;white-space:nowrap;">4/50</span>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-start mb-1">
+                                    <div><div style="font-weight:600;font-size:0.85rem;color:#111827;">SKU-00391</div><div style="font-size:0.75rem;color:#6b7280;">Sourdough Bread 800g</div></div>
+                                    <span class="badge-wh badge-amber">Low</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2 mt-2">
+                                    <div class="stock-bar" style="flex:1;"><div class="stock-bar-fill" style="width:22%;background:#f59e0b;"></div></div>
+                                    <span style="font-size:0.75rem;color:#6b7280;white-space:nowrap;">11/40</span>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-start mb-1">
+                                    <div><div style="font-weight:600;font-size:0.85rem;color:#111827;">SKU-00057</div><div style="font-size:0.75rem;color:#6b7280;">Free Range Eggs × 12</div></div>
+                                    <span class="badge-wh badge-amber">Low</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2 mt-2">
+                                    <div class="stock-bar" style="flex:1;"><div class="stock-bar-fill" style="width:28%;background:#f59e0b;"></div></div>
+                                    <span style="font-size:0.75rem;color:#6b7280;white-space:nowrap;">18/60</span>
+                                </div>
+                            </div>
+                            <div class="text-center mt-3">
+                                <a href="inventory.html" style="font-size:0.85rem;color:#2563eb;font-weight:600;text-decoration:none;">View Inventory →</a>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Quick Actions -->
-                <div class="mb-4">
-                    <div class="page-subheading" style="margin-bottom:12px;font-weight:700;color:#111827;font-size:0.95rem;">Quick Actions</div>
-                    <div class="row g-3">
-                        <div class="col-6 col-lg-3">
-                            <button class="quick-action-btn qa-blue" onclick="showPage('scan', document.querySelector('[onclick*=\'scan\']'))">
-                                <i class="bi bi-box-seam"></i>
-                                Scan Item
-                            </button>
-                        </div>
-                        <div class="col-6 col-lg-3">
-                            <button class="quick-action-btn qa-green" onclick="showPage('pick', document.querySelector('[onclick*=\'pick\']'))">
-                                <i class="bi bi-clipboard-check"></i>
-                                Pick Orders
-                            </button>
-                        </div>
-                        <div class="col-6 col-lg-3">
-                            <button class="quick-action-btn qa-purple" onclick="showPage('dispatch', document.querySelector('[onclick*=\'dispatch\']'))">
-                                <i class="bi bi-truck"></i>
-                                Dispatch
-                            </button>
-                        </div>
-                        <div class="col-6 col-lg-3">
-                            <button class="quick-action-btn qa-red" onclick="showPage('report-issue', document.querySelector('[onclick*=\'report-issue\']'))">
-                                <i class="bi bi-exclamation-circle"></i>
-                                Report Issue
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Recent Orders + Low Stock -->
-                <div class="row g-3">
-                    <div class="col-12 col-lg-7">
-                        <div class="glass-card">
-                            <div class="glass-card-header">
-                                <h6>Recent Orders</h6>
-                            </div>
-                            <div class="glass-card-body">
-                                <div class="recent-order-item" onclick="showPage('pick', document.querySelector('[onclick*=\'pick\']'))">
-                                    <div>
-                                        <div class="recent-order-id">ORD-2847</div>
-                                        <div class="recent-order-meta">14 items · 5 min ago</div>
-                                    </div>
-                                    <div class="text-end">
-                                        <span class="badge-wh badge-red">High</span>
-                                        <div class="td-muted mt-1" style="font-size:0.72rem;">Ready to Pick</div>
-                                    </div>
-                                </div>
-                                <div class="recent-order-item" onclick="showPage('pick', document.querySelector('[onclick*=\'pick\']'))">
-                                    <div>
-                                        <div class="recent-order-id">ORD-2846</div>
-                                        <div class="recent-order-meta">8 items · 12 min ago</div>
-                                    </div>
-                                    <div class="text-end">
-                                        <span class="badge-wh badge-grey">Normal</span>
-                                        <div class="td-muted mt-1" style="font-size:0.72rem;">Picking</div>
-                                    </div>
-                                </div>
-                                <div class="recent-order-item" onclick="showPage('pick', document.querySelector('[onclick*=\'pick\']'))">
-                                    <div>
-                                        <div class="recent-order-id">ORD-2845</div>
-                                        <div class="recent-order-meta">15 items · 18 min ago</div>
-                                    </div>
-                                    <div class="text-end">
-                                        <span class="badge-wh badge-red">High</span>
-                                        <div class="td-muted mt-1" style="font-size:0.72rem;">Ready to Pick</div>
-                                    </div>
-                                </div>
-                                <div class="recent-order-item" onclick="showPage('dispatch', document.querySelector('[onclick*=\'dispatch\']'))">
-                                    <div>
-                                        <div class="recent-order-id">ORD-2844</div>
-                                        <div class="recent-order-meta">6 items · 25 min ago</div>
-                                    </div>
-                                    <div class="text-end">
-                                        <span class="badge-wh badge-grey">Normal</span>
-                                        <div class="td-muted mt-1" style="font-size:0.72rem;">Packed</div>
-                                    </div>
-                                </div>
-                                <div class="recent-order-item" onclick="showPage('pick', document.querySelector('[onclick*=\'pick\']'))">
-                                    <div>
-                                        <div class="recent-order-id">ORD-2843</div>
-                                        <div class="recent-order-meta">20 items · 32 min ago</div>
-                                    </div>
-                                    <div class="text-end">
-                                        <span class="badge-wh badge-grey">Normal</span>
-                                        <div class="td-muted mt-1" style="font-size:0.72rem;">Ready to Pick</div>
-                                    </div>
-                                </div>
-                                <div class="text-center mt-3">
-                                    <a href="#" style="font-size:0.85rem;color:#2563eb;font-weight:600;text-decoration:none;"
-                                       onclick="showPage('pick', document.querySelector('[onclick*=\'pick\']'));return false;">
-                                        View All Orders →
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-lg-5">
-                        <div class="glass-card">
-                            <div class="glass-card-header">
-                                <h6>Low Stock Alerts</h6>
-                            </div>
-                            <div class="glass-card-body">
-                                <div class="mb-3">
-                                    <div class="d-flex justify-content-between align-items-start mb-1">
-                                        <div>
-                                            <div style="font-weight:600;font-size:0.85rem;color:#111827;">SKU-00142</div>
-                                            <div style="font-size:0.75rem;color:#6b7280;">Organic Whole Milk 2L</div>
-                                        </div>
-                                        <span class="badge-wh badge-red">Critical</span>
-                                    </div>
-                                    <div class="d-flex align-items-center gap-2 mt-2">
-                                        <div class="stock-bar" style="flex:1;">
-                                            <div class="stock-bar-fill" style="width:8%;background:#dc2626;"></div>
-                                        </div>
-                                        <span style="font-size:0.75rem;color:#6b7280;white-space:nowrap;">4/50</span>
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <div class="d-flex justify-content-between align-items-start mb-1">
-                                        <div>
-                                            <div style="font-weight:600;font-size:0.85rem;color:#111827;">SKU-00391</div>
-                                            <div style="font-size:0.75rem;color:#6b7280;">Sourdough Bread 800g</div>
-                                        </div>
-                                        <span class="badge-wh badge-amber">Low</span>
-                                    </div>
-                                    <div class="d-flex align-items-center gap-2 mt-2">
-                                        <div class="stock-bar" style="flex:1;">
-                                            <div class="stock-bar-fill" style="width:22%;background:#f59e0b;"></div>
-                                        </div>
-                                        <span style="font-size:0.75rem;color:#6b7280;white-space:nowrap;">11/40</span>
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <div class="d-flex justify-content-between align-items-start mb-1">
-                                        <div>
-                                            <div style="font-weight:600;font-size:0.85rem;color:#111827;">SKU-00057</div>
-                                            <div style="font-size:0.75rem;color:#6b7280;">Free Range Eggs × 12</div>
-                                        </div>
-                                        <span class="badge-wh badge-amber">Low</span>
-                                    </div>
-                                    <div class="d-flex align-items-center gap-2 mt-2">
-                                        <div class="stock-bar" style="flex:1;">
-                                            <div class="stock-bar-fill" style="width:28%;background:#f59e0b;"></div>
-                                        </div>
-                                        <span style="font-size:0.75rem;color:#6b7280;white-space:nowrap;">18/60</span>
-                                    </div>
-                                </div>
-                                <div class="text-center mt-3">
-                                    <a href="#" style="font-size:0.85rem;color:#2563eb;font-weight:600;text-decoration:none;"
-                                       onclick="showPage('inventory', document.querySelector('[onclick*=\'inventory\']'));return false;">
-                                        View Inventory →
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </section>
-            <!-- /dashboard -->
-
-
-            <!-- ══ PAGE 2 · SCAN ITEM ══ -->
-            <section id="wh-page-scan" class="wh-page">
-
-                <div class="page-heading">Scan Item</div>
-                <div class="page-subheading">Scan a barcode or enter a SKU to look up product details</div>
-
-                <div class="row g-3">
-                    <div class="col-12 col-lg-6">
-                        <div class="glass-card mb-3">
-                            <div class="glass-card-header">
-                                <i class="bi bi-upc-scan" style="color:#2563eb;"></i>
-                                <h6>Barcode Scanner</h6>
-                            </div>
-                            <div class="glass-card-body">
-                                <div class="scan-zone mb-4" onclick="simulateScan()">
-                                    <div class="scan-ring">📷</div>
-                                    <div style="font-size:0.88rem;color:#6b7280;">Tap to activate camera scanner</div>
-                                    <div style="font-size:0.72rem;color:#9ca3af;margin-top:5px;">or enter a SKU manually below</div>
-                                </div>
-                                <div class="d-flex align-items-center gap-2 mb-3">
-                                    <div class="wh-divider" style="flex:1;margin:0;"></div>
-                                    <span style="font-size:0.68rem;color:#9ca3af;">OR ENTER MANUALLY</span>
-                                    <div class="wh-divider" style="flex:1;margin:0;"></div>
-                                </div>
-                                <label class="wh-label">SKU / Barcode Number</label>
-                                <div class="d-flex gap-2">
-                                    <input type="text" id="sku-input" class="wh-input" placeholder="e.g. SKU-00142"
-                                           onkeydown="if(event.key==='Enter') lookupSKU()" style="flex:1;">
-                                    <button class="btn-wh btn-wh-primary" onclick="lookupSKU()">
-                                        <i class="bi bi-search"></i> Look Up
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="glass-card">
-                            <div class="glass-card-header">
-                                <i class="bi bi-clock-history" style="color:#9ca3af;"></i>
-                                <h6>Recent Scans</h6>
-                                <span class="hdr-muted">Today</span>
-                            </div>
-                            <div class="glass-card-body p-0">
-                                <table class="wh-table">
-                                    <thead>
-                                    <tr><th>SKU</th><th>Product</th><th>Time</th><th>Result</th></tr>
-                                    </thead>
-                                    <tbody id="recent-scans-body">
-                                    <tr>
-                                        <td class="td-muted">SKU-00057</td>
-                                        <td>Free Range Eggs × 12</td>
-                                        <td class="td-muted">09:32</td>
-                                        <td><span class="badge-wh badge-green">Found</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="td-muted">SKU-00391</td>
-                                        <td>Sourdough Bread 800g</td>
-                                        <td class="td-muted">09:14</td>
-                                        <td><span class="badge-wh badge-amber">Low Stock</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="td-muted">SKU-00999</td>
-                                        <td>—</td>
-                                        <td class="td-muted">08:47</td>
-                                        <td><span class="badge-wh badge-red">Not Found</span></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-lg-6">
-                        <div id="scan-result-panel" class="glass-card scan-result-panel">
-                            <div class="glass-card-header">
-                                <i class="bi bi-box-seam" style="color:#2563eb;"></i>
-                                <h6>Product Details</h6>
-                                <button class="btn-icon ms-auto" onclick="clearScan()" title="Clear"><i class="bi bi-x-lg"></i></button>
-                            </div>
-                            <div class="glass-card-body">
-                                <div class="d-flex align-items-start gap-3 mb-3">
-                                    <div style="flex:1;">
-                                        <div style="font-size:0.64rem;text-transform:uppercase;letter-spacing:1px;color:#9ca3af;margin-bottom:4px;">Product Found</div>
-                                        <div id="result-name" style="font-size:1.25rem;font-weight:700;color:#111827;line-height:1.2;"></div>
-                                        <div id="result-meta" style="font-size:0.76rem;color:#6b7280;margin-top:4px;"></div>
-                                    </div>
-                                    <div id="result-emoji" style="width:52px;height:52px;background:#dbeafe;border:1px solid #bfdbfe;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.7rem;flex-shrink:0;"></div>
-                                </div>
-                                <div class="row g-2 mb-3">
-                                    <div class="col-6">
-                                        <div class="scan-stat-box">
-                                            <div class="scan-stat-label">In Stock</div>
-                                            <div id="result-stock-val" class="scan-stat-value"></div>
-                                            <div class="scan-stat-sub">units available</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="scan-stat-box">
-                                            <div class="scan-stat-label">Aisle</div>
-                                            <div id="result-aisle-val" class="scan-stat-value" style="color:#2563eb;"></div>
-                                            <div class="scan-stat-sub">location</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="scan-stat-box">
-                                            <div class="scan-stat-label">Retail Price</div>
-                                            <div id="result-price-val" class="scan-stat-value"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="scan-stat-box">
-                                            <div class="scan-stat-label">Use By</div>
-                                            <div id="result-useby-val" class="scan-stat-value" style="color:#d97706;"></div>
-                                            <div id="result-useby-sub" class="scan-stat-sub"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="result-alert" class="wh-alert wh-alert-red mb-3" style="display:none;"></div>
-                                <div class="d-flex gap-2 flex-wrap">
-                                    <button class="btn-wh btn-wh-danger"
-                                            onclick="showPage('report-issue', document.querySelector('[onclick*=\'report-issue\']'))">
-                                        <i class="bi bi-flag"></i> Report Issue
-                                    </button>
-                                    <button class="btn-wh btn-wh-ghost"
-                                            onclick="showPage('substitution', document.querySelector('[onclick*=\'substitution\']'))">
-                                        <i class="bi bi-arrow-left-right"></i> Substitution
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="scan-placeholder" class="glass-card scan-empty">
-                            <div class="scan-empty-icon">📦</div>
-                            <div class="scan-empty-txt">Scan a barcode or enter a SKU to see product details here</div>
-                        </div>
-                    </div>
-                </div>
-
-            </section>
-            <!-- /scan -->
-
-
-            <!-- ══ PAGE 3 · INVENTORY ══ -->
-            <section id="wh-page-inventory" class="wh-page">
-
-                <div class="page-heading">Inventory</div>
-                <div class="page-subheading">Live stock levels across all warehouse locations · 142 products</div>
-
-                <div class="glass-card mb-3">
-                    <div class="glass-card-body">
-                        <div class="row g-2 align-items-end">
-                            <div class="col-12 col-md-5">
-                                <div class="search-wrap">
-                                    <i class="bi bi-search"></i>
-                                    <input type="text" class="wh-input" placeholder="Search products, SKU, aisle…"
-                                           onkeyup="filterInventory(this)">
-                                </div>
-                            </div>
-                            <div class="col-6 col-md-2">
-                                <select class="wh-select wh-input">
-                                    <option>All Categories</option>
-                                    <option>Dairy</option><option>Bakery</option>
-                                    <option>Produce</option><option>Meat</option><option>Frozen</option>
-                                </select>
-                            </div>
-                            <div class="col-6 col-md-2">
-                                <select class="wh-select wh-input">
-                                    <option>All Levels</option>
-                                    <option>Critical (&lt;10%)</option>
-                                    <option>Low (&lt;30%)</option>
-                                    <option>OK</option><option>Full</option>
-                                </select>
-                            </div>
-                            <div class="col-6 col-md-2">
-                                <select class="wh-select wh-input">
-                                    <option>All Aisles</option>
-                                    <option>Aisle 1</option><option>Aisle 2</option>
-                                    <option>Aisle 3</option><option>Cold Store</option>
-                                </select>
-                            </div>
-                            <div class="col-6 col-md-1 d-grid">
-                                <button class="btn-wh btn-wh-primary" style="justify-content:center;padding:9px 0;">
-                                    <i class="bi bi-funnel"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="glass-card">
-                    <div class="glass-card-header">
-                        <i class="bi bi-boxes" style="color:#2563eb;"></i>
-                        <h6>All Products</h6>
-                        <span class="hdr-muted">142 items</span>
-                        <button class="btn-wh btn-wh-ghost ms-2 py-1 px-3" style="font-size:0.75rem;">
-                            <i class="bi bi-download"></i> Export CSV
-                        </button>
-                    </div>
-                    <div class="glass-card-body p-0">
-                        <table class="wh-table" id="inventory-table">
-                            <thead>
-                            <tr><th>Product</th><th>SKU</th><th>Category</th><th>Location</th><th>Stock Level</th><th>Units</th><th>Status</th><th>Actions</th></tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td><div>Organic Whole Milk 2L</div><div class="td-muted">Cravendale · Chilled</div></td>
-                                <td class="td-muted">SKU-00142</td>
-                                <td><span class="badge-wh badge-blue">Dairy</span></td>
-                                <td>3B / Shelf 2</td>
-                                <td><div class="d-flex align-items-center gap-2"><div class="stock-bar"><div class="stock-bar-fill" style="width:8%;background:#dc2626;"></div></div><span class="td-muted">8%</span></div></td>
-                                <td style="color:#dc2626;font-weight:700;">4</td>
-                                <td><span class="badge-wh badge-red">Critical</span></td>
-                                <td><div class="d-flex gap-1">
-                                    <button class="btn-icon" onclick="showPage('scan', document.querySelector('[onclick*=\'scan\']'))" title="Scan"><i class="bi bi-upc-scan"></i></button>
-                                    <button class="btn-icon btn-icon-red" onclick="showPage('report-issue', document.querySelector('[onclick*=\'report-issue\']'))" title="Flag"><i class="bi bi-flag"></i></button>
-                                </div></td>
-                            </tr>
-                            <tr>
-                                <td><div>Sourdough Bread 800g</div><div class="td-muted">Bakehouse · Ambient</div></td>
-                                <td class="td-muted">SKU-00391</td>
-                                <td><span class="badge-wh badge-amber">Bakery</span></td>
-                                <td>1A / Shelf 1</td>
-                                <td><div class="d-flex align-items-center gap-2"><div class="stock-bar"><div class="stock-bar-fill" style="width:22%;background:#f59e0b;"></div></div><span class="td-muted">22%</span></div></td>
-                                <td style="color:#d97706;font-weight:700;">11</td>
-                                <td><span class="badge-wh badge-amber">Low</span></td>
-                                <td><div class="d-flex gap-1"><button class="btn-icon" title="Scan"><i class="bi bi-upc-scan"></i></button><button class="btn-icon" title="Edit"><i class="bi bi-pencil"></i></button></div></td>
-                            </tr>
-                            <tr>
-                                <td><div>Free Range Eggs × 12</div><div class="td-muted">Happy Hens · Ambient</div></td>
-                                <td class="td-muted">SKU-00057</td>
-                                <td><span class="badge-wh badge-green">Eggs</span></td>
-                                <td>2C / Shelf 3</td>
-                                <td><div class="d-flex align-items-center gap-2"><div class="stock-bar"><div class="stock-bar-fill" style="width:28%;background:#f59e0b;"></div></div><span class="td-muted">28%</span></div></td>
-                                <td style="color:#d97706;font-weight:700;">18</td>
-                                <td><span class="badge-wh badge-amber">Low</span></td>
-                                <td><div class="d-flex gap-1"><button class="btn-icon" title="Scan"><i class="bi bi-upc-scan"></i></button><button class="btn-icon" title="Edit"><i class="bi bi-pencil"></i></button></div></td>
-                            </tr>
-                            <tr>
-                                <td><div>Chicken Breast 500g</div><div class="td-muted">Butcher's Best · Chilled</div></td>
-                                <td class="td-muted">SKU-00213</td>
-                                <td><span class="badge-wh badge-red">Meat</span></td>
-                                <td>Cold / Bay 2</td>
-                                <td><div class="d-flex align-items-center gap-2"><div class="stock-bar"><div class="stock-bar-fill" style="width:62%;background:#16a34a;"></div></div><span class="td-muted">62%</span></div></td>
-                                <td style="font-weight:600;">31</td>
-                                <td><span class="badge-wh badge-green">OK</span></td>
-                                <td><div class="d-flex gap-1"><button class="btn-icon" title="Scan"><i class="bi bi-upc-scan"></i></button><button class="btn-icon" title="Edit"><i class="bi bi-pencil"></i></button></div></td>
-                            </tr>
-                            <tr>
-                                <td><div>Cheddar Cheese 400g</div><div class="td-muted">Wyke Farms · Chilled</div></td>
-                                <td class="td-muted">SKU-00088</td>
-                                <td><span class="badge-wh badge-blue">Dairy</span></td>
-                                <td>3B / Shelf 4</td>
-                                <td><div class="d-flex align-items-center gap-2"><div class="stock-bar"><div class="stock-bar-fill" style="width:85%;background:#16a34a;"></div></div><span class="td-muted">85%</span></div></td>
-                                <td style="font-weight:600;">43</td>
-                                <td><span class="badge-wh badge-green">Full</span></td>
-                                <td><div class="d-flex gap-1"><button class="btn-icon" title="Scan"><i class="bi bi-upc-scan"></i></button><button class="btn-icon" title="Edit"><i class="bi bi-pencil"></i></button></div></td>
-                            </tr>
-                            <tr>
-                                <td><div>Broccoli (each)</div><div class="td-muted">Produce · Loose</div></td>
-                                <td class="td-muted">SKU-00007</td>
-                                <td><span class="badge-wh badge-green">Produce</span></td>
-                                <td>1D / Display</td>
-                                <td><div class="d-flex align-items-center gap-2"><div class="stock-bar"><div class="stock-bar-fill" style="width:45%;background:#16a34a;"></div></div><span class="td-muted">45%</span></div></td>
-                                <td style="font-weight:600;">27</td>
-                                <td><span class="badge-wh badge-green">OK</span></td>
-                                <td><div class="d-flex gap-1"><button class="btn-icon" title="Scan"><i class="bi bi-upc-scan"></i></button><button class="btn-icon" title="Edit"><i class="bi bi-pencil"></i></button></div></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-            </section>
-            <!-- /inventory -->
-
-
-            <!-- ══ PAGE 4 · PICK ORDERS ══ -->
-            <section id="wh-page-pick" class="wh-page">
-
-                <div class="page-heading">Pick Orders</div>
-                <div class="page-subheading">8 orders to fulfil this shift — sorted by dispatch priority</div>
-
-                <div class="row g-3">
-                    <div class="col-12 col-lg-4">
-                        <div class="glass-card">
-                            <div class="glass-card-header">
-                                <i class="bi bi-list-ol" style="color:#2563eb;"></i>
-                                <h6>Order Queue</h6>
-                                <span class="hdr-muted">8 pending</span>
-                            </div>
-                            <div class="glass-card-body d-flex flex-column gap-2" id="pick-queue">
-                                <div class="order-card active-order">
-                                    <div class="d-flex align-items-center justify-content-between mb-1">
-                                        <span class="order-id">ORD-2847</span>
-                                        <span class="badge-wh badge-blue">Active</span>
-                                    </div>
-                                    <div class="order-meta">14 items · Due 10:30am · High Priority</div>
-                                    <div class="wh-progress">
-                                        <div class="wh-progress-bar pb-blue" id="pick-progress-bar" style="width:36%"></div>
-                                    </div>
-                                    <div class="td-muted" id="pick-progress-label" style="font-size:0.7rem;margin-top:4px;">5 of 14 items picked</div>
-                                </div>
-                                <div class="order-card priority-amber" onclick="selectOrder(this,'ORD-2855','3 items · Due 10:45am')">
-                                    <div class="d-flex align-items-center justify-content-between mb-1">
-                                        <span class="order-id">ORD-2855</span>
-                                        <span class="badge-wh badge-amber">Priority</span>
-                                    </div>
-                                    <div class="order-meta">3 items · Due 10:45am</div>
-                                </div>
-                                <div class="order-card" onclick="selectOrder(this,'ORD-2851','7 items · Due 11:00am')">
-                                    <div class="d-flex align-items-center justify-content-between mb-1">
-                                        <span class="order-id">ORD-2851</span>
-                                        <span class="badge-wh badge-grey">Queued</span>
-                                    </div>
-                                    <div class="order-meta">7 items · Due 11:00am</div>
-                                </div>
-                                <div class="order-card" onclick="selectOrder(this,'ORD-2853','10 items · Due 11:15am')">
-                                    <div class="d-flex align-items-center justify-content-between mb-1">
-                                        <span class="order-id">ORD-2853</span>
-                                        <span class="badge-wh badge-grey">Queued</span>
-                                    </div>
-                                    <div class="order-meta">10 items · Due 11:15am</div>
-                                </div>
-                                <div class="order-card" onclick="selectOrder(this,'ORD-2860','9 items · Due 12:00pm')">
-                                    <div class="d-flex align-items-center justify-content-between mb-1">
-                                        <span class="order-id">ORD-2860</span>
-                                        <span class="badge-wh badge-grey">Queued</span>
-                                    </div>
-                                    <div class="order-meta">9 items · Due 12:00pm</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-lg-8">
-                        <div class="glass-card">
-                            <div class="glass-card-header">
-                                <i class="bi bi-clipboard-check" style="color:#2563eb;"></i>
-                                <h6>Pick List — <span id="active-order-label">ORD-2847</span></h6>
-                                <span class="hdr-muted" id="active-order-meta-topbar">14 items · Bay 3A</span>
-                            </div>
-                            <div class="glass-card-body">
-                                <div class="wh-alert wh-alert-blue mb-3">
-                                    <i class="bi bi-info-circle-fill"></i>
-                                    <div>Pick in route order to save time: <strong>Aisle 1 → 2 → 3 → Cold Store</strong></div>
-                                </div>
-                                <div id="pick-items">
-                                    <div class="pick-item done"><div class="pick-check checked" onclick="togglePick(this)">✓</div><div style="flex:1;"><div class="pick-name">Broccoli (each)</div><div class="pick-loc"><i class="bi bi-geo-alt"></i> Aisle 1D · Display</div></div><div class="pick-qty">× 3</div></div>
-                                    <div class="pick-item done"><div class="pick-check checked" onclick="togglePick(this)">✓</div><div style="flex:1;"><div class="pick-name">Sourdough Bread 800g</div><div class="pick-loc"><i class="bi bi-geo-alt"></i> Aisle 1A · Shelf 1</div></div><div class="pick-qty">× 1</div></div>
-                                    <div class="pick-item done"><div class="pick-check checked" onclick="togglePick(this)">✓</div><div style="flex:1;"><div class="pick-name">Orange Juice 1L</div><div class="pick-loc"><i class="bi bi-geo-alt"></i> Aisle 2A · Shelf 1</div></div><div class="pick-qty">× 2</div></div>
-                                    <div class="pick-item done"><div class="pick-check checked" onclick="togglePick(this)">✓</div><div style="flex:1;"><div class="pick-name">Free Range Eggs × 12</div><div class="pick-loc"><i class="bi bi-geo-alt"></i> Aisle 2C · Shelf 3</div></div><div class="pick-qty">× 2</div></div>
-                                    <div class="pick-item done"><div class="pick-check checked" onclick="togglePick(this)">✓</div><div style="flex:1;"><div class="pick-name">Cheddar Cheese 400g</div><div class="pick-loc"><i class="bi bi-geo-alt"></i> Aisle 3B · Shelf 4</div></div><div class="pick-qty">× 1</div></div>
-                                    <div class="pick-item"><div class="pick-check" onclick="togglePick(this)"></div><div style="flex:1;"><div class="pick-name">Organic Whole Milk 2L</div><div class="pick-loc"><i class="bi bi-geo-alt"></i> Aisle 3B · Shelf 2 &nbsp;<span class="badge-wh badge-red">Low Stock</span></div></div><div class="pick-qty">× 2</div></div>
-                                    <div class="pick-item"><div class="pick-check" onclick="togglePick(this)"></div><div style="flex:1;"><div class="pick-name">Greek Yoghurt 500g</div><div class="pick-loc"><i class="bi bi-geo-alt"></i> Aisle 3B · Shelf 3</div></div><div class="pick-qty">× 1</div></div>
-                                    <div class="pick-item"><div class="pick-check" onclick="togglePick(this)"></div><div style="flex:1;"><div class="pick-name">Pasta 500g Penne</div><div class="pick-loc"><i class="bi bi-geo-alt"></i> Aisle 4C · Shelf 2</div></div><div class="pick-qty">× 3</div></div>
-                                    <div class="pick-item"><div class="pick-check" onclick="togglePick(this)"></div><div style="flex:1;"><div class="pick-name">Tinned Tomatoes 400g</div><div class="pick-loc"><i class="bi bi-geo-alt"></i> Aisle 4A · Shelf 1</div></div><div class="pick-qty">× 4</div></div>
-                                    <div class="pick-item"><div class="pick-check" onclick="togglePick(this)"></div><div style="flex:1;"><div class="pick-name">Chicken Breast 500g</div><div class="pick-loc"><i class="bi bi-geo-alt"></i> Cold Store · Bay 2</div></div><div class="pick-qty">× 2</div></div>
-                                </div>
-                                <div class="wh-divider"></div>
-                                <div class="d-flex gap-2 flex-wrap align-items-center">
-                                    <span class="td-muted" id="pick-count-label">5 / 14 items picked</span>
-                                    <button class="btn-wh btn-wh-success ms-auto" onclick="completeOrder()">
-                                        <i class="bi bi-check-circle"></i> Mark Order Complete
-                                    </button>
-                                    <button class="btn-wh btn-wh-danger" onclick="showPage('report-issue', document.querySelector('[onclick*=\'report-issue\']'))">
-                                        <i class="bi bi-exclamation-triangle"></i> Report Issue
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </section>
-            <!-- /pick -->
-
-
-            <!-- ══ PAGE 5 · SUBSTITUTION ══ -->
-            <section id="wh-page-substitution" class="wh-page">
-
-                <div class="page-heading">Report Substitution</div>
-                <div class="page-subheading">When an ordered item is unavailable, log the replacement product here</div>
-
-                <div class="row g-3">
-                    <div class="col-12 col-lg-8">
-                        <div class="glass-card">
-                            <div class="glass-card-header">
-                                <i class="bi bi-arrow-left-right" style="color:#9333ea;"></i>
-                                <h6>New Substitution</h6>
-                            </div>
-                            <div class="glass-card-body">
-                                <div class="wh-alert wh-alert-blue mb-4">
-                                    <i class="bi bi-info-circle-fill"></i>
-                                    <div>Only substitute with a product of equal or greater value. The customer will be notified and may refuse the substitution at delivery.</div>
-                                </div>
-                                <div class="row g-3">
-                                    <div class="col-12"><div class="section-label">Original Item (Unavailable)</div></div>
-                                    <div class="col-12 col-md-6"><label class="wh-label">Order Number</label><input type="text" class="wh-input" id="sub-order" placeholder="e.g. ORD-2847"></div>
-                                    <div class="col-12 col-md-6"><label class="wh-label">Original Product / SKU</label><input type="text" class="wh-input" id="sub-original" placeholder="e.g. SKU-00142 or product name"></div>
-                                    <div class="col-12 col-md-4"><label class="wh-label">Qty Ordered</label><input type="number" class="wh-input" id="sub-orig-qty" placeholder="e.g. 2" min="1"></div>
-                                    <div class="col-12 col-md-4"><label class="wh-label">Original Price</label><input type="text" class="wh-input" id="sub-orig-price" placeholder="e.g. £1.49"></div>
-                                    <div class="col-12 col-md-4"><label class="wh-label">Reason Unavailable</label><select class="wh-input" id="sub-reason"><option>Out of stock</option><option>Damaged / unsellable</option><option>Expired</option><option>Cannot locate</option></select></div>
-                                    <div class="col-12"><div class="wh-divider"></div></div>
-                                    <div class="col-12"><div class="section-label">Substituted Item (Replacement)</div></div>
-                                    <div class="col-12 col-md-6"><label class="wh-label">Substitute Product / SKU</label><input type="text" class="wh-input" id="sub-replacement" placeholder="e.g. SKU-00145 or product name"></div>
-                                    <div class="col-12 col-md-6"><label class="wh-label">Substitute Brand</label><input type="text" class="wh-input" id="sub-brand" placeholder="e.g. Arla, Tesco Own…"></div>
-                                    <div class="col-12 col-md-4"><label class="wh-label">Substitute Qty</label><input type="number" class="wh-input" id="sub-qty" placeholder="e.g. 2" min="1"></div>
-                                    <div class="col-12 col-md-4"><label class="wh-label">Substitute Price</label><input type="text" class="wh-input" id="sub-price" placeholder="e.g. £1.59"></div>
-                                    <div class="col-12 col-md-4"><label class="wh-label">Similarity</label><select class="wh-input"><option>Yes — same category</option><option>Partial — different variant</option><option>No — different category</option></select></div>
-                                    <div class="col-12"><label class="wh-label">Additional Notes</label><textarea class="wh-textarea" id="sub-notes" placeholder="Any extra context for the customer or manager…" style="min-height:80px;"></textarea></div>
-                                    <div class="col-12">
-                                        <div class="d-flex gap-2 flex-wrap">
-                                            <button class="btn-wh btn-wh-primary" onclick="submitSubstitution()"><i class="bi bi-arrow-left-right"></i> Submit Substitution</button>
-                                            <button class="btn-wh btn-wh-ghost" onclick="clearSubForm()"><i class="bi bi-x-circle"></i> Clear</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-4">
-                        <div class="glass-card">
-                            <div class="glass-card-header">
-                                <i class="bi bi-clock-history" style="color:#9ca3af;"></i>
-                                <h6>Today's Substitutions</h6>
-                            </div>
-                            <div class="glass-card-body d-flex flex-column gap-2" id="sub-history-list">
-                                <div class="sub-history-item">
-                                    <div class="td-muted" style="margin-bottom:4px;">ORD-2837 · 08:52am</div>
-                                    <div style="font-size:0.83rem;font-weight:600;margin-bottom:3px;color:#111827;">Cravendale Milk 2L</div>
-                                    <div style="display:flex;align-items:center;gap:6px;">
-                                        <i class="bi bi-arrow-right" style="color:#9ca3af;font-size:0.75rem;"></i>
-                                        <span style="font-size:0.8rem;color:#6b7280;">Arla Organic Milk 2L</span>
-                                    </div>
-                                    <div class="td-muted" style="margin-top:4px;">Out of stock · Same category</div>
-                                </div>
-                                <div style="text-align:center;padding:16px;color:#9ca3af;font-size:0.8rem;">No other substitutions today</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </section>
-            <!-- /substitution -->
-
-
-            <!-- ══ PAGE 6 · DISPATCH ══ -->
-            <section id="wh-page-dispatch" class="wh-page">
-
-                <div class="page-heading">Dispatch Orders</div>
-                <div class="page-subheading">3 orders ready — hand over to the delivery driver and confirm dispatch</div>
-
-                <div class="wh-alert wh-alert-red mb-3">
-                    <i class="bi bi-truck"></i>
-                    <div><strong>ORD-2845</strong> is 15 minutes overdue — Van 02 driver is waiting at Loading Bay A. Please dispatch immediately.</div>
-                </div>
-
-                <div class="row g-3 mb-3">
-                    <div class="col-12 col-lg-4">
-                        <div class="dispatch-card overdue-card glass-card">
-                            <div class="dispatch-card-header" style="background:#fff5f5;">
-                                <i class="bi bi-clock-history" style="color:#dc2626;"></i>
-                                <h6 style="color:#dc2626;">ORD-2845</h6>
-                                <span class="badge-wh badge-red ms-auto">Overdue</span>
-                            </div>
-                            <div class="dispatch-card-body">
-                                <div class="row g-2 mb-3">
-                                    <div class="col-6"><div class="dispatch-detail-label">Items</div><div class="dispatch-detail-value">12 items</div></div>
-                                    <div class="col-6"><div class="dispatch-detail-label">Van</div><div class="dispatch-detail-value" style="color:#2563eb;">Van 02</div></div>
-                                    <div class="col-6"><div class="dispatch-detail-label">Bay</div><div class="dispatch-detail-value">Loading Bay A</div></div>
-                                    <div class="col-6"><div class="dispatch-detail-label">Driver</div><div class="dispatch-detail-value">M. Singh</div></div>
-                                    <div class="col-12"><div class="dispatch-detail-label">Delivery Address</div><div class="dispatch-detail-value" style="font-weight:400;font-size:0.82rem;">42 Oak Lane, Leeds, LS1 4AB</div></div>
-                                </div>
-                                <div class="wh-progress mb-2"><div class="wh-progress-bar pb-green" style="width:100%;"></div></div>
-                                <div class="td-muted mb-3">Picking complete · Ready for dispatch</div>
-                                <button class="btn-wh btn-wh-success w-100" style="justify-content:center;" onclick="dispatchOrder(this,'ORD-2845')">
-                                    <i class="bi bi-truck"></i> Confirm Dispatch
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-4">
-                        <div class="dispatch-card glass-card">
-                            <div class="dispatch-card-header">
-                                <i class="bi bi-box-seam" style="color:#16a34a;"></i>
-                                <h6>ORD-2839</h6>
-                                <span class="badge-wh badge-green ms-auto">Ready</span>
-                            </div>
-                            <div class="dispatch-card-body">
-                                <div class="row g-2 mb-3">
-                                    <div class="col-6"><div class="dispatch-detail-label">Items</div><div class="dispatch-detail-value">8 items</div></div>
-                                    <div class="col-6"><div class="dispatch-detail-label">Van</div><div class="dispatch-detail-value" style="color:#2563eb;">Van 05</div></div>
-                                    <div class="col-6"><div class="dispatch-detail-label">Bay</div><div class="dispatch-detail-value">Loading Bay B</div></div>
-                                    <div class="col-6"><div class="dispatch-detail-label">Driver</div><div class="dispatch-detail-value">T. Roberts</div></div>
-                                    <div class="col-12"><div class="dispatch-detail-label">Delivery Address</div><div class="dispatch-detail-value" style="font-weight:400;font-size:0.82rem;">18 Maple Rd, Leeds, LS6 2DE</div></div>
-                                </div>
-                                <div class="wh-progress mb-2"><div class="wh-progress-bar pb-green" style="width:100%;"></div></div>
-                                <div class="td-muted mb-3">Due 11:00am · 22 mins remaining</div>
-                                <button class="btn-wh btn-wh-success w-100" style="justify-content:center;" onclick="dispatchOrder(this,'ORD-2839')">
-                                    <i class="bi bi-truck"></i> Confirm Dispatch
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-4">
-                        <div class="dispatch-card glass-card">
-                            <div class="dispatch-card-header">
-                                <i class="bi bi-hourglass-split" style="color:#d97706;"></i>
-                                <h6>ORD-2843</h6>
-                                <span class="badge-wh badge-amber ms-auto">Staged</span>
-                            </div>
-                            <div class="dispatch-card-body">
-                                <div class="row g-2 mb-3">
-                                    <div class="col-6"><div class="dispatch-detail-label">Items</div><div class="dispatch-detail-value">15 items</div></div>
-                                    <div class="col-6"><div class="dispatch-detail-label">Van</div><div class="dispatch-detail-value" style="color:#9ca3af;">TBC</div></div>
-                                    <div class="col-6"><div class="dispatch-detail-label">Bay</div><div class="dispatch-detail-value">Staging Area</div></div>
-                                    <div class="col-6"><div class="dispatch-detail-label">Driver</div><div class="dispatch-detail-value" style="color:#9ca3af;">Awaiting</div></div>
-                                    <div class="col-12"><div class="dispatch-detail-label">Delivery Address</div><div class="dispatch-detail-value" style="font-weight:400;font-size:0.82rem;">7 Birch Close, Leeds, LS9 8GH</div></div>
-                                </div>
-                                <div class="wh-progress mb-2"><div class="wh-progress-bar pb-green" style="width:100%;"></div></div>
-                                <div class="td-muted mb-3">Due 11:30am · Driver not yet arrived</div>
-                                <button class="btn-wh btn-wh-ghost w-100" style="justify-content:center;" disabled>
-                                    <i class="bi bi-hourglass"></i> Awaiting Driver
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="glass-card">
-                    <div class="glass-card-header">
-                        <i class="bi bi-journal-check" style="color:#9ca3af;"></i>
-                        <h6>Dispatch Log — Today</h6>
-                    </div>
-                    <div class="glass-card-body p-0">
-                        <table class="wh-table">
-                            <thead><tr><th>Order</th><th>Items</th><th>Van</th><th>Driver</th><th>Dispatched</th><th>Status</th></tr></thead>
-                            <tbody>
-                            <tr><td class="order-id" style="font-size:0.9rem;">ORD-2829</td><td>6 items</td><td>Van 01</td><td>P. Chen</td><td class="td-muted">08:30am</td><td><span class="badge-wh badge-green">Delivered</span></td></tr>
-                            <tr><td class="order-id" style="font-size:0.9rem;">ORD-2831</td><td>11 items</td><td>Van 03</td><td>A. Khan</td><td class="td-muted">09:10am</td><td><span class="badge-wh badge-blue">In Transit</span></td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-            </section>
-            <!-- /dispatch -->
-
-
-            <!-- ══ PAGE 7 · REPORT ISSUE ══ -->
-            <section id="wh-page-report-issue" class="wh-page">
-
-                <div class="page-heading">Report Issue</div>
-                <div class="page-subheading">Flag a stock, product, or operational problem to the management team</div>
-
-                <div class="row g-3">
-                    <div class="col-12 col-lg-7">
-                        <div class="glass-card">
-                            <div class="glass-card-header">
-                                <i class="bi bi-exclamation-triangle" style="color:#dc2626;"></i>
-                                <h6>New Issue Report</h6>
-                            </div>
-                            <div class="glass-card-body">
-                                <div class="row g-3">
-                                    <div class="col-12 col-md-6"><label class="wh-label">Issue Type</label><select class="wh-input" id="issue-type"><option value="">— Select type —</option><option value="stock">Out of Stock</option><option value="damaged">Damaged Product</option><option value="expiry">Near / Past Expiry</option><option value="misplace">Misplaced Item</option><option value="label">Incorrect Label / Price</option><option value="equipment">Equipment Fault</option><option value="safety">Safety Hazard</option><option value="other">Other</option></select></div>
-                                    <div class="col-12 col-md-6"><label class="wh-label">Priority</label><select class="wh-input" id="issue-priority"><option>Low — no immediate impact</option><option selected>Medium — needs attention today</option><option>High — urgent, affects orders</option><option>Critical — stop everything</option></select></div>
-                                    <div class="col-12 col-md-6"><label class="wh-label">Product / SKU (if applicable)</label><input type="text" class="wh-input" id="issue-sku" placeholder="e.g. SKU-00142 or product name"></div>
-                                    <div class="col-12 col-md-6"><label class="wh-label">Location</label><input type="text" class="wh-input" id="issue-location" placeholder="e.g. Aisle 3B, Cold Store, Bay 2"></div>
-                                    <div class="col-12"><label class="wh-label">Description</label><textarea class="wh-textarea" id="issue-desc" placeholder="Describe what you found, when you found it, and any immediate steps already taken…"></textarea></div>
-                                    <div class="col-12"><label class="wh-label">Reported By</label><input type="text" class="wh-input" value="John Davies · Morning Shift · Bay 3" readonly></div>
-                                    <div class="col-12">
-                                        <div class="d-flex gap-2 flex-wrap">
-                                            <button class="btn-wh btn-wh-danger" onclick="submitIssue()"><i class="bi bi-send"></i> Submit Report</button>
-                                            <button class="btn-wh btn-wh-ghost" onclick="clearIssueForm()"><i class="bi bi-x-circle"></i> Clear</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-5">
-                        <div class="glass-card">
-                            <div class="glass-card-header">
-                                <i class="bi bi-clipboard-x" style="color:#dc2626;"></i>
-                                <h6>Open Issues</h6>
-                                <span class="nav-badge-red ms-auto">2 open</span>
-                            </div>
-                            <div class="glass-card-body d-flex flex-column gap-2" id="open-issues-list">
-                                <div class="issue-card issue-card-red">
-                                    <div class="d-flex align-items-center justify-content-between mb-1">
-                                        <span style="font-weight:600;font-size:0.88rem;color:#111827;">Out of Stock</span>
-                                        <span class="badge-wh badge-red">Critical</span>
-                                    </div>
-                                    <div style="font-size:0.8rem;color:#6b7280;">Organic Whole Milk 2L — SKU-00142</div>
-                                    <div class="td-muted" style="margin-top:5px;"><i class="bi bi-clock"></i> Reported 09:14am · Aisle 3B</div>
-                                    <div class="d-flex gap-2 mt-2">
-                                        <button class="btn-icon" onclick="resolveIssue(this)" title="Resolve"><i class="bi bi-check-circle"></i></button>
-                                        <button class="btn-icon" title="Escalate"><i class="bi bi-arrow-up-circle"></i></button>
-                                    </div>
-                                </div>
-                                <div class="issue-card issue-card-amber">
-                                    <div class="d-flex align-items-center justify-content-between mb-1">
-                                        <span style="font-weight:600;font-size:0.88rem;color:#111827;">Damaged Product</span>
-                                        <span class="badge-wh badge-amber">Medium</span>
-                                    </div>
-                                    <div style="font-size:0.8rem;color:#6b7280;">Sourdough Bread 800g — torn packaging</div>
-                                    <div class="td-muted" style="margin-top:5px;"><i class="bi bi-clock"></i> Reported 08:42am · Aisle 1A</div>
-                                    <div class="d-flex gap-2 mt-2">
-                                        <button class="btn-icon" onclick="resolveIssue(this)" title="Resolve"><i class="bi bi-check-circle"></i></button>
-                                        <button class="btn-icon" title="Escalate"><i class="bi bi-arrow-up-circle"></i></button>
-                                    </div>
-                                </div>
-                                <div id="no-issues-placeholder" style="text-align:center;padding:16px;color:#9ca3af;font-size:0.8rem;">No other open issues</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </section>
-            <!-- /report-issue -->
-
+            </div>
         </div><!-- /#wh-content -->
     </div><!-- /#main -->
 </div><!-- /.app-shell -->
 
-<!-- TOAST -->
-<div id="wh-toast">
-    <div class="toast-inner">
-        <div class="toast-icon" id="toast-icon"></div>
-        <div>
-            <div class="toast-title" id="toast-title"></div>
-            <div class="toast-msg" id="toast-msg"></div>
-        </div>
-    </div>
-</div>
-
-<!-- MOBILE SIDEBAR TOGGLE -->
-<button class="mobile-menu-btn" onclick="toggleSidebar()">
-    <i class="bi bi-list"></i>
-</button>
-
+<div id="wh-toast"><div class="toast-inner"><div class="toast-icon" id="toast-icon"></div><div><div class="toast-title" id="toast-title"></div><div class="toast-msg" id="toast-msg"></div></div></div></div>
+<button class="mobile-menu-btn" onclick="toggleSidebar()"><i class="bi bi-list"></i></button>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../../js/warehouse.js"></script>
 
+<script>
+/* ── RECENT ORDERS FROM CUSTOMER PORTAL ──────────────────────
+   Reads fm_orders from localStorage (saved by checkout.html)
+   and renders them in the Recent Orders card on the dashboard.
+   Falls back to static demo orders if nothing is saved yet.
+──────────────────────────────────────────────────────────────*/
+function renderRecentOrders() {
+    const list = document.getElementById('recent-orders-list');
+    const countEl = document.getElementById('recent-orders-count');
+    if (!list) return;
+
+    const stored = JSON.parse(localStorage.getItem('fm_orders') || '[]');
+
+    const DEMO = [
+        { id: 'FM-3821', items: 5, priority: 'Normal', minsAgo: 5,  warehouseStatus: 'Ready to Pick' },
+        { id: 'FM-3756', items: 3, priority: 'Normal', minsAgo: 18, warehouseStatus: 'Picking'       },
+        { id: 'FM-3701', items: 8, priority: 'High',   minsAgo: 32, warehouseStatus: 'Ready to Pick' },
+    ];
+
+    const orders = stored.length > 0
+        ? stored.slice().reverse().slice(0, 5)
+        : DEMO;
+
+    if (countEl) countEl.textContent = orders.length + ' order' + (orders.length !== 1 ? 's' : '');
+
+    function timeAgo(isoString) {
+        if (!isoString) return '—';
+        const diff = Math.floor((Date.now() - new Date(isoString)) / 60000);
+        if (diff < 1)  return 'just now';
+        if (diff < 60) return diff + ' min ago';
+        const h = Math.floor(diff / 60);
+        return h + ' hr' + (h > 1 ? 's' : '') + ' ago';
+    }
+
+    function priorityBadge(priority) {
+        if (priority === 'High') return '<span class="badge-wh badge-red">High</span>';
+        return '<span class="badge-wh badge-grey">Normal</span>';
+    }
+
+    list.innerHTML = orders.map(function(o) {
+        var id       = o.id || '—';
+        var items    = o.itemCount || o.items || 0;
+        var ago      = o.placedAt ? timeAgo(o.placedAt) : (o.minsAgo ? o.minsAgo + ' min ago' : '—');
+        var priority = o.priority || 'Normal';
+        var status   = o.warehouseStatus || 'Ready to Pick';
+        return '<a href="pick.html" class="recent-order-item text-decoration-none">'
+            + '<div>'
+            + '<div class="recent-order-id">#' + id + '</div>'
+            + '<div class="recent-order-meta">' + items + ' item' + (items !== 1 ? 's' : '') + ' · ' + ago + '</div>'
+            + '</div>'
+            + '<div class="text-end">'
+            + priorityBadge(priority)
+            + '<div class="td-muted mt-1" style="font-size:0.72rem;">' + status + '</div>'
+            + '</div>'
+            + '</a>';
+    }).join('') + '<div class="text-center mt-3"><a href="pick.html" style="font-size:0.85rem;color:#2563eb;font-weight:600;text-decoration:none;">View All Orders →</a></div>';
+}
+
+renderRecentOrders();
+setInterval(renderRecentOrders, 30000);
+</script>
+
 </body>
 </html>
-
-
-<!-- fefe -->
-
-<!-- #41412421 -->
-<!-- #efef -->
