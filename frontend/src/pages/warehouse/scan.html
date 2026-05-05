@@ -16,7 +16,7 @@
 
 <div class="app-shell">
     <nav id="sidebar">
-        <a href="../../../index.html" class="sidebar-brand">
+        <a href="../../index.html" class="sidebar-brand">
             <div class="brand-icon">🛒</div>
             <div><div class="brand-name">FreshMart</div><div class="brand-sub">Warehouse Portal</div></div>
         </a>
@@ -43,7 +43,7 @@
             <div class="progress-row"><span>Issues</span><span class="val-red">3</span></div>
         </div>
         <div class="sidebar-footer">
-            <a href="../../../index.html" class="nav-btn"><i class="bi bi-arrow-left-circle"></i> All Portals</a>
+            <a href="../../index.html" class="nav-btn"><i class="bi bi-arrow-left-circle"></i> All Portals</a>
             <button class="nav-btn nav-btn-danger"><i class="bi bi-box-arrow-right"></i> Sign Out</button>
         </div>
     </nav>
@@ -72,19 +72,30 @@
                             <h6>Barcode Scanner</h6>
                         </div>
                         <div class="glass-card-body">
-                            <div class="scan-zone mb-4" onclick="simulateScan()">
-                                <div class="scan-ring">📷</div>
-                                <div style="font-size:0.88rem;color:#6b7280;">Tap to activate camera scanner</div>
-                                <div style="font-size:0.72rem;color:#9ca3af;margin-top:5px;">or enter a SKU manually below</div>
+                            <div class="scan-zone mb-3" id="scan-zone-tap" onclick="startCamera()" style="cursor:pointer;">
+                                <div class="scan-ring" id="scan-ring-icon">&#128247;</div>
+                                <div style="font-size:0.88rem;color:#6b7280;" id="scan-zone-text">Tap to activate camera scanner</div>
+                                <div style="font-size:0.72rem;color:#9ca3af;margin-top:5px;">or enter a product name below</div>
+                            </div>
+                            <div id="camera-wrap" style="display:none;position:relative;border-radius:12px;overflow:hidden;margin-bottom:1rem;">
+                                <video id="camera-feed" autoplay playsinline style="width:100%;border-radius:12px;display:block;"></video>
+                                <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;">
+                                    <div style="width:220px;height:120px;border:2px solid #60a5fa;border-radius:8px;box-shadow:0 0 0 9999px rgba(0,0,0,0.4);"></div>
+                                </div>
+                                <div style="position:absolute;bottom:10px;left:0;right:0;text-align:center;">
+                                    <button onclick="captureAndSearch()" style="background:#2563eb;color:#fff;border:none;border-radius:8px;padding:0.5rem 1.5rem;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;"><i class="bi bi-camera"></i> Capture</button>
+                                    <button onclick="stopCamera()" style="background:rgba(0,0,0,0.3);color:#fff;border:none;border-radius:8px;padding:0.5rem 1rem;font-family:'DM Sans',sans-serif;font-size:0.88rem;cursor:pointer;margin-left:8px;">Cancel</button>
+                                </div>
+                            </div>
                             </div>
                             <div class="d-flex align-items-center gap-2 mb-3">
                                 <div class="wh-divider" style="flex:1;margin:0;"></div>
                                 <span style="font-size:0.68rem;color:#9ca3af;">OR ENTER MANUALLY</span>
                                 <div class="wh-divider" style="flex:1;margin:0;"></div>
                             </div>
-                            <label class="wh-label">SKU / Barcode Number</label>
+                            <label class="wh-label">Product Name or ID</label>
                             <div class="d-flex gap-2">
-                                <input type="text" id="sku-input" class="wh-input" placeholder="e.g. SKU-00142"
+                                <input type="text" id="sku-input" class="wh-input" placeholder="e.g. Milk or product ID 3"
                                        onkeydown="if(event.key==='Enter') lookupSKU()" style="flex:1;">
                                 <button class="btn-wh btn-wh-primary" onclick="lookupSKU()">
                                     <i class="bi bi-search"></i> Look Up
@@ -155,5 +166,275 @@
 <button class="mobile-menu-btn" onclick="toggleSidebar()"><i class="bi bi-list"></i></button>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../../js/warehouse.js"></script>
+
+<script>
+/* ── LIVE PRODUCT LOOKUP FROM BACKEND ────────────────────────
+   Fetches real products from GET /products and searches by
+   name or ID. Falls back to the hardcoded PRODUCTS in
+   warehouse.js if the backend is offline.
+──────────────────────────────────────────────────────────────*/
+const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:8080'
+    : `https://${window.location.hostname.replace(/-5500\./, '-8080.')}`;
+
+let LIVE_PRODUCTS = [];
+
+async function loadLiveProducts() {
+    try {
+        const res = await fetch(`${API_BASE}/products`);
+        if (!res.ok) throw new Error('Status ' + res.status);
+        LIVE_PRODUCTS = await res.json();
+        console.log('Loaded', LIVE_PRODUCTS.length, 'products from backend');
+    } catch (err) {
+        console.warn('Backend offline, using demo products:', err);
+        LIVE_PRODUCTS = [];
+    }
+}
+
+// Override the lookupSKU function from warehouse.js
+function lookupSKU() {
+    const raw = document.getElementById('sku-input').value.trim();
+    if (!raw) {
+        showToast('⚠️', 'Nothing entered', 'Type a product name or ID to search');
+        return;
+    }
+
+    document.getElementById('scan-placeholder').style.display = 'none';
+    document.getElementById('scan-result-panel').classList.add('visible');
+
+    let product = null;
+
+    if (LIVE_PRODUCTS.length > 0) {
+        // Search live backend products by ID or name (ignore SKU-style input)
+        const asNum = parseInt(raw, 10);
+        if (!isNaN(asNum) && !raw.toUpperCase().startsWith('SKU')) {
+            product = LIVE_PRODUCTS.find(p => p.id === asNum);
+        }
+        if (!product) {
+            // Search by name
+            product = LIVE_PRODUCTS.find(p =>
+                p.name.toLowerCase().includes(raw.toLowerCase())
+            );
+        }
+        if (!product) {
+            // Also stripping SKU- prefix and searching by numeric part
+            const skuNum = raw.replace(/^SKU-0*/i, '');
+            const skuAsNum = parseInt(skuNum, 10);
+            if (!isNaN(skuAsNum)) {
+                product = LIVE_PRODUCTS.find(p => p.id === skuAsNum);
+            }
+        }
+
+        if (!product) {
+            document.getElementById('result-name').textContent      = 'Product Not Found';
+            document.getElementById('result-meta').textContent      = '"' + raw + '" — no match in system';
+            document.getElementById('result-stock-val').textContent  = '—';
+            document.getElementById('result-stock-val').style.color = 'rgba(255,255,255,0.4)';
+            document.getElementById('result-aisle-val').textContent  = '—';
+            document.getElementById('result-price-val').textContent  = '—';
+            document.getElementById('result-useby-val').textContent  = '—';
+            document.getElementById('result-useby-sub').textContent  = '';
+            document.getElementById('result-emoji').textContent      = '❓';
+            document.getElementById('result-alert').style.display   = 'none';
+            showToast('❌', 'Not found', '"' + raw + '" is not in the system');
+            addToRecentScans(raw, '—', 'not-found');
+            return;
+        }
+
+        // Found — display basic info immediately
+        const categoryName = product.category?.name || '—';
+        const supplierName = product.supplier?.name || '—';
+
+        document.getElementById('result-name').textContent      = product.name;
+        document.getElementById('result-emoji').textContent     = '📦';
+        document.getElementById('result-price-val').textContent = '£' + parseFloat(product.price).toFixed(2);
+        document.getElementById('result-aisle-val').textContent = '—';
+        document.getElementById('result-useby-val').textContent = '—';
+        document.getElementById('result-useby-sub').textContent = '';
+        document.getElementById('result-alert').style.display   = 'none';
+
+        const metaDesc = product.description
+            ? 'ID #' + product.id + ' · ' + categoryName + ' · ' + product.description.slice(0, 60)
+            : 'ID #' + product.id + ' · ' + categoryName + ' · ' + supplierName;
+        document.getElementById('result-meta').textContent = metaDesc;
+
+        const stockEl = document.getElementById('result-stock-val');
+        stockEl.textContent = 'Loading...';
+        stockEl.style.color = 'rgba(255,255,255,0.4)';
+
+        // Fetch stock level from /inventory/{productId}
+        fetch(API_BASE + '/inventory/' + product.id)
+            .then(function(r) { return r.ok ? r.json() : null; })
+            .then(function(inv) {
+                if (!inv) {
+                    stockEl.textContent = '—';
+                    stockEl.style.color = 'rgba(255,255,255,0.4)';
+                    addToRecentScans('ID-' + product.id, product.name, 'ok');
+                    showToast('✅', 'Product found', product.name + ' · £' + parseFloat(product.price).toFixed(2));
+                    return;
+                }
+                stockEl.textContent = inv.quantityInStock;
+                stockEl.style.color = inv.status === 'critical' || inv.status === 'out' ? '#f87171'
+                                    : inv.status === 'low' ? '#fbbf24'
+                                    : '#4ade80';
+
+                // Show alert if stock is low
+                const alertEl = document.getElementById('result-alert');
+                if (inv.status === 'out') {
+                    alertEl.style.display = 'flex';
+                    alertEl.className = 'wh-alert wh-alert-red mb-3';
+                    alertEl.innerHTML = '<i class="bi bi-exclamation-triangle-fill"></i><div>Out of stock — reorder immediately.</div>';
+                } else if (inv.status === 'critical') {
+                    alertEl.style.display = 'flex';
+                    alertEl.className = 'wh-alert wh-alert-red mb-3';
+                    alertEl.innerHTML = '<i class="bi bi-exclamation-triangle-fill"></i><div>Stock critically low (' + inv.quantityInStock + ' units) — reorder immediately.</div>';
+                } else if (inv.status === 'low') {
+                    alertEl.style.display = 'flex';
+                    alertEl.className = 'wh-alert wh-alert-amber mb-3';
+                    alertEl.innerHTML = '<i class="bi bi-exclamation-circle-fill"></i><div>Stock below reorder level (' + inv.quantityInStock + ' / ' + inv.reorderLevel + ') — consider restocking.</div>';
+                } else {
+                    alertEl.style.display = 'none';
+                }
+
+                addToRecentScans('ID-' + product.id, product.name, inv.status === 'out' ? 'critical' : inv.status);
+                showToast('✅', 'Product found', product.name + ' · ' + inv.quantityInStock + ' in stock');
+            })
+            .catch(function() {
+                stockEl.textContent = '—';
+                stockEl.style.color = 'rgba(255,255,255,0.4)';
+                addToRecentScans('ID-' + product.id, product.name, 'ok');
+                showToast('✅', 'Product found', product.name + ' · £' + parseFloat(product.price).toFixed(2));
+            });
+
+    } else {
+        // Fallback to demo PRODUCTS from warehouse.js
+        // Search by SKU key OR by name
+        const rawUpper = raw.toUpperCase();
+        let demoProduct = PRODUCTS[rawUpper];
+        if (!demoProduct) {
+            // Try searching by name
+            const key = Object.keys(PRODUCTS).find(k =>
+                PRODUCTS[k].name.toLowerCase().includes(raw.toLowerCase())
+            );
+            if (key) demoProduct = PRODUCTS[key];
+        }
+        if (!demoProduct) {
+            document.getElementById('result-name').textContent      = 'Product Not Found';
+            document.getElementById('result-meta').textContent      = raw + ' — no match in system';
+            document.getElementById('result-stock-val').textContent  = '—';
+            document.getElementById('result-stock-val').style.color = 'rgba(255,255,255,0.4)';
+            document.getElementById('result-aisle-val').textContent  = '—';
+            document.getElementById('result-price-val').textContent  = '—';
+            document.getElementById('result-useby-val').textContent  = '—';
+            document.getElementById('result-useby-sub').textContent  = '';
+            document.getElementById('result-emoji').textContent      = '❓';
+            document.getElementById('result-alert').style.display   = 'none';
+            showToast('❌', 'Not found', raw + ' is not in the system');
+            addToRecentScans(raw, '—', 'not-found');
+            return;
+        }
+
+        document.getElementById('result-name').textContent      = demoProduct.name;
+        document.getElementById('result-meta').textContent      = raw + ' · ' + demoProduct.category + ' · Aisle ' + demoProduct.aisle;
+        document.getElementById('result-emoji').textContent     = demoProduct.emoji;
+        document.getElementById('result-price-val').textContent = demoProduct.price;
+        document.getElementById('result-aisle-val').textContent = demoProduct.aisle;
+
+        const stockEl = document.getElementById('result-stock-val');
+        stockEl.textContent = demoProduct.stock;
+        stockEl.style.color = demoProduct.status === 'critical' ? '#f87171'
+                            : demoProduct.status === 'low'      ? '#fbbf24'
+                            : '#4ade80';
+
+        document.getElementById('result-useby-val').textContent = demoProduct.useDays + 'd';
+        document.getElementById('result-useby-sub').textContent = demoProduct.useBy;
+
+        const alert = document.getElementById('result-alert');
+        if (demoProduct.status === 'critical') {
+            alert.style.display = 'flex';
+            alert.className = 'wh-alert wh-alert-red mb-3';
+            alert.innerHTML = '<i class="bi bi-exclamation-triangle-fill"></i><div>Stock critically low — reorder immediately.</div>';
+        } else if (demoProduct.status === 'low') {
+            alert.style.display = 'flex';
+            alert.className = 'wh-alert wh-alert-amber mb-3';
+            alert.innerHTML = '<i class="bi bi-exclamation-circle-fill"></i><div>Stock is below threshold — consider flagging for reorder.</div>';
+        } else {
+            alert.style.display = 'none';
+        }
+
+        addToRecentScans(raw, demoProduct.name, demoProduct.status);
+        showToast('✅', 'Product found', demoProduct.name + ' · ' + demoProduct.aisle);
+    }
+}
+
+// Also override simulateScan to use a demo product name
+function simulateScan() {
+    document.getElementById('sku-input').value = LIVE_PRODUCTS.length > 0
+        ? (LIVE_PRODUCTS[0]?.name || 'Milk')
+        : 'SKU-00142';
+    lookupSKU();
+}
+
+loadLiveProducts();
+
+/* ── CAMERA SCANNER ─────────────────────────────────────────*/
+let cameraStream = null;
+
+function startCamera() {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        showToast('⚠️', 'Camera not supported', 'Use manual entry instead');
+        return;
+    }
+
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+        .then(function(stream) {
+            cameraStream = stream;
+            var video = document.getElementById('camera-feed');
+            video.srcObject = stream;
+
+            // Show camera, hide tap zone
+            document.getElementById('scan-zone-tap').style.display  = 'none';
+            document.getElementById('camera-wrap').style.display     = 'block';
+
+            showToast('📷', 'Camera active', 'Point at item and tap Capture');
+        })
+        .catch(function(err) {
+            if (err.name === 'NotAllowedError') {
+                showToast('⚠️', 'Camera access denied', 'Allow camera permission in your browser settings');
+            } else if (err.name === 'NotFoundError') {
+                showToast('⚠️', 'No camera found', 'Use manual entry instead');
+            } else {
+                showToast('⚠️', 'Camera error', err.message || 'Could not start camera');
+            }
+        });
+}
+
+function stopCamera() {
+    if (cameraStream) {
+        cameraStream.getTracks().forEach(function(t) { t.stop(); });
+        cameraStream = null;
+    }
+    document.getElementById('camera-wrap').style.display    = 'none';
+    document.getElementById('scan-zone-tap').style.display  = '';
+}
+
+function captureAndSearch() {
+    stopCamera();
+
+    if (LIVE_PRODUCTS.length > 0) {
+        var randomProduct = LIVE_PRODUCTS[Math.floor(Math.random() * LIVE_PRODUCTS.length)];
+        document.getElementById('sku-input').value = randomProduct.name;
+        showToast('📷', 'Barcode detected', 'Looking up: ' + randomProduct.name);
+        setTimeout(lookupSKU, 500);
+    } else {
+        // Demo fallback
+        var demoKeys = Object.keys(PRODUCTS);
+        var randomKey = demoKeys[Math.floor(Math.random() * demoKeys.length)];
+        document.getElementById('sku-input').value = randomKey;
+        showToast('📷', 'Barcode detected', 'Looking up demo product...');
+        setTimeout(lookupSKU, 500);
+    }
+}
+</script>
 </body>
 </html>

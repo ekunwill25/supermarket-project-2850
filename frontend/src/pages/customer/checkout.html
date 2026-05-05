@@ -228,7 +228,7 @@
               <div class="form-group">
                 <label class="form-label" for="cardExpiry">Expiry Date</label>
                 <input type="text" id="cardExpiry" class="form-input no-icon" placeholder="MM/YY" maxlength="5" oninput="formatExpiry(this)">
-                <div class="field-error" id="expiryErr">Please enter a valid expiry date</div>
+                <div class="field-error" id="expiryErr">Card has expired or date is invalid</div>
               </div>
               <div class="form-group">
                 <label class="form-label" for="cardCvc">CVV</label>
@@ -457,7 +457,15 @@
       if (paymentMethod === 'card') {
         fields.push(
           ['cardNumber', 'cardNumErr', v => v.replace(/\s/g,'').length === 16],
-          ['cardExpiry', 'expiryErr',  v => /^\d{2}\/\d{2}$/.test(v)],
+          ['cardExpiry', 'expiryErr',  v => {
+              if (!/^\d{2}\/\d{2}$/.test(v)) return false;
+              const [mm, yy] = v.split('/');
+              const month = parseInt(mm, 10);
+              const year  = 2000 + parseInt(yy, 10);
+              if (month < 1 || month > 12) return false;
+              const expiry = new Date(year, month, 1);
+              return expiry > new Date();
+          }],
           ['cardCvc',    'cvcErr',     v => v.length === 3]
         );
       }
