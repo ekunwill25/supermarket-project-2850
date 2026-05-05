@@ -1,33 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventory</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>FreshMart — Inventory</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/warehouse.css">
 </head>
-<body class="p-4">
+<body>
+<div class="bg-layer"></div>
+<div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
 
-<h2>Inventory</h2>
+<div class="app-shell">
+    <nav id="sidebar">
+        <a href="../../../index.html" class="sidebar-brand">
+            <div class="brand-icon">🛒</div>
+            <div><div class="brand-name">FreshMart</div><div class="brand-sub">Warehouse Portal</div></div>
+        </a>
+        <div class="sidebar-worker">
+            <div class="worker-avatar">JD</div>
+            <div><div class="worker-name">John Davies</div><div class="worker-shift">Morning Shift · Bay 3</div></div>
+        </div>
+        <div class="sidebar-nav">
+            <div class="nav-section-label">Overview</div>
+            <a href="index.html" class="nav-btn"><i class="bi bi-speedometer2"></i> Dashboard</a>
+            <div class="nav-section-label">Operations</div>
+            <a href="scan.html" class="nav-btn"><i class="bi bi-upc-scan"></i> Scan</a>
+            <a href="inventory.html" class="nav-btn active"><i class="bi bi-boxes"></i> Inventory</a>
+            <a href="pick.html" class="nav-btn"><i class="bi bi-list-check"></i> Pick <span class="nav-badge">8</span></a>
+            <a href="substitution.html" class="nav-btn"><i class="bi bi-arrow-left-right"></i> Substitution</a>
+            <a href="dispatch.html" class="nav-btn"><i class="bi bi-truck"></i> Dispatch <span class="nav-badge">3</span></a>
+            <div class="nav-section-label">Issues</div>
+            <a href="report.html" class="nav-btn"><i class="bi bi-exclamation-circle"></i> Report <span class="nav-badge-red">2</span></a>
+        </div>
+        <div class="progress-section">
+            <div class="progress-section-title">Today's Progress</div>
+            <div class="progress-row"><span>Picked</span><span class="val">142/180</span></div>
+            <div class="progress-row"><span>Dispatched</span><span class="val">98/120</span></div>
+            <div class="progress-row"><span>Issues</span><span class="val-red">3</span></div>
+        </div>
+        <div class="sidebar-footer">
+            <a href="../../../index.html" class="nav-btn"><i class="bi bi-arrow-left-circle"></i> All Portals</a>
+            <button class="nav-btn nav-btn-danger"><i class="bi bi-box-arrow-right"></i> Sign Out</button>
+        </div>
+    </nav>
 
-<input type="text" class="form-control mb-3" placeholder="Search product">
+    <div id="main">
+        <header id="topbar">
+            <div class="topbar-title">
+                <span>FreshMart Warehouse System</span>
+                <small>Device: Tablet with Barcode Scanner (UK)</small>
+            </div>
+            <div class="topbar-right-info">
+                <strong>Distribution Centre - Zone 1</strong>
+                Worker ID: FM-2847
+            </div>
+        </header>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>SKU</th>
-            <th>Name</th>
-            <th>Stock</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>FM-001</td>
-            <td>Protein Bars</td>
-            <td>145</td>
-        </tr>
-    </tbody>
-</table>
+        <div id="wh-content">
+            <div class="page-heading">Inventory</div>
+            <div class="page-subheading">Live stock levels across all warehouse locations · 142 products</div>
 
+            <div class="glass-card mb-3">
+                <div class="glass-card-body">
+                    <div class="row g-2 align-items-end">
+                        <div class="col-12 col-md-5">
+                            <div class="search-wrap">
+                                <i class="bi bi-search"></i>
+                                <input type="text" class="wh-input" placeholder="Search products, SKU, aisle…" onkeyup="filterInventory(this)">
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-2">
+                            <select class="wh-select wh-input"><option>All Categories</option><option>Dairy</option><option>Bakery</option><option>Produce</option><option>Meat</option><option>Frozen</option></select>
+                        </div>
+                        <div class="col-6 col-md-2">
+                            <select class="wh-select wh-input"><option>All Levels</option><option>Critical (&lt;10%)</option><option>Low (&lt;30%)</option><option>OK</option><option>Full</option></select>
+                        </div>
+                        <div class="col-6 col-md-2">
+                            <select class="wh-select wh-input"><option>All Aisles</option><option>Aisle 1</option><option>Aisle 2</option><option>Aisle 3</option><option>Cold Store</option></select>
+                        </div>
+                        <div class="col-6 col-md-1 d-grid">
+                            <button class="btn-wh btn-wh-primary" style="justify-content:center;padding:9px 0;"><i class="bi bi-funnel"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <div class="glass-card-header">
+                    <i class="bi bi-boxes" style="color:#2563eb;"></i>
+                    <h6>All Products</h6>
+                    <span class="hdr-muted">142 items</span>
+                    <button class="btn-wh btn-wh-ghost ms-2 py-1 px-3" style="font-size:0.75rem;"><i class="bi bi-download"></i> Export CSV</button>
+                </div>
+                <div class="glass-card-body p-0">
+                    <table class="wh-table" id="inventory-table">
+                        <thead><tr><th>Product</th><th>SKU</th><th>Category</th><th>Location</th><th>Stock Level</th><th>Units</th><th>Status</th><th>Actions</th></tr></thead>
+                        <tbody>
+                        <tr>
+                            <td><div>Organic Whole Milk 2L</div><div class="td-muted">Cravendale · Chilled</div></td>
+                            <td class="td-muted">SKU-00142</td><td><span class="badge-wh badge-blue">Dairy</span></td><td>3B / Shelf 2</td>
+                            <td><div class="d-flex align-items-center gap-2"><div class="stock-bar"><div class="stock-bar-fill" style="width:8%;background:#dc2626;"></div></div><span class="td-muted">8%</span></div></td>
+                            <td style="color:#dc2626;font-weight:700;">4</td><td><span class="badge-wh badge-red">Critical</span></td>
+                            <td><div class="d-flex gap-1"><a href="scan.html" class="btn-icon" title="Scan"><i class="bi bi-upc-scan"></i></a><a href="report.html" class="btn-icon btn-icon-red" title="Flag"><i class="bi bi-flag"></i></a></div></td>
+                        </tr>
+                        <tr>
+                            <td><div>Sourdough Bread 800g</div><div class="td-muted">Bakehouse · Ambient</div></td>
+                            <td class="td-muted">SKU-00391</td><td><span class="badge-wh badge-amber">Bakery</span></td><td>1A / Shelf 1</td>
+                            <td><div class="d-flex align-items-center gap-2"><div class="stock-bar"><div class="stock-bar-fill" style="width:22%;background:#f59e0b;"></div></div><span class="td-muted">22%</span></div></td>
+                            <td style="color:#d97706;font-weight:700;">11</td><td><span class="badge-wh badge-amber">Low</span></td>
+                            <td><div class="d-flex gap-1"><button class="btn-icon" title="Scan"><i class="bi bi-upc-scan"></i></button><button class="btn-icon" title="Edit"><i class="bi bi-pencil"></i></button></div></td>
+                        </tr>
+                        <tr>
+                            <td><div>Free Range Eggs × 12</div><div class="td-muted">Happy Hens · Ambient</div></td>
+                            <td class="td-muted">SKU-00057</td><td><span class="badge-wh badge-green">Eggs</span></td><td>2C / Shelf 3</td>
+                            <td><div class="d-flex align-items-center gap-2"><div class="stock-bar"><div class="stock-bar-fill" style="width:28%;background:#f59e0b;"></div></div><span class="td-muted">28%</span></div></td>
+                            <td style="color:#d97706;font-weight:700;">18</td><td><span class="badge-wh badge-amber">Low</span></td>
+                            <td><div class="d-flex gap-1"><button class="btn-icon" title="Scan"><i class="bi bi-upc-scan"></i></button><button class="btn-icon" title="Edit"><i class="bi bi-pencil"></i></button></div></td>
+                        </tr>
+                        <tr>
+                            <td><div>Chicken Breast 500g</div><div class="td-muted">Butcher's Best · Chilled</div></td>
+                            <td class="td-muted">SKU-00213</td><td><span class="badge-wh badge-red">Meat</span></td><td>Cold / Bay 2</td>
+                            <td><div class="d-flex align-items-center gap-2"><div class="stock-bar"><div class="stock-bar-fill" style="width:62%;background:#16a34a;"></div></div><span class="td-muted">62%</span></div></td>
+                            <td style="font-weight:600;">31</td><td><span class="badge-wh badge-green">OK</span></td>
+                            <td><div class="d-flex gap-1"><button class="btn-icon" title="Scan"><i class="bi bi-upc-scan"></i></button><button class="btn-icon" title="Edit"><i class="bi bi-pencil"></i></button></div></td>
+                        </tr>
+                        <tr>
+                            <td><div>Cheddar Cheese 400g</div><div class="td-muted">Wyke Farms · Chilled</div></td>
+                            <td class="td-muted">SKU-00088</td><td><span class="badge-wh badge-blue">Dairy</span></td><td>3B / Shelf 4</td>
+                            <td><div class="d-flex align-items-center gap-2"><div class="stock-bar"><div class="stock-bar-fill" style="width:85%;background:#16a34a;"></div></div><span class="td-muted">85%</span></div></td>
+                            <td style="font-weight:600;">43</td><td><span class="badge-wh badge-green">Full</span></td>
+                            <td><div class="d-flex gap-1"><button class="btn-icon" title="Scan"><i class="bi bi-upc-scan"></i></button><button class="btn-icon" title="Edit"><i class="bi bi-pencil"></i></button></div></td>
+                        </tr>
+                        <tr>
+                            <td><div>Broccoli (each)</div><div class="td-muted">Produce · Loose</div></td>
+                            <td class="td-muted">SKU-00007</td><td><span class="badge-wh badge-green">Produce</span></td><td>1D / Display</td>
+                            <td><div class="d-flex align-items-center gap-2"><div class="stock-bar"><div class="stock-bar-fill" style="width:45%;background:#16a34a;"></div></div><span class="td-muted">45%</span></div></td>
+                            <td style="font-weight:600;">27</td><td><span class="badge-wh badge-green">OK</span></td>
+                            <td><div class="d-flex gap-1"><button class="btn-icon" title="Scan"><i class="bi bi-upc-scan"></i></button><button class="btn-icon" title="Edit"><i class="bi bi-pencil"></i></button></div></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="wh-toast"><div class="toast-inner"><div class="toast-icon" id="toast-icon"></div><div><div class="toast-title" id="toast-title"></div><div class="toast-msg" id="toast-msg"></div></div></div></div>
+<button class="mobile-menu-btn" onclick="toggleSidebar()"><i class="bi bi-list"></i></button>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../../js/warehouse.js"></script>
 </body>
 </html>
