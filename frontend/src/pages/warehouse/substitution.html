@@ -1,10 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>FreshMart — Report Substitution</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/warehouse.css">
 </head>
 <body>
+<div class="bg-layer"></div>
+<div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
 
+<div class="app-shell">
+    <nav id="sidebar">
+        <a href="../../../index.html" class="sidebar-brand">
+            <div class="brand-icon">🛒</div>
+            <div><div class="brand-name">FreshMart</div><div class="brand-sub">Warehouse Portal</div></div>
+        </a>
+        <div class="sidebar-worker">
+            <div class="worker-avatar">JD</div>
+            <div><div class="worker-name">John Davies</div><div class="worker-shift">Morning Shift · Bay 3</div></div>
+        </div>
+        <div class="sidebar-nav">
+            <div class="nav-section-label">Overview</div>
+            <a href="index.html" class="nav-btn"><i class="bi bi-speedometer2"></i> Dashboard</a>
+            <div class="nav-section-label">Operations</div>
+            <a href="scan.html" class="nav-btn"><i class="bi bi-upc-scan"></i> Scan</a>
+            <a href="inventory.html" class="nav-btn"><i class="bi bi-boxes"></i> Inventory</a>
+            <a href="pick.html" class="nav-btn"><i class="bi bi-list-check"></i> Pick <span class="nav-badge">8</span></a>
+            <a href="substitution.html" class="nav-btn active"><i class="bi bi-arrow-left-right"></i> Substitution</a>
+            <a href="dispatch.html" class="nav-btn"><i class="bi bi-truck"></i> Dispatch <span class="nav-badge">3</span></a>
+            <div class="nav-section-label">Issues</div>
+            <a href="report.html" class="nav-btn"><i class="bi bi-exclamation-circle"></i> Report <span class="nav-badge-red">2</span></a>
+        </div>
+        <div class="progress-section">
+            <div class="progress-section-title">Today's Progress</div>
+            <div class="progress-row"><span>Picked</span><span class="val">142/180</span></div>
+            <div class="progress-row"><span>Dispatched</span><span class="val">98/120</span></div>
+            <div class="progress-row"><span>Issues</span><span class="val-red">3</span></div>
+        </div>
+        <div class="sidebar-footer">
+            <a href="../../../index.html" class="nav-btn"><i class="bi bi-arrow-left-circle"></i> All Portals</a>
+            <button class="nav-btn nav-btn-danger"><i class="bi bi-box-arrow-right"></i> Sign Out</button>
+        </div>
+    </nav>
+
+    <div id="main">
+        <header id="topbar">
+            <div class="topbar-title">
+                <span>FreshMart Warehouse System</span>
+                <small>Device: Tablet with Barcode Scanner (UK)</small>
+            </div>
+            <div class="topbar-right-info">
+                <strong>Distribution Centre - Zone 1</strong>
+                Worker ID: FM-2847
+            </div>
+        </header>
+
+        <div id="wh-content">
+            <div class="page-heading">Report Substitution</div>
+            <div class="page-subheading">When an ordered item is unavailable, log the replacement product here</div>
+
+            <div class="row g-3">
+                <div class="col-12 col-lg-8">
+                    <div class="glass-card">
+                        <div class="glass-card-header">
+                            <i class="bi bi-arrow-left-right" style="color:#9333ea;"></i>
+                            <h6>New Substitution</h6>
+                        </div>
+                        <div class="glass-card-body">
+                            <div class="wh-alert wh-alert-blue mb-4">
+                                <i class="bi bi-info-circle-fill"></i>
+                                <div>Only substitute with a product of equal or greater value. The customer will be notified and may refuse the substitution at delivery.</div>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-12"><div class="section-label">Original Item (Unavailable)</div></div>
+                                <div class="col-12 col-md-6"><label class="wh-label">Order Number</label><input type="text" class="wh-input" id="sub-order" placeholder="e.g. ORD-2847"></div>
+                                <div class="col-12 col-md-6"><label class="wh-label">Original Product / SKU</label><input type="text" class="wh-input" id="sub-original" placeholder="e.g. SKU-00142 or product name"></div>
+                                <div class="col-12 col-md-4"><label class="wh-label">Qty Ordered</label><input type="number" class="wh-input" id="sub-orig-qty" placeholder="e.g. 2" min="1"></div>
+                                <div class="col-12 col-md-4"><label class="wh-label">Original Price</label><input type="text" class="wh-input" id="sub-orig-price" placeholder="e.g. £1.49"></div>
+                                <div class="col-12 col-md-4"><label class="wh-label">Reason Unavailable</label><select class="wh-input" id="sub-reason"><option>Out of stock</option><option>Damaged / unsellable</option><option>Expired</option><option>Cannot locate</option></select></div>
+                                <div class="col-12"><div class="wh-divider"></div></div>
+                                <div class="col-12"><div class="section-label">Substituted Item (Replacement)</div></div>
+                                <div class="col-12 col-md-6"><label class="wh-label">Substitute Product / SKU</label><input type="text" class="wh-input" id="sub-replacement" placeholder="e.g. SKU-00145 or product name"></div>
+                                <div class="col-12 col-md-6"><label class="wh-label">Substitute Brand</label><input type="text" class="wh-input" id="sub-brand" placeholder="e.g. Arla, Tesco Own…"></div>
+                                <div class="col-12 col-md-4"><label class="wh-label">Substitute Qty</label><input type="number" class="wh-input" id="sub-qty" placeholder="e.g. 2" min="1"></div>
+                                <div class="col-12 col-md-4"><label class="wh-label">Substitute Price</label><input type="text" class="wh-input" id="sub-price" placeholder="e.g. £1.59"></div>
+                                <div class="col-12 col-md-4"><label class="wh-label">Similarity</label><select class="wh-input"><option>Yes — same category</option><option>Partial — different variant</option><option>No — different category</option></select></div>
+                                <div class="col-12"><label class="wh-label">Additional Notes</label><textarea class="wh-textarea" id="sub-notes" placeholder="Any extra context for the customer or manager…" style="min-height:80px;"></textarea></div>
+                                <div class="col-12">
+                                    <div class="d-flex gap-2 flex-wrap">
+                                        <button class="btn-wh btn-wh-primary" onclick="submitSubstitution()"><i class="bi bi-arrow-left-right"></i> Submit Substitution</button>
+                                        <button class="btn-wh btn-wh-ghost" onclick="clearSubForm()"><i class="bi bi-x-circle"></i> Clear</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-4">
+                    <div class="glass-card">
+                        <div class="glass-card-header">
+                            <i class="bi bi-clock-history" style="color:#9ca3af;"></i>
+                            <h6>Today's Substitutions</h6>
+                        </div>
+                        <div class="glass-card-body d-flex flex-column gap-2" id="sub-history-list">
+                            <div class="sub-history-item">
+                                <div class="td-muted" style="margin-bottom:4px;">ORD-2837 · 08:52am</div>
+                                <div style="font-size:0.83rem;font-weight:600;margin-bottom:3px;color:#111827;">Cravendale Milk 2L</div>
+                                <div style="display:flex;align-items:center;gap:6px;">
+                                    <i class="bi bi-arrow-right" style="color:#9ca3af;font-size:0.75rem;"></i>
+                                    <span style="font-size:0.8rem;color:#6b7280;">Arla Organic Milk 2L</span>
+                                </div>
+                                <div class="td-muted" style="margin-top:4px;">Out of stock · Same category</div>
+                            </div>
+                            <div style="text-align:center;padding:16px;color:#9ca3af;font-size:0.8rem;">No other substitutions today</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="wh-toast"><div class="toast-inner"><div class="toast-icon" id="toast-icon"></div><div><div class="toast-title" id="toast-title"></div><div class="toast-msg" id="toast-msg"></div></div></div></div>
+<button class="mobile-menu-btn" onclick="toggleSidebar()"><i class="bi bi-list"></i></button>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../../js/warehouse.js"></script>
 </body>
 </html>
