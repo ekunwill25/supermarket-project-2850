@@ -90,7 +90,7 @@
                     <div class="star-rating" style="margin-right:12px;"><i class="bi bi-star-fill"></i> 4.9</div>
                     <span class="trend-up" style="margin-right:12px;"><i class="bi bi-graph-up-arrow"></i> +14.5%</span>
                     <div style="text-align:right;">
-                        <div style="font-size:0.72rem;color:#9ca3af;">Stock</div>
+                        <div style="font-size:0.72rem;color:#4b5563;">Stock</div>
                         <div style="font-size:0.88rem;font-weight:700;color:#111827;">312</div>
                     </div>
                 </div>
@@ -108,7 +108,7 @@
                     <div class="star-rating" style="margin-right:12px;"><i class="bi bi-star-fill"></i> 4.9</div>
                     <span class="trend-up" style="margin-right:12px;"><i class="bi bi-graph-up-arrow"></i> +23.2%</span>
                     <div style="text-align:right;">
-                        <div style="font-size:0.72rem;color:#9ca3af;">Stock</div>
+                        <div style="font-size:0.72rem;color:#4b5563;">Stock</div>
                         <div style="font-size:0.88rem;font-weight:700;color:#111827;">198</div>
                     </div>
                 </div>
@@ -126,7 +126,7 @@
                     <div class="star-rating" style="margin-right:12px;"><i class="bi bi-star-fill"></i> 4.8</div>
                     <span class="trend-up" style="margin-right:12px;"><i class="bi bi-graph-up-arrow"></i> +18.7%</span>
                     <div style="text-align:right;">
-                        <div style="font-size:0.72rem;color:#9ca3af;">Stock</div>
+                        <div style="font-size:0.72rem;color:#4b5563;">Stock</div>
                         <div style="font-size:0.88rem;font-weight:700;color:#111827;">267</div>
                     </div>
                 </div>
@@ -144,7 +144,7 @@
                     <div class="star-rating" style="margin-right:12px;"><i class="bi bi-star-fill"></i> 4.8</div>
                     <span class="trend-up" style="margin-right:12px;"><i class="bi bi-graph-up-arrow"></i> +12.1%</span>
                     <div style="text-align:right;">
-                        <div style="font-size:0.72rem;color:#9ca3af;">Stock</div>
+                        <div style="font-size:0.72rem;color:#4b5563;">Stock</div>
                         <div style="font-size:0.88rem;font-weight:700;color:#111827;">234</div>
                     </div>
                 </div>
@@ -162,7 +162,7 @@
                     <div class="star-rating" style="margin-right:12px;"><i class="bi bi-star-fill"></i> 4.6</div>
                     <span class="trend-up" style="margin-right:12px;"><i class="bi bi-graph-up-arrow"></i> +28.9%</span>
                     <div style="text-align:right;">
-                        <div style="font-size:0.72rem;color:#9ca3af;">Stock</div>
+                        <div style="font-size:0.72rem;color:#4b5563;">Stock</div>
                         <div style="font-size:0.88rem;font-weight:700;color:#111827;">156</div>
                     </div>
                 </div>
@@ -203,7 +203,7 @@
                             <div class="low-stock-name">🦀 Alaska Dungeness Crab Clusters</div>
                             <div class="low-stock-meta"><span>Stock: <span class="stock-num">34</span></span><span>Reorder: 50</span></div>
                         </div>
-                        <button class="btn-red mt-3">Generate Reorder List</button>
+                        <button class="btn-red mt-3" onclick="generateReorderList()">Generate Reorder List</button>
                     </div>
                 </div>
             </div>
@@ -213,7 +213,7 @@
         <div class="card-white mb-4">
             <div class="card-white-header">
                 <span class="card-white-title">Slow Moving Items</span>
-                <span style="font-size:0.78rem;color:#9ca3af;">Items with low sales velocity</span>
+                <span style="font-size:0.78rem;color:#6b7280;">Items with low sales velocity</span>
             </div>
             <div class="card-white-body">
                 <div class="row g-3">
@@ -221,8 +221,8 @@
                         <div class="slow-card">
                             <div class="slow-name">🍷 Leoville Las Cases Collection Miroir</div>
                             <div class="slow-meta">
-                                <div><div style="font-size:0.72rem;color:#6b7280;">Sales</div><strong>12</strong></div>
-                                <div style="text-align:right;"><div style="font-size:0.72rem;color:#6b7280;">Days in stock</div><div class="slow-days">45</div></div>
+                                <div><div style="font-size:0.72rem;color:#4b5563;">Sales</div><strong>12</strong></div>
+                                <div style="text-align:right;"><div style="font-size:0.72rem;color:#4b5563;">Days in stock</div><div class="slow-days">45</div></div>
                             </div>
                         </div>
                     </div>
@@ -230,8 +230,8 @@
                         <div class="slow-card">
                             <div class="slow-name">💧 Ready Project Water Purification Kit</div>
                             <div class="slow-meta">
-                                <div><div style="font-size:0.72rem;color:#6b7280;">Sales</div><strong>23</strong></div>
-                                <div style="text-align:right;"><div style="font-size:0.72rem;color:#6b7280;">Days in stock</div><div class="slow-days">38</div></div>
+                                <div><div style="font-size:0.72rem;color:#4b5563;">Sales</div><strong>23</strong></div>
+                                <div style="text-align:right;"><div style="font-size:0.72rem;color:#4b5563;">Days in stock</div><div class="slow-days">38</div></div>
                             </div>
                         </div>
                     </div>
@@ -239,8 +239,8 @@
                         <div class="slow-card">
                             <div class="slow-name">🍷 Chateau Calon Segur Gift Set</div>
                             <div class="slow-meta">
-                                <div><div style="font-size:0.72rem;color:#6b7280;">Sales</div><strong>18</strong></div>
-                                <div style="text-align:right;"><div style="font-size:0.72rem;color:#6b7280;">Days in stock</div><div class="slow-days">42</div></div>
+                                <div><div style="font-size:0.72rem;color:#4b5563;">Sales</div><strong>18</strong></div>
+                                <div style="text-align:right;"><div style="font-size:0.72rem;color:#4b5563;">Days in stock</div><div class="slow-days">42</div></div>
                             </div>
                         </div>
                     </div>
@@ -284,26 +284,284 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-new Chart(document.getElementById('categoryBarChart'), {
-    type: 'bar',
-    data: {
-        labels: ['Meat','Snacks','Paper & Plastic','Organic','Household','Dairy','Laundry'],
-        datasets: [{
-            data: [32100,24500,22300,21400,19800,18300,16700],
-            backgroundColor: '#7c3aed',
-            borderRadius: 4,
-            barThickness: 22
-        }]
-    },
-    options: {
-        indexAxis: 'y',
-        plugins: { legend: { display: false } },
-        scales: {
-            x: { grid: { color: '#f3f4f6', borderDash:[4,4] }, ticks: { color: '#9ca3af', font: { family:'DM Sans' } } },
-            y: { grid: { display: false }, ticks: { color: '#374151', font: { family:'DM Sans', weight:'500' } } }
-        }
-    }
+/* ── PRODUCT PERFORMANCE — reads fm_orders + live /products ── */
+const orders = JSON.parse(localStorage.getItem('fm_orders') || '[]');
+
+// Count sales per product name from real orders
+const salesMap = {};
+orders.forEach(function(o) {
+    (o.items || []).forEach(function(item) {
+        const name = item.name || ('Product #' + item.productId);
+        salesMap[name] = (salesMap[name] || 0) + (item.quantity || 1);
+    });
 });
+
+// If we have real product sales data, update the top performers list
+const topList = document.querySelectorAll('.rank-item');
+const sortedProducts = Object.entries(salesMap).sort(function(a,b) { return b[1]-a[1]; }).slice(0,5);
+if (sortedProducts.length > 0) {
+    sortedProducts.forEach(function(entry, i) {
+        if (!topList[i]) return;
+        const nameEl = topList[i].querySelector('.rank-name');
+        const valEl  = topList[i].querySelector('.rank-val');
+        if (nameEl) nameEl.textContent = entry[0];
+        if (valEl)  valEl.textContent  = entry[1] + ' sales';
+    });
+}
+
+// Build category bar chart from real orders or fall back to demo
+const categoryMap = {};
+orders.forEach(function(o) {
+    (o.items || []).forEach(function(item) {
+        // We don't have category in localStorage items, use demo data
+    });
+});
+
+const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:8080'
+    : ('https://' + window.location.hostname.replace(/-5500\./, '-8080.'));
+
+// Try to fetch real products and build category breakdown
+fetch(API_BASE + '/products')
+    .then(function(r) { return r.ok ? r.json() : null; })
+    .then(function(products) {
+        var catMap = {};
+        if (products && products.length > 0) {
+            products.forEach(function(p) {
+                var cat = (p.category && p.category.name) ? p.category.name : 'Other';
+                catMap[cat] = (catMap[cat] || 0) + p.price;
+            });
+        }
+
+        var labels, data;
+        if (Object.keys(catMap).length > 0) {
+            var sorted = Object.entries(catMap).sort(function(a,b) { return b[1]-a[1]; }).slice(0,7);
+            labels = sorted.map(function(e) { return e[0]; });
+            data   = sorted.map(function(e) { return Math.round(e[1]); });
+        } else {
+            labels = ['Meat','Snacks','Paper & Plastic','Organic','Household','Dairy','Laundry'];
+            data   = [32100,24500,22300,21400,19800,18300,16700];
+        }
+
+        new Chart(document.getElementById('categoryBarChart'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: '#7c3aed',
+                    borderRadius: 4,
+                    barThickness: 22
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { color: '#f3f4f6', borderDash:[4,4] }, ticks: { color: '#374151', font: { family:'DM Sans' } } },
+                    y: { grid: { display: false }, ticks: { color: '#374151', font: { family:'DM Sans', weight:'500' } } }
+                }
+            }
+        });
+
+        // Update summary stats
+        if (products && products.length > 0) {
+            var statVals = document.querySelectorAll('.summary-stat-value');
+            if (statVals[0]) statVals[0].textContent = products.length;
+            if (statVals[1]) statVals[1].textContent = products.filter(function(p) { return p.isActive; }).length;
+        }
+    })
+    .catch(function() {
+        // Backend offline — render demo chart
+        new Chart(document.getElementById('categoryBarChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Meat','Snacks','Paper & Plastic','Organic','Household','Dairy','Laundry'],
+                datasets: [{
+                    data: [32100,24500,22300,21400,19800,18300,16700],
+                    backgroundColor: '#7c3aed', borderRadius: 4, barThickness: 22
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { color: '#f3f4f6', borderDash:[4,4] }, ticks: { color: '#374151', font: { family:'DM Sans' } } },
+                    y: { grid: { display: false }, ticks: { color: '#374151', font: { family:'DM Sans', weight:'500' } } }
+                }
+            }
+        });
+    });
+
+/* ── GENERATE REORDER LIST ── */
+function generateReorderList() {
+    const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? 'http://localhost:8080'
+        : ('https://' + window.location.hostname.replace(/-5500\./, '-8080.'));
+
+    // Try to get real low stock items from backend
+    fetch(API_BASE + '/inventory')
+        .then(function(r) { return r.ok ? r.json() : null; })
+        .then(function(inventory) {
+            var lowItems = [];
+            var demoFallback = [
+                { name: 'Japanese Wagyu Center Cut NY Strip Steaks', stock: 23, reorder: 50, needed: 27, status: 'low' },
+                { name: 'Coastal Seafood Frozen Lobster Tails',      stock: 28, reorder: 50, needed: 22, status: 'low' },
+                { name: 'Ermes Fontana Whole Boneless Leg',          stock: 34, reorder: 50, needed: 16, status: 'low' },
+                { name: 'Alaska Dungeness Crab Clusters',            stock: 34, reorder: 50, needed: 16, status: 'low' },
+            ];
+            if (inventory && inventory.length > 0) {
+                lowItems = inventory.filter(function(i) {
+                    return i.status === 'critical' || i.status === 'low' || i.status === 'out';
+                }).map(function(i) {
+                    return {
+                        name:     i.productName,
+                        stock:    i.quantityInStock,
+                        reorder:  i.reorderLevel,
+                        needed:   Math.max(0, i.reorderLevel - i.quantityInStock),
+                        status:   i.status
+                    };
+                });
+                // If backend has no low stock items, use demo data
+                if (lowItems.length === 0) lowItems = demoFallback;
+            } else {
+                lowItems = demoFallback;
+            }
+
+            if (lowItems.length === 0) {
+                alert('No items currently below reorder level.');
+                return;
+            }
+
+            // Build CSV content
+            var csv = 'Product Name,Current Stock,Reorder Level,Units Needed,Status,Date Generated\n';
+            var dateStr = new Date().toLocaleDateString('en-GB');
+            lowItems.forEach(function(item) {
+                csv += '"' + item.name + '",' + item.stock + ',' + item.reorder + ',' + item.needed + ',' + item.status + ',' + dateStr + '\n';
+            });
+
+            // Download as CSV
+            var blob = new Blob([csv], { type: 'text/csv' });
+            var url  = URL.createObjectURL(blob);
+            var a    = document.createElement('a');
+            a.href     = url;
+            a.download = 'freshmart-reorder-list-' + new Date().toISOString().slice(0,10) + '.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+        })
+        .catch(function() {
+            // Backend offline — use demo data
+            var csv = 'Product Name,Current Stock,Reorder Level,Units Needed,Status,Date Generated\n';
+            var dateStr = new Date().toLocaleDateString('en-GB');
+            var demoItems = [
+                { name: 'Japanese Wagyu Center Cut NY Strip Steaks', stock: 23, reorder: 50, needed: 27, status: 'low' },
+                { name: 'Coastal Seafood Frozen Lobster Tails',      stock: 28, reorder: 50, needed: 22, status: 'low' },
+                { name: 'Ermes Fontana Whole Boneless Leg',          stock: 34, reorder: 50, needed: 16, status: 'low' },
+                { name: 'Alaska Dungeness Crab Clusters',            stock: 34, reorder: 50, needed: 16, status: 'low' },
+            ];
+            demoItems.forEach(function(item) {
+                csv += '"' + item.name + '",' + item.stock + ',' + item.reorder + ',' + item.needed + ',' + item.status + ',' + dateStr + '\n';
+            });
+            var blob = new Blob([csv], { type: 'text/csv' });
+            var url  = URL.createObjectURL(blob);
+            var a    = document.createElement('a');
+            a.href     = url;
+            a.download = 'freshmart-reorder-list-' + new Date().toISOString().slice(0,10) + '.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+}
+</script>
+<!-- Unauthorised Access Overlay -->
+<div id="unauth-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:99999;align-items:center;justify-content:center;">
+    <div style="background:#fff;border-radius:16px;padding:2.5rem 2rem;max-width:380px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.4);animation:popIn 0.3s cubic-bezier(0.34,1.56,0.64,1);">
+        <div style="width:60px;height:60px;background:#fee2e2;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;font-size:1.6rem;">&#128683;</div>
+        <h2 style="font-size:1.2rem;font-weight:700;color:#111827;margin-bottom:0.5rem;">Unauthorised Access</h2>
+        <p style="font-size:0.85rem;color:#6b7280;margin-bottom:0.5rem;" id="unauth-msg">You do not have permission to access this portal.</p>
+        <p style="font-size:0.78rem;color:#9ca3af;">Redirecting you now...</p>
+        <div style="margin-top:1.25rem;height:4px;background:#f3f4f6;border-radius:2px;overflow:hidden;">
+            <div id="unauth-bar" style="height:100%;background:#dc2626;border-radius:2px;width:0%;transition:width 2s linear;"></div>
+        </div>
+    </div>
+</div>
+<style>@keyframes popIn { from { opacity:0;transform:scale(0.85); } to { opacity:1;transform:scale(1); } }</style>
+<!-- PIN Auth Overlay -->
+<div id="pin-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center;">
+    <div style="background:#fff;border-radius:16px;padding:2.5rem 2rem;max-width:360px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+        <div style="width:56px;height:56px;background:#f3e8ff;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;font-size:1.5rem;"><i class="bi bi-shield-lock" style="color:#7c3aed;"></i></div>
+        <h2 style="font-size:1.2rem;font-weight:700;color:#111827;margin-bottom:0.4rem;">Management Access</h2>
+        <p style="font-size:0.85rem;color:#6b7280;margin-bottom:1.5rem;">Enter your manager PIN to continue</p>
+        <input type="password" id="pin-input" maxlength="6"
+            style="width:100%;border:1.5px solid #d1d5db;border-radius:8px;padding:0.75rem;font-size:1.2rem;text-align:center;letter-spacing:0.4rem;outline:none;margin-bottom:0.5rem;font-family:'DM Sans',sans-serif;"
+            placeholder="****"
+            onkeydown="if(event.key==='Enter') submitPin()"
+            onfocus="this.style.borderColor='#7c3aed'" onblur="this.style.borderColor='#d1d5db'">
+        <div id="pin-error" style="display:none;color:#dc2626;font-size:0.8rem;margin-bottom:0.75rem;margin-top:0.25rem;">Incorrect PIN. Please try again.</div>
+        <button onclick="submitPin()" style="width:100%;background:#7c3aed;color:#fff;border:none;border-radius:8px;padding:0.75rem;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:600;cursor:pointer;margin-bottom:0.75rem;margin-top:0.5rem;">Enter Portal</button>
+        <a href="../../../index.html" style="font-size:0.82rem;color:#6b7280;text-decoration:none;">&#8592; Back to Portal Selector</a>
+    </div>
+</div>
+<script>
+/* ── MANAGEMENT PORTAL AUTH ─────────────────────────────────
+   PIN: 1234  (change MANAGER_PIN below to update)
+   Persists for the browser session, clears on tab close.
+──────────────────────────────────────────────────────────────*/
+const MANAGER_PIN  = '1234';
+const SESSION_KEY  = 'fm_mgmt_auth';
+function showUnauthAndRedirect(msg, url) {
+    var overlay = document.getElementById('unauth-overlay');
+    var msgEl   = document.getElementById('unauth-msg');
+    var bar     = document.getElementById('unauth-bar');
+    if (msgEl) msgEl.textContent = msg;
+    if (overlay) overlay.style.display = 'flex';
+    setTimeout(function() { if (bar) bar.style.width = '100%'; }, 50);
+    setTimeout(function() { window.location.href = url; }, 2200);
+}
+
+function checkManagerAuth() {
+    const user = JSON.parse(
+        localStorage.getItem('fm_user') ||
+        sessionStorage.getItem('fm_user') ||
+        'null'
+    );
+
+    if (!user) {
+        showUnauthAndRedirect('You must be logged in to access the Management Portal.', '../customer/login.html');
+        return;
+    }
+
+    const role = (user.role || '').toLowerCase();
+    if (role !== 'management') {
+        showUnauthAndRedirect('Your account (' + (user.role || 'Customer') + ') does not have access to the Management Portal.', '../../../index.html');
+        return;
+    }
+
+    // Correct user — now check PIN session
+    if (sessionStorage.getItem(SESSION_KEY) === 'true') return;
+    document.getElementById('pin-overlay').style.display = 'flex';
+    setTimeout(function() { var i = document.getElementById('pin-input'); if(i) i.focus(); }, 100);
+}
+
+function submitPin() {
+    var entered = document.getElementById('pin-input').value;
+    if (entered === MANAGER_PIN) {
+        sessionStorage.setItem(SESSION_KEY, 'true');
+        document.getElementById('pin-overlay').style.display = 'none';
+    } else {
+        document.getElementById('pin-error').style.display = 'block';
+        document.getElementById('pin-input').value = '';
+        document.getElementById('pin-input').focus();
+    }
+}
+
+function signOut() {
+    sessionStorage.removeItem(SESSION_KEY);
+    localStorage.removeItem('fm_user');
+    sessionStorage.removeItem('fm_user');
+    window.location.href = '../../../index.html';
+}
+
+checkManagerAuth();
 </script>
 </body>
 </html>

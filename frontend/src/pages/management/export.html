@@ -51,7 +51,7 @@
             font-size: 1.1rem; margin-bottom: 12px;
         }
         .export-card-title { font-size: 0.92rem; font-weight: 700; color: #111827; margin-bottom: 4px; }
-        .export-card-desc  { font-size: 0.76rem; color: #9ca3af; line-height: 1.5; }
+        .export-card-desc  { font-size: 0.76rem; color: #6b7280; line-height: 1.5; }
 
         .format-btn {
             border: 2px solid #e5e7eb;
@@ -108,7 +108,7 @@
         }
         .export-history-info { flex: 1; }
         .export-history-name { font-size: 0.85rem; font-weight: 600; color: #111827; }
-        .export-history-meta { font-size: 0.72rem; color: #9ca3af; margin-top: 1px; }
+        .export-history-meta { font-size: 0.72rem; color: #6b7280; margin-top: 1px; }
         .export-history-size { font-size: 0.78rem; color: #6b7280; margin-right: 10px; }
         .download-btn {
             background: none; border: 1px solid #e5e7eb; border-radius: 6px;
@@ -288,7 +288,7 @@
                                     <div class="format-btn-icon" style="background:#dcfce7;color:#16a34a;"><i class="bi bi-filetype-csv"></i></div>
                                     <div style="text-align:left;">
                                         <div>CSV</div>
-                                        <div style="font-size:0.7rem;font-weight:400;color:#9ca3af;">Spreadsheet ready</div>
+                                        <div style="font-size:0.7rem;font-weight:400;color:#6b7280;">Spreadsheet ready</div>
                                     </div>
                                 </button>
                             </div>
@@ -297,7 +297,7 @@
                                     <div class="format-btn-icon" style="background:#fee2e2;color:#dc2626;"><i class="bi bi-filetype-pdf"></i></div>
                                     <div style="text-align:left;">
                                         <div>PDF</div>
-                                        <div style="font-size:0.7rem;font-weight:400;color:#9ca3af;">Formatted report</div>
+                                        <div style="font-size:0.7rem;font-weight:400;color:#6b7280;">Formatted report</div>
                                     </div>
                                 </button>
                             </div>
@@ -306,7 +306,7 @@
                                     <div class="format-btn-icon" style="background:#dbeafe;color:#2563eb;"><i class="bi bi-filetype-xlsx"></i></div>
                                     <div style="text-align:left;">
                                         <div>Excel</div>
-                                        <div style="font-size:0.7rem;font-weight:400;color:#9ca3af;">With charts &amp; tables</div>
+                                        <div style="font-size:0.7rem;font-weight:400;color:#6b7280;">With charts &amp; tables</div>
                                     </div>
                                 </button>
                             </div>
@@ -372,19 +372,19 @@
                     </div>
                     <div class="card-white-body">
                         <div style="margin-bottom:12px;">
-                            <div style="font-size:0.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Report Type</div>
+                            <div style="font-size:0.72rem;color:#4b5563;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Report Type</div>
                             <div id="summary-type" style="font-size:0.88rem;font-weight:600;color:#111827;">Sales Report</div>
                         </div>
                         <div style="margin-bottom:12px;">
-                            <div style="font-size:0.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Date Range</div>
+                            <div style="font-size:0.72rem;color:#4b5563;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Date Range</div>
                             <div id="summary-date" style="font-size:0.88rem;font-weight:600;color:#111827;">Last 30 Days</div>
                         </div>
                         <div style="margin-bottom:12px;">
-                            <div style="font-size:0.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Format</div>
+                            <div style="font-size:0.72rem;color:#4b5563;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Format</div>
                             <div id="summary-format" style="font-size:0.88rem;font-weight:600;color:#111827;">CSV</div>
                         </div>
                         <div style="margin-bottom:4px;">
-                            <div style="font-size:0.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Est. File Size</div>
+                            <div style="font-size:0.72rem;color:#4b5563;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Est. File Size</div>
                             <div style="font-size:0.88rem;font-weight:600;color:#111827;">~142 KB</div>
                         </div>
                         <hr style="border-color:#f3f4f6;margin:16px 0;">
@@ -506,13 +506,215 @@
     }
 
     function triggerExport() {
+        const orders  = JSON.parse(localStorage.getItem('fm_orders') || '[]');
+        const now     = new Date();
+        const ext     = selectedFormat === 'Excel' ? 'csv' : selectedFormat.toLowerCase();
+        const dateTag = now.toISOString().slice(0,7).replace('-','_');
+        const slug    = selectedReport.replace(/\s+/g,'_');
+        const filename = slug + '_' + dateTag + '.' + (ext === 'pdf' ? 'csv' : ext);
+
+        // Filter orders by selected date range
+        const msNow = now.getTime();
+        const rangeDays = {
+            'Last 7 Days': 7, 'Last 30 Days': 30,
+            'Last 90 Days': 90, 'Year to Date': 365
+        };
+        const days = rangeDays[selectedDate] || 30;
+        const cutoff = new Date(msNow - days * 86400000);
+
+        const filtered = orders.filter(function(o) {
+            if (!o.placedAt) return true;
+            return new Date(o.placedAt) >= cutoff;
+        });
+
+        // Build CSV based on report type
+        let csv = '';
+        const dateStr = now.toLocaleDateString('en-GB');
+
+        if (selectedReport === 'Sales Report' || selectedReport === 'Full Dashboard Report') {
+            csv += 'FreshMart — ' + selectedReport + '\n';
+            csv += 'Generated: ' + dateStr + ' | Range: ' + selectedDate + '\n\n';
+            csv += 'Order ID,Date,Status,Total (£),Items,Delivery,Payment\n';
+            if (filtered.length > 0) {
+                filtered.forEach(function(o) {
+                    const d = o.placedAt ? new Date(o.placedAt).toLocaleDateString('en-GB') : 'N/A';
+                    csv += '"' + (o.id||'—') + '",' + d + ',' + (o.status||'processing') + ','
+                        + parseFloat(o.total||0).toFixed(2) + ','
+                        + (o.itemCount || (o.items ? o.items.length : 0)) + ','
+                        + (o.delivery||'Standard') + ','
+                        + (o.payment||'Card') + '\n';
+                });
+                const total = filtered.reduce(function(s,o) { return s + parseFloat(o.total||0); }, 0);
+                csv += '\nSUMMARY\n';
+                csv += 'Total Orders,' + filtered.length + '\n';
+                csv += 'Total Revenue,£' + total.toFixed(2) + '\n';
+                csv += 'Avg Order Value,£' + (filtered.length > 0 ? (total/filtered.length).toFixed(2) : '0.00') + '\n';
+            } else {
+                csv += 'No orders found for selected date range\n';
+            }
+        } else if (selectedReport === 'Product Performance') {
+            csv += 'FreshMart — Product Performance Report\n';
+            csv += 'Generated: ' + dateStr + ' | Range: ' + selectedDate + '\n\n';
+            csv += 'Product Name,Units Sold,Revenue (£)\n';
+            const prodMap = {};
+            filtered.forEach(function(o) {
+                (o.items || []).forEach(function(item) {
+                    const name = item.name || ('Product #' + item.productId);
+                    if (!prodMap[name]) prodMap[name] = { qty: 0, rev: 0 };
+                    prodMap[name].qty += item.quantity || 1;
+                    prodMap[name].rev += (item.price || 0) * (item.quantity || 1);
+                });
+            });
+            const sorted = Object.entries(prodMap).sort(function(a,b) { return b[1].qty - a[1].qty; });
+            if (sorted.length > 0) {
+                sorted.forEach(function(e) {
+                    csv += '"' + e[0] + '",' + e[1].qty + ',' + e[1].rev.toFixed(2) + '\n';
+                });
+            } else {
+                csv += 'No product data available for selected range\n';
+            }
+        } else if (selectedReport === 'Customer Insights') {
+            csv += 'FreshMart — Customer Insights Report\n';
+            csv += 'Generated: ' + dateStr + ' | Range: ' + selectedDate + '\n\n';
+            csv += 'Order ID,Date,Customer Address,Total (£),Items,Status\n';
+            filtered.forEach(function(o) {
+                const d    = o.placedAt ? new Date(o.placedAt).toLocaleDateString('en-GB') : 'N/A';
+                const addr = o.address ? [o.address.name, o.address.city, o.address.postcode].filter(Boolean).join(', ') : 'N/A';
+                csv += '"' + (o.id||'—') + '",' + d + ',"' + addr + '",'
+                    + parseFloat(o.total||0).toFixed(2) + ','
+                    + (o.itemCount || (o.items ? o.items.length : 0)) + ','
+                    + (o.status||'processing') + '\n';
+            });
+        }
+
+        // Download the file
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url  = URL.createObjectURL(blob);
+        const a    = document.createElement('a');
+        a.href = url; a.download = filename; a.click();
+        URL.revokeObjectURL(url);
+
+        // Add to recent exports list
+        addToRecentExports(selectedReport, selectedFormat, filename, dateStr);
+
+        // Show toast
         const toast = document.getElementById('exportToast');
-        const ext = selectedFormat === 'Excel' ? 'xlsx' : selectedFormat.toLowerCase();
-        const name = selectedReport.replace(/\s+/g,'_') + '_Apr2025.' + ext;
-        document.getElementById('toastSub').textContent = name + ' is ready';
+        document.getElementById('toastSub').textContent = filename + ' is ready';
         toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 3500);
+        setTimeout(function() { toast.classList.remove('show'); }, 3500);
     }
+
+    function addToRecentExports(reportType, format, filename, dateStr) {
+        const list = document.querySelector('.card-white:last-child .card-white-body');
+        if (!list) return;
+        const iconMap = { 'CSV': { bg:'#dcfce7', col:'#16a34a', icon:'bi-filetype-csv' },
+                          'PDF': { bg:'#fee2e2', col:'#dc2626', icon:'bi-filetype-pdf' },
+                          'Excel': { bg:'#dbeafe', col:'#2563eb', icon:'bi-filetype-xlsx' } };
+        const ic = iconMap[format] || iconMap['CSV'];
+        const ext = format === 'Excel' ? 'csv' : format.toLowerCase();
+        const item = document.createElement('div');
+        item.className = 'export-history-item';
+        item.innerHTML = '<div class="export-history-icon" style="background:' + ic.bg + ';color:' + ic.col + ';">'
+            + '<i class="bi ' + ic.icon + '"></i></div>'
+            + '<div class="export-history-info">'
+            + '<div class="export-history-name">' + reportType + ' — ' + dateStr + '</div>'
+            + '<div class="export-history-meta">Just now · Emma T.</div>'
+            + '</div>'
+            + '<span class="export-history-size">Live</span>'
+            + '<button class="download-btn" onclick="window.location.href=\'#\'"><i class="bi bi-download"></i> ' + ext.toUpperCase() + '</button>';
+        list.insertBefore(item, list.firstChild);
+    }
+</script>
+<!-- Unauthorised Access Overlay -->
+<div id="unauth-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:99999;align-items:center;justify-content:center;">
+    <div style="background:#fff;border-radius:16px;padding:2.5rem 2rem;max-width:380px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.4);animation:popIn 0.3s cubic-bezier(0.34,1.56,0.64,1);">
+        <div style="width:60px;height:60px;background:#fee2e2;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;font-size:1.6rem;">&#128683;</div>
+        <h2 style="font-size:1.2rem;font-weight:700;color:#111827;margin-bottom:0.5rem;">Unauthorised Access</h2>
+        <p style="font-size:0.85rem;color:#6b7280;margin-bottom:0.5rem;" id="unauth-msg">You do not have permission to access this portal.</p>
+        <p style="font-size:0.78rem;color:#9ca3af;">Redirecting you now...</p>
+        <div style="margin-top:1.25rem;height:4px;background:#f3f4f6;border-radius:2px;overflow:hidden;">
+            <div id="unauth-bar" style="height:100%;background:#dc2626;border-radius:2px;width:0%;transition:width 2s linear;"></div>
+        </div>
+    </div>
+</div>
+<style>@keyframes popIn { from { opacity:0;transform:scale(0.85); } to { opacity:1;transform:scale(1); } }</style>
+<!-- PIN Auth Overlay -->
+<div id="pin-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center;">
+    <div style="background:#fff;border-radius:16px;padding:2.5rem 2rem;max-width:360px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+        <div style="width:56px;height:56px;background:#f3e8ff;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;font-size:1.5rem;"><i class="bi bi-shield-lock" style="color:#7c3aed;"></i></div>
+        <h2 style="font-size:1.2rem;font-weight:700;color:#111827;margin-bottom:0.4rem;">Management Access</h2>
+        <p style="font-size:0.85rem;color:#6b7280;margin-bottom:1.5rem;">Enter your manager PIN to continue</p>
+        <input type="password" id="pin-input" maxlength="6"
+            style="width:100%;border:1.5px solid #d1d5db;border-radius:8px;padding:0.75rem;font-size:1.2rem;text-align:center;letter-spacing:0.4rem;outline:none;margin-bottom:0.5rem;font-family:'DM Sans',sans-serif;"
+            placeholder="****"
+            onkeydown="if(event.key==='Enter') submitPin()"
+            onfocus="this.style.borderColor='#7c3aed'" onblur="this.style.borderColor='#d1d5db'">
+        <div id="pin-error" style="display:none;color:#dc2626;font-size:0.8rem;margin-bottom:0.75rem;margin-top:0.25rem;">Incorrect PIN. Please try again.</div>
+        <button onclick="submitPin()" style="width:100%;background:#7c3aed;color:#fff;border:none;border-radius:8px;padding:0.75rem;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:600;cursor:pointer;margin-bottom:0.75rem;margin-top:0.5rem;">Enter Portal</button>
+        <a href="../../../index.html" style="font-size:0.82rem;color:#6b7280;text-decoration:none;">&#8592; Back to Portal Selector</a>
+    </div>
+</div>
+<script>
+/* ── MANAGEMENT PORTAL AUTH ─────────────────────────────────
+   PIN: 1234  (change MANAGER_PIN below to update)
+   Persists for the browser session, clears on tab close.
+──────────────────────────────────────────────────────────────*/
+const MANAGER_PIN  = '1234';
+const SESSION_KEY  = 'fm_mgmt_auth';
+function showUnauthAndRedirect(msg, url) {
+    var overlay = document.getElementById('unauth-overlay');
+    var msgEl   = document.getElementById('unauth-msg');
+    var bar     = document.getElementById('unauth-bar');
+    if (msgEl) msgEl.textContent = msg;
+    if (overlay) overlay.style.display = 'flex';
+    setTimeout(function() { if (bar) bar.style.width = '100%'; }, 50);
+    setTimeout(function() { window.location.href = url; }, 2200);
+}
+
+function checkManagerAuth() {
+    const user = JSON.parse(
+        localStorage.getItem('fm_user') ||
+        sessionStorage.getItem('fm_user') ||
+        'null'
+    );
+
+    if (!user) {
+        showUnauthAndRedirect('You must be logged in to access the Management Portal.', '../customer/login.html');
+        return;
+    }
+
+    const role = (user.role || '').toLowerCase();
+    if (role !== 'management') {
+        showUnauthAndRedirect('Your account (' + (user.role || 'Customer') + ') does not have access to the Management Portal.', '../../../index.html');
+        return;
+    }
+
+    // Correct user — now check PIN session
+    if (sessionStorage.getItem(SESSION_KEY) === 'true') return;
+    document.getElementById('pin-overlay').style.display = 'flex';
+    setTimeout(function() { var i = document.getElementById('pin-input'); if(i) i.focus(); }, 100);
+}
+
+function submitPin() {
+    var entered = document.getElementById('pin-input').value;
+    if (entered === MANAGER_PIN) {
+        sessionStorage.setItem(SESSION_KEY, 'true');
+        document.getElementById('pin-overlay').style.display = 'none';
+    } else {
+        document.getElementById('pin-error').style.display = 'block';
+        document.getElementById('pin-input').value = '';
+        document.getElementById('pin-input').focus();
+    }
+}
+
+function signOut() {
+    sessionStorage.removeItem(SESSION_KEY);
+    localStorage.removeItem('fm_user');
+    sessionStorage.removeItem('fm_user');
+    window.location.href = '../../../index.html';
+}
+
+checkManagerAuth();
 </script>
 </body>
 </html>
