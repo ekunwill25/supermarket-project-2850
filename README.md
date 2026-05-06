@@ -188,8 +188,9 @@ Navigate to `frontend/index.html` and open it in your browser.
 cd /workspaces/supermarket-project-2850
 ./start.sh
 ```
-3. In the **Ports** tab, set both port **8080** and port **5500** to **Public**
+3. In the **Ports** tab, right click the ports set both port **8080** and port **5500** to **Public**
 4. Open the frontend using the forwarded port 5500 URL shown in the Ports tab
+5. Paste /frontend/index.html at the end of the website of 5500 port
 
 ---
 
