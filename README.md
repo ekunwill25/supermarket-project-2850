@@ -227,8 +227,8 @@ Use these accounts to test all three portals without registering:
 | User | Email | Password | Portal |
 | --- | --- | --- | --- |
 | Dave (Customer) | `dave@freshmart.com` | `customer123` | Customer Portal |
-| Sarah (Warehouse) | `sarah@freshmart.com` | `warehouse123` | Warehouse Portal |
-| Emma (Management) | `emma@freshmart.com` | `manager123` | Management Portal |
+| Sarah (Warehouse) | `sarah@freshmart.com` | `warehouse123`| Warehouse Portal |
+| Emma (Management) | `emma@freshmart.com` | `manager123` + `1234` (PIN)  | Management Portal |
 
 These are also available as quick-fill buttons on the login page.
 
