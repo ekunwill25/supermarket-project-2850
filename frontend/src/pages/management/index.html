@@ -262,13 +262,64 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-// Sales Trend Line Chart
+/* ── DASHBOARD — reads from fm_orders (same source as sales.html) ── */
+const orders = JSON.parse(localStorage.getItem('fm_orders') || '[]');
+const now    = new Date();
+const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+/* ── Stat cards ── */
+const thisMonth   = now.getMonth();
+const thisYear    = now.getFullYear();
+let revMTD = 0, ordersMTD = 0, revLast = 0, ordersLast = 0, newCust = 0;
+const seenEmails  = new Set();
+
+orders.forEach(function(o) {
+    const d     = o.placedAt ? new Date(o.placedAt) : null;
+    const total = parseFloat(o.total) || 0;
+    if (!d) return;
+    if (d.getFullYear() === thisYear && d.getMonth() === thisMonth) {
+        revMTD += total; ordersMTD++;
+        const email = o.address || o.id;
+        if (!seenEmails.has(email)) { seenEmails.add(email); newCust++; }
+    } else if (d.getFullYear() === thisYear && d.getMonth() === thisMonth - 1) {
+        revLast += total; ordersLast++;
+    }
+});
+
+function fmt(n) { return '£' + n.toLocaleString('en-GB', {minimumFractionDigits:0,maximumFractionDigits:0}); }
+
+if (orders.length > 0) {
+    const statVals = document.querySelectorAll('.stat-value');
+    const statSubs = document.querySelectorAll('.stat-sub');
+    if (statVals[0]) statVals[0].textContent = fmt(revMTD || 356000);
+    if (statVals[1]) statVals[1].textContent = (ordersMTD || 4284).toLocaleString();
+    if (statVals[2]) statVals[2].textContent = fmt(ordersMTD > 0 ? revMTD / ordersMTD : 83.12);
+    if (statVals[3]) statVals[3].textContent = (newCust || 892).toLocaleString();
+    if (statSubs[0]) statSubs[0].textContent = 'vs ' + fmt(revLast || 285000) + ' last month';
+    if (statSubs[1]) statSubs[1].textContent = 'vs ' + (ordersLast || 3956) + ' last month';
+}
+
+/* ── Monthly Sales Trend ── */
+const monthlyRev = new Array(12).fill(0);
+orders.forEach(function(o) {
+    if (!o.placedAt) return;
+    const d = new Date(o.placedAt);
+    if (d.getFullYear() === thisYear) monthlyRev[d.getMonth()] += parseFloat(o.total) || 0;
+});
+const hasReal = monthlyRev.some(function(v) { return v > 0; });
+const trendLabels = hasReal
+    ? monthNames.slice(0, thisMonth + 1).slice(-6)
+    : ['Jan','Feb','Mar','Apr','May','Jun'];
+const trendData = hasReal
+    ? monthlyRev.slice(0, thisMonth + 1).slice(-6)
+    : [46000, 52000, 61000, 58000, 67000, 74000];
+
 new Chart(document.getElementById('salesTrendChart'), {
     type: 'line',
     data: {
-        labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+        labels: trendLabels,
         datasets: [{
-            data: [46000, 52000, 61000, 58000, 67000, 74000],
+            data: trendData,
             borderColor: '#7c3aed',
             backgroundColor: 'transparent',
             borderWidth: 2.5,
@@ -286,7 +337,7 @@ new Chart(document.getElementById('salesTrendChart'), {
     }
 });
 
-// Category Pie Chart
+/* ── Category Pie Chart ── */
 new Chart(document.getElementById('categoryPieChart'), {
     type: 'pie',
     data: {
@@ -306,6 +357,34 @@ new Chart(document.getElementById('categoryPieChart'), {
         }
     }
 });
+
+/* ── Best Selling Products from real orders ── */
+if (orders.length > 0) {
+    const prodMap = {};
+    orders.forEach(function(o) {
+        (o.items || []).forEach(function(item) {
+            const name = item.name || ('Product #' + item.productId);
+            const rev  = (item.price || 0) * (item.quantity || item.qty || 1);
+            const qty  = item.quantity || item.qty || 1;
+            if (!prodMap[name]) prodMap[name] = { qty: 0, rev: 0 };
+            prodMap[name].qty += qty;
+            prodMap[name].rev += rev;
+        });
+    });
+    const sorted = Object.entries(prodMap).sort(function(a,b) { return b[1].qty - a[1].qty; }).slice(0,5);
+    if (sorted.length > 0) {
+        const rankItems = document.querySelectorAll('.rank-item');
+        sorted.forEach(function(entry, i) {
+            if (!rankItems[i]) return;
+            const nameEl = rankItems[i].querySelector('.rank-name');
+            const valEl  = rankItems[i].querySelector('.rank-val');
+            const sub2   = rankItems[i].querySelector('.rank-sub2');
+            if (nameEl) nameEl.textContent = entry[0];
+            if (valEl)  valEl.textContent  = fmt(entry[1].rev);
+            if (sub2)   sub2.textContent   = entry[1].qty + ' units';
+        });
+    }
+}
 </script>
 <!-- Unauthorised Access Overlay -->
 <div id="unauth-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:99999;align-items:center;justify-content:center;">

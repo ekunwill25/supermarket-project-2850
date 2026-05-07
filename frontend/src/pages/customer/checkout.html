@@ -202,8 +202,9 @@
           <div class="section-head"><div class="section-icon">🚚</div><div class="section-title">Delivery Method</div></div>
           <div class="option-card selected" id="del-standard" onclick="selectDelivery('standard')">
             <div class="radio-circle"></div>
-            <div class="option-info"><div class="option-name">Standard Delivery</div><div class="option-desc">Delivery in 3–5 working days</div></div>
-            <div class="option-price price-free">FREE</div>
+            <div class="option-info"><div class="option-name">Standard Delivery</div><div class="option-desc">Free over £50 · otherwise £3.99 · 3–5 working days</div></div>
+            <div class="option-price price-free" id="standard-delivery-price">FREE</div>
+            
           </div>
           <div class="option-card" id="del-nextday" onclick="selectDelivery('nextday')">
             <div class="radio-circle"></div>
@@ -368,7 +369,9 @@
         return s + resolveItem(id).price * qty;
       }, 0);
 
-      const delCost = deliveryMethod === 'nextday' ? 5.99 : 0;
+      const FREE_DELIVERY_THRESHOLD = 50;
+      const standardCost = subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : 3.99;
+      const delCost = deliveryMethod === 'nextday' ? 5.99 : standardCost;
       const total   = subtotal + delCost;
       const totalQty = entries.reduce((s, [, v]) => s + v, 0);
 
@@ -392,7 +395,14 @@
 
       const del = document.getElementById('summaryDelivery');
       del.textContent = delCost === 0 ? 'FREE' : `£${delCost.toFixed(2)}`;
-      del.className   = delCost === 0 ? 'val-free' : '';
+    del.className   = delCost === 0 ? 'val-free' : '';
+
+    // Update standard delivery option card price dynamically
+    const stdPriceEl = document.getElementById('standard-delivery-price');
+    if (stdPriceEl) {
+      stdPriceEl.textContent = standardCost === 0 ? 'FREE' : `£${standardCost.toFixed(2)}`;
+      stdPriceEl.className   = standardCost === 0 ? 'option-price price-free' : 'option-price';
+    }
     }
 
     function showErr(id, errId) { document.getElementById(id).classList.add('invalid'); document.getElementById(errId).classList.add('show'); }

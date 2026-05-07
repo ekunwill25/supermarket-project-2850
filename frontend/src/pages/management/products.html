@@ -296,18 +296,102 @@ orders.forEach(function(o) {
     });
 });
 
-// If we have real product sales data, update the top performers list
-const topList = document.querySelectorAll('.rank-item');
-const sortedProducts = Object.entries(salesMap).sort(function(a,b) { return b[1]-a[1]; }).slice(0,5);
-if (sortedProducts.length > 0) {
-    sortedProducts.forEach(function(entry, i) {
-        if (!topList[i]) return;
-        const nameEl = topList[i].querySelector('.rank-name');
-        const valEl  = topList[i].querySelector('.rank-val');
-        if (nameEl) nameEl.textContent = entry[0];
-        if (valEl)  valEl.textContent  = entry[1] + ' sales';
+// Also track revenue and productId per product name
+const revenueMap = {};
+const productIdMap = {};
+orders.forEach(function(o) {
+    (o.items || []).forEach(function(item) {
+        const name = item.name || ('Product #' + item.productId);
+        const rev  = (item.price || 0) * (item.quantity || item.qty || 1);
+        revenueMap[name]   = (revenueMap[name]   || 0) + rev;
+        if (item.productId) productIdMap[name] = item.productId;
     });
+});
+
+// Emoji guesser based on product name keywords
+function guessEmoji(name) {
+    const n = name.toLowerCase();
+    if (n.includes('milk') || n.includes('dairy') || n.includes('butter') || n.includes('cheese') || n.includes('yogh')) return '🥛';
+    if (n.includes('egg'))  return '🥚';
+    if (n.includes('bread') || n.includes('sourdough') || n.includes('loaf')) return '🍞';
+    if (n.includes('chicken') || n.includes('poultry')) return '🍗';
+    if (n.includes('beef') || n.includes('steak') || n.includes('wagyu')) return '🥩';
+    if (n.includes('fish') || n.includes('salmon') || n.includes('cod')) return '🐟';
+    if (n.includes('lobster') || n.includes('crab') || n.includes('prawn') || n.includes('shrimp')) return '🦞';
+    if (n.includes('apple'))  return '🍎';
+    if (n.includes('banana')) return '🍌';
+    if (n.includes('orange') || n.includes('juice')) return '🍊';
+    if (n.includes('broccoli') || n.includes('vegetable') || n.includes('veg')) return '🥦';
+    if (n.includes('tomato')) return '🍅';
+    if (n.includes('pasta') || n.includes('penne') || n.includes('spaghetti')) return '🍝';
+    if (n.includes('cookie') || n.includes('oreo') || n.includes('biscuit')) return '🍪';
+    if (n.includes('chocolate') || n.includes('protein bar') || n.includes('snack')) return '🍫';
+    if (n.includes('wine') || n.includes('leoville') || n.includes('chateau') || n.includes('calon')) return '🍷';
+    if (n.includes('beer') || n.includes('ale') || n.includes('lager')) return '🍺';
+    if (n.includes('water') || n.includes('purif')) return '💧';
+    if (n.includes('coffee')) return '☕';
+    if (n.includes('tea'))    return '🍵';
+    if (n.includes('tissue') || n.includes('toilet') || n.includes('paper')) return '🧻';
+    if (n.includes('detergent') || n.includes('tide') || n.includes('laundry') || n.includes('pod')) return '🧺';
+    if (n.includes('soap') || n.includes('wash') || n.includes('clean')) return '🧼';
+    return '📦';
 }
+
+// Fetch backend products for category names, then render
+const API_BASE_TOP = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:8080'
+    : ('https://' + window.location.hostname.replace(/-5500\./, '-8080.'));
+
+fetch(API_BASE_TOP + '/products')
+    .then(function(r) { return r.ok ? r.json() : null; })
+    .then(function(backendProducts) {
+        // Build a map of productId -> category name
+        const catByName = {};
+        if (backendProducts) {
+            backendProducts.forEach(function(p) {
+                catByName[p.name] = (p.category && p.category.name) ? p.category.name : 'General';
+            });
+        }
+
+        const topList = document.querySelectorAll('.rank-item');
+        const sorted  = Object.entries(salesMap).sort(function(a,b) { return b[1]-a[1]; }).slice(0,5);
+        if (sorted.length === 0) return;
+
+        sorted.forEach(function(entry, i) {
+            if (!topList[i]) return;
+            const name     = entry[0];
+            const qty      = entry[1];
+            const rev      = revenueMap[name] || 0;
+            const category = catByName[name] || 'General';
+            const emoji    = guessEmoji(name);
+
+            const nameEl  = topList[i].querySelector('.rank-name');
+            const subEl   = topList[i].querySelector('.rank-sub');
+            const valEl   = topList[i].querySelector('.rank-val');
+            const sub2El  = topList[i].querySelector('.rank-sub2');
+            const emojiEl = topList[i].querySelector('.rank-emoji');
+
+            if (nameEl)  nameEl.textContent  = name;
+            if (subEl)   subEl.textContent   = category;
+            if (valEl)   valEl.textContent   = qty + ' sales';
+            if (sub2El)  sub2El.textContent  = '£' + rev.toFixed(2);
+            if (emojiEl) emojiEl.textContent = emoji;
+        });
+    })
+    .catch(function() {
+        // Backend offline — just update name and sales count
+        const topList = document.querySelectorAll('.rank-item');
+        const sorted  = Object.entries(salesMap).sort(function(a,b) { return b[1]-a[1]; }).slice(0,5);
+        sorted.forEach(function(entry, i) {
+            if (!topList[i]) return;
+            const nameEl  = topList[i].querySelector('.rank-name');
+            const valEl   = topList[i].querySelector('.rank-val');
+            const emojiEl = topList[i].querySelector('.rank-emoji');
+            if (nameEl)  nameEl.textContent  = entry[0];
+            if (valEl)   valEl.textContent   = entry[1] + ' sales';
+            if (emojiEl) emojiEl.textContent = guessEmoji(entry[0]);
+        });
+    });
 
 // Build category bar chart from real orders or fall back to demo
 const categoryMap = {};
