@@ -1,12 +1,5 @@
 /*
   FRESHMART — warehouse.js
-  JavaScript for the Warehouse Portal (src/pages/warehouse/index.html).
-
-  This is a NEW file — completely separate from portal.js.
-  portal.js only handles the ripple on the landing page.
-  warehouse.js handles: navigation, scan lookup, pick checklist,
-  dispatch confirmation, issue reporting, substitution logging,
-  mobile sidebar, and toast notifications.
 */
 
 
@@ -257,12 +250,13 @@ function completeOrder() {
     const activeOrderIdx = typeof _activeOrderIndex !== 'undefined' ? _activeOrderIndex : 0;
     const activeOrder    = reversedOrders[activeOrderIdx] || (realOrders.length > 0 ? realOrders[realOrders.length - 1] : null);
 
+    const rawAddr = activeOrder ? (activeOrder.address || '') : '';
     const dispatchEntry = {
         id:          activeOrder ? activeOrder.id : ('ORD-' + Math.floor(2800 + Math.random() * 200)),
         itemCount:   _pickTotal,
         status:      'ready',
         completedAt: new Date().toISOString(),
-        address:     activeOrder ? (activeOrder.address || {}) : {},
+        address:     rawAddr,   // may be string or object — dispatch.html handles both
         delivery:    activeOrder ? activeOrder.delivery : 'Standard',
     };
 
@@ -282,7 +276,17 @@ function completeOrder() {
         }
     }
 
-    showToast('✅', 'Order complete!', dispatchEntry.id + ' sent to dispatch queue');
+    showToast('✅', 'Order complete!', dispatchEntry.id + ' sent to dispatch queue — redirecting to dispatch');
+
+    // Update dispatch badge in sidebar nav
+    const updatedQueue = JSON.parse(localStorage.getItem('fm_dispatch_queue') || '[]');
+    const dispatchBadge = document.querySelector('a[href="dispatch.html"] .nav-badge');
+    if (dispatchBadge) dispatchBadge.textContent = updatedQueue.length;
+
+    // Redirect to dispatch page after 2s so user sees the toast
+    setTimeout(function() {
+        window.location.href = 'dispatch.html';
+    }, 2000);
 
     // Turn completed card green
     const bar = document.getElementById('pick-progress-bar');

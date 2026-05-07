@@ -186,7 +186,9 @@ function renderDispatchQueue() {
         const id        = order.id || '—';
         const items     = order.itemCount || 0;
         const addr      = order.address || {};
-        const addrStr   = [addr.street, addr.city, addr.postcode].filter(Boolean).join(', ') || 'Address not provided';
+        const addrStr   = typeof addr === 'string' && addr.length > 0
+            ? addr
+            : [addr.name, addr.street, addr.city, addr.postcode].filter(Boolean).join(', ') || 'Address not provided';
         const isOverdue = order.status === 'overdue';
         const colDiv    = document.createElement('div');
         colDiv.className = 'col-12 col-lg-4';
@@ -210,7 +212,7 @@ function renderDispatchQueue() {
           + '    </div>'
           + '    <div class="wh-progress mb-2"><div class="wh-progress-bar pb-green" style="width:100%;"></div></div>'
           + '    <div class="td-muted mb-3">Picking complete · Ready for dispatch</div>'
-          + '    <button class="btn-wh btn-wh-success w-100" style="justify-content:center;" onclick="dispatchOrder(this,'#' + id + '')">'
+          + '    <button class="btn-wh btn-wh-success w-100" style="justify-content:center;" onclick="dispatchOrder(this,\'' + id + '\')">'
           + '      <i class="bi bi-truck"></i> Confirm Dispatch'
           + '    </button>'
           + '  </div>'
@@ -245,6 +247,14 @@ function addToDispatchLog(queue) {
 }
 
 renderDispatchQueue();
+
+// Re-render when user navigates back to this tab from pick page
+document.addEventListener('visibilitychange', function() {
+    if (!document.hidden) renderDispatchQueue();
+});
+window.addEventListener('focus', function() {
+    renderDispatchQueue();
+});
 </script>
 
 <!-- Unauthorised Access Overlay -->
