@@ -3,11 +3,9 @@
 */
 
 
-/* ══════════════════════════════════════════════════════════════
-   1. PAGE NAVIGATION
+/* 1. PAGE NAVIGATION
    Shows/hides .wh-page sections and updates the topbar title.
-   Called by onclick on each sidebar nav button.
-   ══════════════════════════════════════════════════════════════ */
+   Called by onclick on each sidebar nav button.  */
 
 const PAGE_INFO = {
     dashboard:      ['Dashboard',           'Warehouse · Overview'],
@@ -34,9 +32,7 @@ function showPage(id, btn) {
 }
 
 
-/* ══════════════════════════════════════════════════════════════
-   2. MOBILE SIDEBAR TOGGLE
-   ══════════════════════════════════════════════════════════════ */
+/* 2. MOBILE SIDEBAR TOGGLE */
 
 function toggleSidebar() {
     document.getElementById('sidebar').classList.toggle('open');
@@ -56,9 +52,7 @@ document.addEventListener('click', function (e) {
 });
 
 
-/* ══════════════════════════════════════════════════════════════
-   3. RIPPLE EFFECT
-   ══════════════════════════════════════════════════════════════ */
+/* 3. RIPPLE EFFECT */
 
 function applyRipple(e) {
     const el   = e.currentTarget;
@@ -91,9 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-/* ══════════════════════════════════════════════════════════════
-   4. TOAST NOTIFICATIONS
-   ══════════════════════════════════════════════════════════════ */
+/* 4. TOAST NOTIFICATIONS */
 
 let _toastTimer = null;
 
@@ -108,9 +100,7 @@ function showToast(icon, title, message) {
 }
 
 
-/* ══════════════════════════════════════════════════════════════
-   5. SCAN ITEM PAGE
-   ══════════════════════════════════════════════════════════════ */
+/* 5. SCAN ITEM PAGE */
 
 const PRODUCTS = {
     'SKU-00142': { name:'Organic Whole Milk 2L', brand:'Cravendale', category:'Dairy', aisle:'3B', shelf:'Shelf 2', stock:4, min:50, price:'£1.49', useBy:'21 Apr 2025', useDays:3, emoji:'🥛', status:'critical' },
