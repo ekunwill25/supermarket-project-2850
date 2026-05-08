@@ -87,26 +87,29 @@ supermarket-project-2850/
 | Login | `customer/login.html` | Role-based login with demo accounts panel |
 | Sign Up | `customer/signup.html` | Customer registration with live password strength indicator |
 
-### Warehouse Portal *(in progress)*
+### Warehouse Portal
 | Page | File | Description |
 | --- | --- | --- |
 | Home | `warehouse/index.html` | Warehouse portal dashboard |
-| Picking List | `warehouse/picking-list.html` | Order picking interface sorted by shelf location |
-| Stock | `warehouse/stock.html` | Stock level management |
-| Deliveries | `warehouse/deliveries.html` | Incoming delivery processing |
+| Picking List | `warehouse/pick.html` | Order picking interface sorted by shelf location |
+| Inventory | `warehouse/inventory.html` | Stock level management and monitoring |
+| Dispatch | `warehouse/dispatch.html` | Outgoing order dispatch and verification |
+| Report | `warehouse/report.html` | Report substitutions and unavailable items |
+| Scan | `warehouse/scan.html` | Barcode scanning for product lookup |
+| Substitution | `warehouse/substitution.html` | Substitution selection for out of stock items |
 
-### Management Portal *(in progress)*
+### Management Portal
 | Page | File | Description |
 | --- | --- | --- |
-| Home | `management/index.html` | Management dashboard |
+| Home | `management/index.html` | Management dashboard with key metrics |
 | Sales | `management/sales.html` | Sales metrics and trend charts |
 | Products | `management/products.html` | Best-selling and trending product analysis |
-| Export | `management/export.html` | Data export (CSV/PDF) |
+| Export | `management/export.html` | Data export in CSV format |
+| Customers | `management/customers.html` | Customer insights and behaviour analysis |
 
 ---
 
 ## 🗄️ Backend API Endpoints
-
 | Method | Endpoint | Description | Status |
 | --- | --- | --- | --- |
 | GET | `/products` | Returns all active products | ✅ Live |
@@ -116,13 +119,16 @@ supermarket-project-2850/
 | GET | `/customers/{id}` | Returns a single customer by ID | ✅ Live |
 | POST | `/customers` | Creates a new customer account | ✅ Live |
 | GET | `/inventory` | Returns all stock levels | ✅ Live |
+| GET | `/inventory/{productId}` | Returns stock level for a single product | ✅ Live |
+| POST | `/inventory/seed` | Seeds all products with initial stock levels | ✅ Live |
 | POST | `/auth/register` | Registers a new customer account | ✅ Live |
 | POST | `/auth/login` | Authenticates a customer | ✅ Live |
-| GET | `/orders` | Returns all orders | 🔄 In progress |
-| POST | `/orders` | Places a new order | 🔄 In progress |
-| GET | `/cart/{customerId}` | Returns a customer's basket | 🔄 In progress |
-| POST | `/cart` | Adds an item to a basket | 🔄 In progress |
-
+| GET | `/orders` | Returns all orders | ✅ Live |
+| POST | `/orders` | Places a new order and deducts inventory | ✅ Live |
+| GET | `/orders/{id}` | Returns a single order by ID | ✅ Live |
+| GET | `/cart/{customerId}` | Returns a customer's basket | ✅ Live |
+| POST | `/cart` | Adds an item to a basket | ✅ Live |
+| DELETE | `/cart/{customerId}/{productId}` | Removes an item from a basket | ✅ Live |
 ---
 
 ## 🚀 Setup & Installation
