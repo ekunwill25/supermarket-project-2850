@@ -300,28 +300,25 @@ const avgOrder     = ordersMTD > 0 ? revMTD / ordersMTD : 0;
 const avgLastMonth = ordersLastMonth > 0 ? revLastMonth / ordersLastMonth : 0;
 
 /* ── Update stat cards if we have real data ── */
-if (orders.length > 0) {
-    const cards = document.querySelectorAll('.stat-value');
-    if (cards[0]) cards[0].textContent = fmt(revMTD || 73000);
-    if (cards[1]) cards[1].textContent = (ordersMTD || 1823).toLocaleString();
-    if (cards[2]) cards[2].textContent = fmt(avgOrder || 40.04);
+// Always update stats from real data (no hardcoded fallbacks)
+const cards = document.querySelectorAll('.stat-value');
+if (cards[0]) cards[0].textContent = fmt(revMTD);
+if (cards[1]) cards[1].textContent = ordersMTD.toLocaleString();
+if (cards[2]) cards[2].textContent = fmt(avgOrder);
 
-    // Update sub labels
-    const subs = document.querySelectorAll('.stat-sub');
-    if (subs[0]) subs[0].textContent = 'vs ' + fmt(revLastMonth || 64867) + ' last month';
-    if (subs[1]) subs[1].textContent = 'vs ' + (ordersLastMonth || 1685) + ' last month';
-    if (subs[2]) subs[2].textContent = 'vs ' + fmt(avgLastMonth || 38.53) + ' last month';
+const subs = document.querySelectorAll('.stat-sub');
+if (subs[0]) subs[0].textContent = 'vs ' + fmt(revLastMonth) + ' last month';
+if (subs[1]) subs[1].textContent = 'vs ' + ordersLastMonth + ' last month';
+if (subs[2]) subs[2].textContent = 'vs ' + fmt(avgLastMonth) + ' last month';
 
-    // Update quick stats in sidebar
-    const todayOrders = orders.filter(function(o) {
-        if (!o.placedAt) return false;
-        const d = new Date(o.placedAt);
-        return d.toDateString() === now.toDateString();
-    });
-    const todayRev = todayOrders.reduce(function(s, o) { return s + (parseFloat(o.total) || 0); }, 0);
-    const todaySalesEl = document.querySelector('.stat-row-value');
-    if (todaySalesEl && todayRev > 0) todaySalesEl.textContent = fmt(todayRev);
-}
+// Update quick stats sidebar — today's revenue
+const todayOrders = orders.filter(function(o) {
+    if (!o.placedAt) return false;
+    return new Date(o.placedAt).toDateString() === now.toDateString();
+});
+const todayRev     = todayOrders.reduce(function(s, o) { return s + (parseFloat(o.total) || 0); }, 0);
+const todaySalesEl = document.querySelector('.stat-row-value');
+if (todaySalesEl) todaySalesEl.textContent = todayRev > 0 ? fmt(todayRev) : fmt(revMTD);
 
 /* ── Build Monthly Revenue chart from real orders ── */
 const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -410,15 +407,17 @@ new Chart(document.getElementById('dailySalesChart'), {
 });
 
 /* ── Payment method donuts from real orders ── */
-const totalTx   = payCard + payPaypal || 100;
-const pctCard   = Math.round((payCard   / totalTx) * 100) || 58;
-const pctPaypal = Math.round((payPaypal / totalTx) * 100) || 8;
+const totalTx   = payCard + payPaypal;
+const pctCard   = totalTx > 0 ? Math.round((payCard   / totalTx) * 100) : 0;
+const pctPaypal = totalTx > 0 ? Math.round((payPaypal / totalTx) * 100) : 0;
 
-// Update transaction labels
+// Update all four transaction labels
 const donutSubs = document.querySelectorAll('.donut-sub');
-if (orders.length > 0 && donutSubs.length >= 3) {
+if (donutSubs.length >= 4) {
     donutSubs[0].textContent = payCard   + ' transactions';
+    donutSubs[1].textContent = '0 transactions';
     donutSubs[2].textContent = payPaypal + ' transactions';
+    donutSubs[3].textContent = '0 transactions';
 }
 
 function makeDonut(id, pct) {
@@ -452,9 +451,9 @@ function makeDonut(id, pct) {
 }
 
 makeDonut('donut1', pctCard);
-makeDonut('donut2', 30);
+makeDonut('donut2', 0);
 makeDonut('donut3', pctPaypal);
-makeDonut('donut4', Math.max(0, 100 - pctCard - 30 - pctPaypal));
+makeDonut('donut4', 0);
 </script>
 <!-- Unauthorised Access Overlay -->
 <div id="unauth-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:99999;align-items:center;justify-content:center;">

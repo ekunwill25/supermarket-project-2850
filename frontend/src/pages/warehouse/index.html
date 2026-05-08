@@ -170,6 +170,25 @@
 <button class="mobile-menu-btn" onclick="toggleSidebar()"><i class="bi bi-list"></i></button>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../../js/warehouse.js"></script>
+<script>
+/* ── UPDATE SIDEBAR BADGES FROM REAL DATA ── */
+(function() {
+    var allOrders = JSON.parse(localStorage.getItem('fm_orders') || '[]');
+    var pending   = allOrders.filter(function(o) {
+        return o.warehouseStatus !== 'picked' && o.status !== 'shipped' && o.status !== 'delivered';
+    });
+    var pickBadge = document.querySelector('a[href="pick.html"] .nav-badge');
+    if (pickBadge) pickBadge.textContent = pending.length;
+
+    var queue      = JSON.parse(localStorage.getItem('fm_dispatch_queue') || '[]');
+    var readyCount = queue.filter(function(o) {
+        var s = (o.status || '').toLowerCase();
+        return s === 'ready' || s === '';
+    }).length;
+    var dispatchBadge = document.querySelector('a[href="dispatch.html"] .nav-badge');
+    if (dispatchBadge) dispatchBadge.textContent = readyCount;
+})();
+</script>
 
 <script>
 /* ── RECENT ORDERS FROM CUSTOMER PORTAL ──────────────────────

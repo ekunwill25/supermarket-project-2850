@@ -67,8 +67,8 @@
                 <div class="page-subheading" style="margin-bottom:0;">Overview of sales performance and trends</div>
             </div>
             <div class="page-topbar-actions">
-                <button class="btn-outline"><i class="bi bi-funnel"></i> Filter</button>
-                <button class="btn-purple"><i class="bi bi-download"></i> Export</button>
+                <button class="btn-outline" onclick="openFilterPanel()"><i class="bi bi-funnel"></i> Filter</button>
+                <button class="btn-purple" onclick="exportDashboard()"><i class="bi bi-download"></i> Export</button>
             </div>
         </div>
 
@@ -262,13 +262,63 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-// Sales Trend Line Chart
+/* ── DASHBOARD — reads from fm_orders (same source as sales.html) ── */
+const orders = JSON.parse(localStorage.getItem('fm_orders') || '[]');
+const now    = new Date();
+const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+/* ── Stat cards ── */
+const thisMonth   = now.getMonth();
+const thisYear    = now.getFullYear();
+let revMTD = 0, ordersMTD = 0, revLast = 0, ordersLast = 0, newCust = 0;
+const seenEmails  = new Set();
+
+orders.forEach(function(o) {
+    const d     = o.placedAt ? new Date(o.placedAt) : null;
+    const total = parseFloat(o.total) || 0;
+    if (!d) return;
+    if (d.getFullYear() === thisYear && d.getMonth() === thisMonth) {
+        revMTD += total; ordersMTD++;
+        const email = o.address || o.id;
+        if (!seenEmails.has(email)) { seenEmails.add(email); newCust++; }
+    } else if (d.getFullYear() === thisYear && d.getMonth() === thisMonth - 1) {
+        revLast += total; ordersLast++;
+    }
+});
+
+function fmt(n) { return '£' + n.toLocaleString('en-GB', {minimumFractionDigits:0,maximumFractionDigits:0}); }
+
+// Always update stats from real data (no hardcoded fallbacks)
+const statVals = document.querySelectorAll('.stat-value');
+const statSubs = document.querySelectorAll('.stat-sub');
+if (statVals[0]) statVals[0].textContent = fmt(revMTD);
+if (statVals[1]) statVals[1].textContent = ordersMTD.toLocaleString();
+if (statVals[2]) statVals[2].textContent = fmt(ordersMTD > 0 ? revMTD / ordersMTD : 0);
+if (statVals[3]) statVals[3].textContent = newCust.toLocaleString();
+if (statSubs[0]) statSubs[0].textContent = 'vs ' + fmt(revLast) + ' last month';
+if (statSubs[1]) statSubs[1].textContent = 'vs ' + ordersLast + ' last month';
+
+/* ── Monthly Sales Trend ── */
+const monthlyRev = new Array(12).fill(0);
+orders.forEach(function(o) {
+    if (!o.placedAt) return;
+    const d = new Date(o.placedAt);
+    if (d.getFullYear() === thisYear) monthlyRev[d.getMonth()] += parseFloat(o.total) || 0;
+});
+const hasReal = monthlyRev.some(function(v) { return v > 0; });
+const trendLabels = hasReal
+    ? monthNames.slice(0, thisMonth + 1).slice(-6)
+    : ['Jan','Feb','Mar','Apr','May','Jun'];
+const trendData = hasReal
+    ? monthlyRev.slice(0, thisMonth + 1).slice(-6)
+    : [46000, 52000, 61000, 58000, 67000, 74000];
+
 new Chart(document.getElementById('salesTrendChart'), {
     type: 'line',
     data: {
-        labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+        labels: trendLabels,
         datasets: [{
-            data: [46000, 52000, 61000, 58000, 67000, 74000],
+            data: trendData,
             borderColor: '#7c3aed',
             backgroundColor: 'transparent',
             borderWidth: 2.5,
@@ -286,7 +336,7 @@ new Chart(document.getElementById('salesTrendChart'), {
     }
 });
 
-// Category Pie Chart
+/* ── Category Pie Chart ── */
 new Chart(document.getElementById('categoryPieChart'), {
     type: 'pie',
     data: {
@@ -306,6 +356,34 @@ new Chart(document.getElementById('categoryPieChart'), {
         }
     }
 });
+
+/* ── Best Selling Products from real orders ── */
+if (orders.length > 0) {
+    const prodMap = {};
+    orders.forEach(function(o) {
+        (o.items || []).forEach(function(item) {
+            const name = item.name || ('Product #' + item.productId);
+            const rev  = (item.price || 0) * (item.quantity || item.qty || 1);
+            const qty  = item.quantity || item.qty || 1;
+            if (!prodMap[name]) prodMap[name] = { qty: 0, rev: 0 };
+            prodMap[name].qty += qty;
+            prodMap[name].rev += rev;
+        });
+    });
+    const sorted = Object.entries(prodMap).sort(function(a,b) { return b[1].qty - a[1].qty; }).slice(0,5);
+    if (sorted.length > 0) {
+        const rankItems = document.querySelectorAll('.rank-item');
+        sorted.forEach(function(entry, i) {
+            if (!rankItems[i]) return;
+            const nameEl = rankItems[i].querySelector('.rank-name');
+            const valEl  = rankItems[i].querySelector('.rank-val');
+            const sub2   = rankItems[i].querySelector('.rank-sub2');
+            if (nameEl) nameEl.textContent = entry[0];
+            if (valEl)  valEl.textContent  = fmt(entry[1].rev);
+            if (sub2)   sub2.textContent   = entry[1].qty + ' units';
+        });
+    }
+}
 </script>
 <!-- Unauthorised Access Overlay -->
 <div id="unauth-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:99999;align-items:center;justify-content:center;">
@@ -397,6 +475,188 @@ function signOut() {
 }
 
 checkManagerAuth();
+</script>
+
+<!-- Filter Panel -->
+<div id="filter-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:500;" onclick="closeFilterPanel()"></div>
+<div id="filter-panel" style="display:none;position:fixed;top:0;right:0;height:100%;width:320px;background:#fff;z-index:501;box-shadow:-4px 0 24px rgba(0,0,0,0.12);padding:1.75rem;overflow-y:auto;font-family:'DM Sans',sans-serif;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+        <h3 style="font-size:1rem;font-weight:700;color:#111827;margin:0;">Filter Dashboard</h3>
+        <button onclick="closeFilterPanel()" style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:#6b7280;line-height:1;">×</button>
+    </div>
+
+    <div style="margin-bottom:1.25rem;">
+        <div style="font-size:0.75rem;font-weight:600;color:#374151;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.6rem;">Date Range</div>
+        <div style="display:flex;flex-direction:column;gap:0.5rem;">
+            <button class="filter-preset active" onclick="setFilterPreset(this,'7d')">Last 7 Days</button>
+            <button class="filter-preset" onclick="setFilterPreset(this,'30d')">Last 30 Days</button>
+            <button class="filter-preset" onclick="setFilterPreset(this,'90d')">Last 90 Days</button>
+            <button class="filter-preset" onclick="setFilterPreset(this,'all')">All Time</button>
+        </div>
+    </div>
+
+    <div style="margin-bottom:1.25rem;">
+        <div style="font-size:0.75rem;font-weight:600;color:#374151;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.6rem;">Custom Range</div>
+        <label style="font-size:0.8rem;color:#6b7280;display:block;margin-bottom:4px;">From</label>
+        <input type="date" id="filter-from" style="width:100%;border:1.5px solid #e5e7eb;border-radius:8px;padding:0.5rem 0.75rem;font-family:'DM Sans',sans-serif;font-size:0.85rem;margin-bottom:0.5rem;outline:none;">
+        <label style="font-size:0.8rem;color:#6b7280;display:block;margin-bottom:4px;">To</label>
+        <input type="date" id="filter-to" style="width:100%;border:1.5px solid #e5e7eb;border-radius:8px;padding:0.5rem 0.75rem;font-family:'DM Sans',sans-serif;font-size:0.85rem;outline:none;">
+    </div>
+
+    <button onclick="applyFilter()" style="width:100%;background:#7c3aed;color:#fff;border:none;border-radius:8px;padding:0.75rem;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;margin-top:0.5rem;">Apply Filter</button>
+    <button onclick="resetFilter()" style="width:100%;background:#f3f4f6;color:#374151;border:none;border-radius:8px;padding:0.75rem;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:500;cursor:pointer;margin-top:0.5rem;">Reset</button>
+</div>
+
+<style>
+.filter-preset {
+    width:100%;text-align:left;background:#f9fafb;border:1.5px solid #e5e7eb;
+    border-radius:8px;padding:0.6rem 0.85rem;font-family:'DM Sans',sans-serif;
+    font-size:0.85rem;font-weight:500;color:#374151;cursor:pointer;transition:all 0.15s;
+}
+.filter-preset:hover { border-color:#7c3aed;color:#7c3aed; }
+.filter-preset.active { border-color:#7c3aed;background:#faf5ff;color:#7c3aed;font-weight:600; }
+</style>
+
+<script>
+/* ── FILTER + EXPORT for dashboard index.html ── */
+let currentFilterDays = 30;
+
+function openFilterPanel() {
+    document.getElementById('filter-panel').style.display   = 'block';
+    document.getElementById('filter-overlay').style.display = 'block';
+}
+function closeFilterPanel() {
+    document.getElementById('filter-panel').style.display   = 'none';
+    document.getElementById('filter-overlay').style.display = 'none';
+}
+
+function setFilterPreset(btn, preset) {
+    document.querySelectorAll('.filter-preset').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    const days = { '7d':7, '30d':30, '90d':90, 'all':36500 };
+    currentFilterDays = days[preset] || 30;
+    document.getElementById('filter-from').value = '';
+    document.getElementById('filter-to').value   = '';
+}
+
+function getFilteredOrders() {
+    var fromVal   = document.getElementById('filter-from') ? document.getElementById('filter-from').value : '';
+    var toVal     = document.getElementById('filter-to')   ? document.getElementById('filter-to').value   : '';
+    var allOrders = JSON.parse(localStorage.getItem('fm_orders') || '[]');
+    if (fromVal && toVal) {
+        var from = new Date(fromVal);
+        var to   = new Date(toVal); to.setHours(23,59,59,999);
+        return allOrders.filter(function(o) {
+            if (!o.placedAt) return false;
+            var d = new Date(o.placedAt);
+            return d >= from && d <= to;
+        });
+    }
+    if (currentFilterDays >= 36500) return allOrders;
+    var cutoff = new Date(Date.now() - currentFilterDays * 86400000);
+    return allOrders.filter(function(o) {
+        return !o.placedAt || new Date(o.placedAt) >= cutoff;
+    });
+}
+
+function updateStatCards(filtered) {
+    var rev = 0;
+    filtered.forEach(function(o) { rev += parseFloat(o.total) || 0; });
+    var avg = filtered.length > 0 ? rev / filtered.length : 0;
+    function fmt(n) { return '£' + Math.round(n).toLocaleString('en-GB'); }
+    var statVals = document.querySelectorAll('.stat-value');
+    if (statVals[0]) statVals[0].textContent = fmt(rev);
+    if (statVals[1]) statVals[1].textContent = filtered.length;
+    if (statVals[2]) statVals[2].textContent = fmt(avg);
+    if (statVals[3]) statVals[3].textContent = filtered.length;
+}
+
+function applyFilter() {
+    var fromVal = document.getElementById('filter-from').value;
+    var toVal   = document.getElementById('filter-to').value;
+    var filtered = getFilteredOrders();
+
+    updateStatCards(filtered);
+
+    var label = fromVal && toVal
+        ? fromVal + ' to ' + toVal
+        : (currentFilterDays >= 36500 ? 'All time' : 'Last ' + currentFilterDays + ' days');
+
+    // Update subheading to show active filter
+    var sub = document.querySelector('.page-subheading');
+    if (sub) sub.textContent = 'Filtered: ' + label + ' · ' + filtered.length + ' orders';
+
+    closeFilterPanel();
+    showFilterToast(filtered.length + ' orders · ' + label);
+}
+
+function resetFilter() {
+    currentFilterDays = 30;
+    document.querySelectorAll('.filter-preset').forEach(function(b,i) { b.classList.toggle('active', i===1); });
+    document.getElementById('filter-from').value = '';
+    document.getElementById('filter-to').value   = '';
+    var sub = document.querySelector('.page-subheading');
+    if (sub) sub.textContent = 'Overview of sales performance and trends';
+    applyFilter();
+}
+
+function showFilterToast(msg) {
+    // Reuse management CSS toast pattern inline
+    let toast = document.getElementById('dash-filter-toast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'dash-filter-toast';
+        toast.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#1e293b;color:#fff;border-radius:10px;padding:12px 18px;font-family:DM Sans,sans-serif;font-size:0.85rem;font-weight:500;z-index:9999;display:flex;align-items:center;gap:8px;box-shadow:0 8px 24px rgba(0,0,0,0.2);';
+        document.body.appendChild(toast);
+    }
+    toast.innerHTML = '<i class="bi bi-funnel-fill" style="color:#a78bfa;"></i> ' + msg;
+    toast.style.display = 'flex';
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(function() { toast.style.display = 'none'; }, 3000);
+}
+
+function exportDashboard() {
+    var filtered = getFilteredOrders();
+
+    var dateStr = new Date().toLocaleDateString('en-GB');
+    var rows    = [];
+    rows.push('FreshMart Dashboard Export');
+    rows.push('Generated: ' + dateStr);
+    rows.push('');
+    rows.push('Order ID,Date,Status,Total,Items,Delivery,Payment');
+
+    if (filtered.length > 0) {
+        filtered.forEach(function(o) {
+            var d = o.placedAt ? new Date(o.placedAt).toLocaleDateString('en-GB') : 'N/A';
+            rows.push([
+                o.id || '-',
+                d,
+                o.status || 'processing',
+                parseFloat(o.total || 0).toFixed(2),
+                o.itemCount || (o.items ? o.items.length : 0),
+                o.delivery || 'Standard',
+                o.payment  || 'Card'
+            ].join(','));
+        });
+        var total = filtered.reduce(function(s, o) { return s + parseFloat(o.total || 0); }, 0);
+        rows.push('');
+        rows.push('SUMMARY');
+        rows.push('Total Orders,' + filtered.length);
+        rows.push('Total Revenue,' + total.toFixed(2));
+        rows.push('Avg Order Value,' + (total / filtered.length).toFixed(2));
+    } else {
+        rows.push('No orders found for selected period');
+    }
+
+    var csv  = rows.join('\n');
+    var blob = new Blob([csv], { type: 'text/csv' });
+    var url  = URL.createObjectURL(blob);
+    var a    = document.createElement('a');
+    a.href     = url;
+    a.download = 'freshmart-dashboard-' + new Date().toISOString().slice(0, 10) + '.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+}
 </script>
 </body>
 </html>
