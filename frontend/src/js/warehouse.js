@@ -3,9 +3,7 @@
 */
 
 
-/* 1. PAGE NAVIGATION
-   Shows/hides .wh-page sections and updates the topbar title.
-   Called by onclick on each sidebar nav button.  */
+/* 1. PAGE NAVIGATION */
 
 const PAGE_INFO = {
     dashboard:      ['Dashboard',           'Warehouse · Overview'],
@@ -59,7 +57,6 @@ function applyRipple(e) {
     const rect = el.getBoundingClientRect();
     const size   = Math.max(rect.width, rect.height);
     const radius = size / 2;
-
     const circle = document.createElement('span');
     circle.style.cssText = `
         position: fixed;
@@ -174,12 +171,8 @@ function clearScan() {
 }
 
 
-/* ══════════════════════════════════════════════════════════════
-   6. PICK ORDERS PAGE
-   ══════════════════════════════════════════════════════════════ */
+/* 6. PICK ORDERS PAGE */
 
-// Dynamically read item count from real orders in localStorage
-// Falls back to 14 (demo) if no real orders exist
 const _realOrders  = JSON.parse(localStorage.getItem('fm_orders') || '[]');
 const _activeOrder = _realOrders.length > 0 ? _realOrders[_realOrders.length - 1] : null;
 let _pickTotal     = _activeOrder
@@ -187,7 +180,6 @@ let _pickTotal     = _activeOrder
     : 14;
 let _pickChecked   = 0;
 
-/* Call this whenever switching orders — resets counters and DOM labels */
 function resetPickState(itemCount) {
     _pickTotal   = itemCount;
     _pickChecked = 0;
@@ -206,8 +198,6 @@ function togglePick(checkEl) {
     const item = checkEl.closest('.pick-item');
     if (item) item.classList.toggle('done', checkEl.classList.contains('checked'));
 
-    // Re-read _pickTotal from DOM in case it was updated by pick.html
-    // Count total pick-items in the list
     const allItems = document.querySelectorAll('#pick-items .pick-item');
     if (allItems.length > 0 && _pickTotal === 0) _pickTotal = allItems.length;
 
@@ -231,11 +221,9 @@ function completeOrder() {
         return;
     }
 
-    // Save completed order to dispatch queue in localStorage
     const realOrders    = JSON.parse(localStorage.getItem('fm_orders') || '[]');
     const dispatchQueue = JSON.parse(localStorage.getItem('fm_dispatch_queue') || '[]');
 
-    // Find the currently active order (index 0 when reversed = last in array)
     const reversedOrders = realOrders.slice().reverse();
     const activeOrderIdx = typeof _activeOrderIndex !== 'undefined' ? _activeOrderIndex : 0;
     const activeOrder    = reversedOrders[activeOrderIdx] || (realOrders.length > 0 ? realOrders[realOrders.length - 1] : null);
@@ -246,7 +234,7 @@ function completeOrder() {
         itemCount:   _pickTotal,
         status:      'ready',
         completedAt: new Date().toISOString(),
-        address:     rawAddr,   // may be string or object — dispatch.html handles both
+        address:     rawAddr,
         delivery:    activeOrder ? activeOrder.delivery : 'Standard',
     };
 
@@ -268,56 +256,49 @@ function completeOrder() {
 
     showToast('✅', 'Order complete!', dispatchEntry.id + ' sent to dispatch queue — redirecting to dispatch');
 
-    // Update dispatch badge in sidebar nav
-    const updatedQueue = JSON.parse(localStorage.getItem('fm_dispatch_queue') || '[]');
+    // Update dispatch badge
+    const updatedQueue  = JSON.parse(localStorage.getItem('fm_dispatch_queue') || '[]');
+    const readyCount    = updatedQueue.filter(o => (o.status || '').toLowerCase() === 'ready').length;
     const dispatchBadge = document.querySelector('a[href="dispatch.html"] .nav-badge');
-    if (dispatchBadge) dispatchBadge.textContent = updatedQueue.length;
+    if (dispatchBadge) dispatchBadge.textContent = readyCount;
 
-    // Redirect to dispatch page after 2s so user sees the toast
+    // Turn progress bar green
+    const bar = document.getElementById('pick-progress-bar');
+    if (bar) { bar.classList.remove('pb-blue'); bar.classList.add('pb-green'); }
+
+    // Redirect to dispatch after 2s
     setTimeout(function() {
         window.location.href = 'dispatch.html';
     }, 2000);
 
-    // Turn completed card green
-    const bar = document.getElementById('pick-progress-bar');
-    if (bar) { bar.classList.remove('pb-blue'); bar.classList.add('pb-green'); }
-
-    // Remove completed order from queue and promote next after short delay
+    // Fade out and remove the completed card
     setTimeout(function() {
         const queue = document.getElementById('pick-queue');
         if (!queue) return;
         const currentIndex = typeof _activeOrderIndex !== 'undefined' ? _activeOrderIndex : 0;
         const cards = queue.querySelectorAll('.order-card');
-
-        // Remove the completed card with a fade
         if (cards[currentIndex]) {
             cards[currentIndex].style.transition = 'opacity 0.4s ease, max-height 0.4s ease';
             cards[currentIndex].style.opacity    = '0';
             cards[currentIndex].style.maxHeight  = cards[currentIndex].offsetHeight + 'px';
             setTimeout(function() {
-                cards[currentIndex].style.maxHeight  = '0';
-                cards[currentIndex].style.overflow   = 'hidden';
+                cards[currentIndex].style.maxHeight    = '0';
+                cards[currentIndex].style.overflow     = 'hidden';
                 cards[currentIndex].style.marginBottom = '0';
-                cards[currentIndex].style.padding    = '0';
+                cards[currentIndex].style.padding      = '0';
                 setTimeout(function() {
                     if (cards[currentIndex].parentElement) {
                         cards[currentIndex].parentElement.removeChild(cards[currentIndex]);
                     }
-                    // Update the pending count
                     var remaining = document.querySelectorAll('#pick-queue .order-card').length;
                     var countEl   = document.getElementById('queue-count');
                     var subEl     = document.getElementById('pick-subheading');
                     if (countEl) countEl.textContent = remaining + ' pending';
                     if (subEl)   subEl.textContent   = remaining + ' order' + (remaining !== 1 ? 's' : '') + ' to fulfil this shift';
-                    // After removal, promote the new first card
-                    if (typeof selectPickOrder === 'function') {
-                        selectPickOrder(0);
-                    }
+                    if (typeof selectPickOrder === 'function') selectPickOrder(0);
                 }, 400);
             }, 400);
         }
-
-        // Also update _activeOrderIndex back to 0
         if (typeof _activeOrderIndex !== 'undefined') _activeOrderIndex = 0;
     }, 800);
 }
@@ -329,73 +310,117 @@ function selectOrder(card, orderId, meta) {
     const mtop = document.getElementById('active-order-meta-topbar');
     if (lbl)  lbl.textContent  = orderId;
     if (mtop) mtop.textContent = meta;
-
-    // Reset pick counters for the newly selected order
-    // Parse item count from meta string e.g. "7 items · Due 11:00am"
     const metaMatch = String(meta).match(/^(\d+)\s+item/);
     const newTotal  = metaMatch ? parseInt(metaMatch[1]) : _pickTotal;
     _pickTotal   = newTotal;
     _pickChecked = 0;
-
-    const bar = document.getElementById('pick-progress-bar');
-    const pbl = document.getElementById('pick-progress-label');
+    const bar  = document.getElementById('pick-progress-bar');
+    const pbl  = document.getElementById('pick-progress-label');
     const lbl2 = document.getElementById('pick-count-label');
     if (bar)  bar.style.width  = '0%';
     if (pbl)  pbl.textContent  = '0 of ' + newTotal + ' items picked';
     if (lbl2) lbl2.textContent = '0 / '  + newTotal + ' items picked';
-
     showToast('📋', 'Order selected', orderId + ' — work through the pick list below');
 }
 
 
-/* ══════════════════════════════════════════════════════════════
-   7. DISPATCH ORDERS PAGE
-   ══════════════════════════════════════════════════════════════ */
+/* 7. DISPATCH ORDERS PAGE */
 
 function dispatchOrder(btn, orderId) {
-    btn.innerHTML = '<i class="bi bi-check-circle-fill"></i> Dispatched!';
-    btn.classList.remove('btn-wh-success');
-    btn.classList.add('btn-wh-ghost');
-    btn.disabled = true;
-    btn.style.opacity = '0.6';
-    btn.style.transform = 'none';
-    btn.style.boxShadow = 'none';
-    const card = btn.closest('.dispatch-card, .glass-card');
-    if (card) card.style.opacity = '0.65';
-
-    // Update order status in fm_orders so customer orders.html shows "Shipped"
     const cleanId = String(orderId).replace(/^#/, '');
-    const orders  = JSON.parse(localStorage.getItem('fm_orders') || '[]');
-    const idx     = orders.findIndex(o =>
+    const now     = new Date();
+    const timeStr = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+
+    // Update fm_orders → shipped
+    const orders = JSON.parse(localStorage.getItem('fm_orders') || '[]');
+    const oIdx   = orders.findIndex(o =>
         String(o.id) === cleanId ||
         '#' + String(o.id) === cleanId ||
         String(o.id) === '#' + cleanId
     );
-    if (idx !== -1) {
-        orders[idx].status       = 'shipped';
-        orders[idx].dispatchedAt = new Date().toISOString();
+    var itemCount = 0;
+    if (oIdx !== -1) {
+        orders[oIdx].status       = 'shipped';
+        orders[oIdx].dispatchedAt = now.toISOString();
+        itemCount = orders[oIdx].itemCount || (orders[oIdx].items ? orders[oIdx].items.length : 0);
         localStorage.setItem('fm_orders', JSON.stringify(orders));
     }
 
-    // Also update fm_dispatch_queue entry
+    // Update fm_dispatch_queue → dispatched
     const queue = JSON.parse(localStorage.getItem('fm_dispatch_queue') || '[]');
-    const qi    = queue.findIndex(o =>
+    const qIdx  = queue.findIndex(o =>
         String(o.id) === cleanId ||
         '#' + String(o.id) === cleanId
     );
-    if (qi !== -1) {
-        queue[qi].status       = 'dispatched';
-        queue[qi].dispatchedAt = new Date().toISOString();
+    if (qIdx !== -1) {
+        itemCount = itemCount || queue[qIdx].itemCount || 0;
+        queue[qIdx].status       = 'dispatched';
+        queue[qIdx].dispatchedAt = now.toISOString();
         localStorage.setItem('fm_dispatch_queue', JSON.stringify(queue));
     }
 
-    showToast('🚚', orderId + ' dispatched', 'Customer notified · Order marked as shipped');
+    // Update dispatch log — find existing row or insert new one
+    var tbody = document.querySelector('.wh-table tbody');
+    if (tbody) {
+        // Check all rows for a matching order id (with or without # prefix)
+        var existing = tbody.querySelector('[data-order-id="' + cleanId + '"]');
+        if (!existing) {
+            // Also search by text content in the first cell
+            var rows = tbody.querySelectorAll('tr');
+            rows.forEach(function(row) {
+                var cell = row.querySelector('td');
+                if (cell && cell.textContent.replace('#','').trim() === cleanId) {
+                    existing = row;
+                }
+            });
+        }
+        if (existing) {
+            // Update existing row status to In Transit
+            var statusCell = existing.querySelector('.badge-wh');
+            if (statusCell) {
+                statusCell.className   = 'badge-wh badge-blue';
+                statusCell.textContent = 'In Transit';
+            }
+            // Move to top of log
+            tbody.insertBefore(existing, tbody.firstChild);
+        } else {
+            // Insert new row
+            var tr = document.createElement('tr');
+            tr.setAttribute('data-order-id', cleanId);
+            tr.innerHTML = '<td class="order-id" style="font-size:0.9rem;">#' + cleanId + '</td>'
+                + '<td>' + (itemCount || '—') + ' items</td>'
+                + '<td style="color:#6b7280;">TBC</td>'
+                + '<td style="color:#6b7280;">TBC</td>'
+                + '<td class="td-muted">' + timeStr + '</td>'
+                + '<td><span class="badge-wh badge-blue">In Transit</span></td>';
+            tbody.insertBefore(tr, tbody.firstChild);
+        }
+    }
+
+    // Fade out and remove the dispatch card — walk up the DOM to find the column wrapper
+    var card = btn.closest('.col-12');
+    if (!card) card = btn.closest('[class*="col-"]');
+    if (!card) card = btn.closest('.dispatch-card');
+    if (card) {
+        card.style.transition = 'opacity 0.4s ease';
+        card.style.opacity    = '0';
+        setTimeout(function() {
+            if (card.parentElement) card.parentElement.removeChild(card);
+            var remaining     = document.querySelectorAll('.dispatch-card').length;
+            var sub           = document.querySelector('.page-subheading');
+            if (sub) sub.textContent = remaining > 0
+                ? remaining + ' order' + (remaining !== 1 ? 's' : '') + ' ready — hand over to the delivery driver and confirm dispatch'
+                : 'No orders ready — all caught up!';
+            var dispatchBadge = document.querySelector('a[href="dispatch.html"] .nav-badge');
+            if (dispatchBadge) dispatchBadge.textContent = remaining;
+        }, 400);
+    }
+
+    showToast('🚚', '#' + cleanId + ' dispatched', 'Customer notified · Order marked as shipped');
 }
 
 
-/* ══════════════════════════════════════════════════════════════
-   8. REPORT ISSUE PAGE
-   ══════════════════════════════════════════════════════════════ */
+/* 8. REPORT ISSUE PAGE */
 
 function submitIssue() {
     const type     = document.getElementById('issue-type').value;
@@ -441,9 +466,7 @@ function clearIssueForm() {
 }
 
 
-/* ══════════════════════════════════════════════════════════════
-   9. REPORT SUBSTITUTION PAGE
-   ══════════════════════════════════════════════════════════════ */
+/* 9. REPORT SUBSTITUTION PAGE */
 
 function submitSubstitution() {
     const order       = document.getElementById('sub-order').value.trim();
@@ -471,13 +494,20 @@ function clearSubForm() {
 }
 
 
-/* ══════════════════════════════════════════════════════════════
-   10. INVENTORY SEARCH (client-side filter)
-   ══════════════════════════════════════════════════════════════ */
+/* 10. INVENTORY SEARCH */
 
 function filterInventory(inputEl) {
     const query = inputEl.value.toLowerCase();
     document.querySelectorAll('#inventory-table tbody tr').forEach(row => {
         row.style.display = row.textContent.toLowerCase().includes(query) ? '' : 'none';
     });
+}
+
+
+/* 11. WAREHOUSE SIGN OUT */
+
+function warehouseSignOut() {
+    localStorage.removeItem('fm_user');
+    sessionStorage.removeItem('fm_user');
+    window.location.href = '../customer/login.html';
 }

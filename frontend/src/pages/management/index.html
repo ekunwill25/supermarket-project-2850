@@ -288,16 +288,15 @@ orders.forEach(function(o) {
 
 function fmt(n) { return '£' + n.toLocaleString('en-GB', {minimumFractionDigits:0,maximumFractionDigits:0}); }
 
-if (orders.length > 0) {
-    const statVals = document.querySelectorAll('.stat-value');
-    const statSubs = document.querySelectorAll('.stat-sub');
-    if (statVals[0]) statVals[0].textContent = fmt(revMTD || 356000);
-    if (statVals[1]) statVals[1].textContent = (ordersMTD || 4284).toLocaleString();
-    if (statVals[2]) statVals[2].textContent = fmt(ordersMTD > 0 ? revMTD / ordersMTD : 83.12);
-    if (statVals[3]) statVals[3].textContent = (newCust || 892).toLocaleString();
-    if (statSubs[0]) statSubs[0].textContent = 'vs ' + fmt(revLast || 285000) + ' last month';
-    if (statSubs[1]) statSubs[1].textContent = 'vs ' + (ordersLast || 3956) + ' last month';
-}
+// Always update stats from real data (no hardcoded fallbacks)
+const statVals = document.querySelectorAll('.stat-value');
+const statSubs = document.querySelectorAll('.stat-sub');
+if (statVals[0]) statVals[0].textContent = fmt(revMTD);
+if (statVals[1]) statVals[1].textContent = ordersMTD.toLocaleString();
+if (statVals[2]) statVals[2].textContent = fmt(ordersMTD > 0 ? revMTD / ordersMTD : 0);
+if (statVals[3]) statVals[3].textContent = newCust.toLocaleString();
+if (statSubs[0]) statSubs[0].textContent = 'vs ' + fmt(revLast) + ' last month';
+if (statSubs[1]) statSubs[1].textContent = 'vs ' + ordersLast + ' last month';
 
 /* ── Monthly Sales Trend ── */
 const monthlyRev = new Array(12).fill(0);

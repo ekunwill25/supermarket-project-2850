@@ -279,9 +279,9 @@
         <div class="row g-3 mb-4">
             <div class="col-12 col-lg-6">
                 <div class="card-white">
-                    <div class="card-white-header"><span class="card-white-title">Age Demographics</span></div>
+                    <div class="card-white-header"><span class="card-white-title">Orders Per Month</span></div>
                     <div class="card-white-body">
-                        <canvas id="ageChart" height="200"></canvas>
+                        <canvas id="ordersPerMonthChart" height="200"></canvas>
                     </div>
                 </div>
             </div>
@@ -382,62 +382,97 @@
 <script>
 /* ── CUSTOMER INSIGHTS — reads fm_orders from localStorage ── */
 const orders = JSON.parse(localStorage.getItem('fm_orders') || '[]');
+const now    = new Date();
+const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
-/* ── Shopping Time chart — use real order hours ── */
-const timeBuckets = [0,0,0,0]; // morning, afternoon, evening, night
+/* ── Orders Per Month ── */
+(function() {
+    var counts = new Array(12).fill(0);
+    orders.forEach(function(o) {
+        if (!o.placedAt) return;
+        var d = new Date(o.placedAt);
+        if (d.getFullYear() === now.getFullYear()) counts[d.getMonth()]++;
+    });
+    var maxM   = now.getMonth() + 1;
+    var hasData = counts.slice(0, maxM).some(function(v) { return v > 0; });
+    var labels  = hasData ? monthNames.slice(0, maxM) : ['Jan','Feb','Mar','Apr','May','Jun'];
+    var data    = hasData ? counts.slice(0, maxM)     : [28,35,42,38,51,47];
+    new Chart(document.getElementById('ordersPerMonthChart'), {
+        type: 'bar',
+        data: { labels: labels, datasets: [{ data: data, backgroundColor: '#7c3aed', borderRadius: 4 }] },
+        options: {
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { grid: { display: false }, ticks: { color: '#374151', font: { family:'DM Sans' } } },
+                y: { grid: { color: '#f3f4f6', borderDash:[4,4] }, ticks: { color: '#374151', font: { family:'DM Sans' }, beginAtZero: true } }
+            }
+        }
+    });
+})();
+
+/* ── Shopping Time — bucket orders by hour ── */
+var timeBuckets = [0,0,0,0];
 orders.forEach(function(o) {
     if (!o.placedAt) return;
-    const h = new Date(o.placedAt).getHours();
+    var h = new Date(o.placedAt).getHours();
     if      (h >= 6  && h < 12) timeBuckets[0]++;
     else if (h >= 12 && h < 18) timeBuckets[1]++;
     else if (h >= 18 && h < 24) timeBuckets[2]++;
     else                         timeBuckets[3]++;
 });
-const hasRealTime = timeBuckets.some(function(v) { return v > 0; });
-
-/* ── Acquisition trend — orders by month ── */
-const now = new Date();
-const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-const newByMonth      = new Array(6).fill(0);
-const returningByMonth = new Array(6).fill(0);
-// Track which emails have ordered before
-const seenEmails = {};
-orders.slice().reverse().forEach(function(o) {
-    if (!o.placedAt) return;
-    const d   = new Date(o.placedAt);
-    const idx = (now.getMonth() - d.getMonth() + 12) % 12;
-    if (idx < 6) {
-        const email = (o.address && o.address.name) ? o.address.name : 'unknown';
-        if (!seenEmails[email]) { newByMonth[5-idx]++; seenEmails[email] = true; }
-        else                     returningByMonth[5-idx]++;
-    }
-});
-const hasRealAcq = newByMonth.some(function(v) { return v > 0; });
-const acqLabels  = monthNames.slice(Math.max(0, now.getMonth()-5), now.getMonth()+1);
-
-/* ── Update stat cards from real orders ── */
-if (orders.length > 0) {
-    const totalOrders = orders.length;
-    const statVals = document.querySelectorAll('.stat-value');
-    if (statVals[1]) statVals[1].textContent = totalOrders;  // use order count for "loyal"
-    // Update avg orders card
-    if (statVals[2]) statVals[2].textContent = totalOrders;
-}
-
-/* ── Segment donut ── */
-new Chart(document.getElementById('segmentDonut'), {
-    type: 'doughnut',
-    data: {
-        datasets: [{
-            data: [35,28,23,14],
-            backgroundColor: ['#7c3aed','#3b82f6','#10b981','#f59e0b'],
-            borderWidth: 3, borderColor: '#fff'
-        }]
-    },
-    options: { cutout: '60%', plugins: { legend: { display: false } } }
-});
+var hasRealTime = timeBuckets.some(function(v) { return v > 0; });
 
 /* ── Acquisition trend ── */
+var newByMonth       = [0,0,0,0,0,0];
+var returningByMonth = [0,0,0,0,0,0];
+var seenKeys = {};
+orders.forEach(function(o) {
+    if (!o.placedAt) return;
+    var d     = new Date(o.placedAt);
+    var diff  = (d.getFullYear() - now.getFullYear()) * 12 + (d.getMonth() - now.getMonth());
+    var slot  = diff + 5; // slot 5 = current month, 0 = 5 months ago
+    if (slot < 0 || slot > 5) return;
+    var key = String(o.address || o.id);
+    if (!seenKeys[key]) { newByMonth[slot]++;       seenKeys[key] = true; }
+    else                { returningByMonth[slot]++; }
+});
+var hasRealAcq = newByMonth.some(function(v) { return v > 0; });
+var acqLabels  = [];
+for (var i = 5; i >= 0; i--) {
+    acqLabels.push(monthNames[((now.getMonth() - i) + 12) % 12]);
+}
+
+/* ── Segment donut — order frequency ── */
+(function() {
+    var loyal = 0, regular = 0, occasional = 0, newC = 0;
+    if (orders.length > 0) {
+        var addressCount = {};
+        orders.forEach(function(o) {
+            var key = String(o.address || o.id);
+            addressCount[key] = (addressCount[key] || 0) + 1;
+        });
+        Object.values(addressCount).forEach(function(count) {
+            if (count >= 5)      loyal++;
+            else if (count >= 3) regular++;
+            else if (count >= 2) occasional++;
+            else                 newC++;
+        });
+    }
+    var total = loyal + regular + occasional + newC;
+    new Chart(document.getElementById('segmentDonut'), {
+        type: 'doughnut',
+        data: {
+            datasets: [{
+                data: total > 0 ? [loyal||1, regular||1, occasional||1, newC||1] : [35,28,23,14],
+                backgroundColor: ['#7c3aed','#3b82f6','#10b981','#f59e0b'],
+                borderWidth: 3, borderColor: '#fff'
+            }]
+        },
+        options: { cutout: '60%', plugins: { legend: { display: false } } }
+    });
+})();
+
+/* ── Acquisition trend chart ── */
 new Chart(document.getElementById('acquisitionChart'), {
     type: 'line',
     data: {
@@ -461,31 +496,12 @@ new Chart(document.getElementById('acquisitionChart'), {
         plugins: { legend: { display: false } },
         scales: {
             x: { grid: { color: '#f3f4f6' }, ticks: { color: '#374151', font: { family:'DM Sans' } } },
-            y: { grid: { color: '#f3f4f6', borderDash:[4,4] }, ticks: { color: '#374151', font: { family:'DM Sans' } } }
+            y: { grid: { color: '#f3f4f6', borderDash:[4,4] }, ticks: { color: '#374151', font: { family:'DM Sans' }, beginAtZero: true } }
         }
     }
 });
 
-/* ── Age demographics (static — no age data in orders) ── */
-new Chart(document.getElementById('ageChart'), {
-    type: 'bar',
-    data: {
-        labels: ['18-24','25-34','35-44','45-54','55-64','65+'],
-        datasets: [{
-            data: [820,1890,2380,1440,890,650],
-            backgroundColor: '#7c3aed', borderRadius: 4
-        }]
-    },
-    options: {
-        plugins: { legend: { display: false } },
-        scales: {
-            x: { grid: { display: false }, ticks: { color: '#374151', font: { family:'DM Sans' } } },
-            y: { grid: { color: '#f3f4f6', borderDash:[4,4] }, ticks: { color: '#374151', font: { family:'DM Sans' } } }
-        }
-    }
-});
-
-/* ── Shopping time chart — real hours or demo ── */
+/* ── Shopping time chart ── */
 new Chart(document.getElementById('timeChart'), {
     type: 'bar',
     data: {

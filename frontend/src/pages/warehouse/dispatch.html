@@ -62,14 +62,14 @@
 
         <div id="wh-content">
             <div class="page-heading">Dispatch Orders</div>
-            <div class="page-subheading">3 orders ready — hand over to the delivery driver and confirm dispatch</div>
+            <div class="page-subheading" id="dispatch-subheading">3 orders ready — hand over to the delivery driver and confirm dispatch</div>
 
-            <div class="wh-alert wh-alert-red mb-3">
+            <div class="wh-alert wh-alert-red mb-3" id="overdue-alert">
                 <i class="bi bi-truck"></i>
                 <div><strong>ORD-2845</strong> is 15 minutes overdue — Van 02 driver is waiting at Loading Bay A. Please dispatch immediately.</div>
             </div>
 
-            <div class="row g-3 mb-3">
+            <div class="row g-3 mb-3" id="dispatch-cards-row">
                 <div class="col-12 col-lg-4">
                     <div class="dispatch-card overdue-card glass-card">
                         <div class="dispatch-card-header" style="background:#fff5f5;">
@@ -143,7 +143,7 @@
                 <div class="glass-card-body p-0">
                     <table class="wh-table">
                         <thead><tr><th>Order</th><th>Items</th><th>Van</th><th>Driver</th><th>Dispatched</th><th>Status</th></tr></thead>
-                        <tbody>
+                        <tbody id="dispatch-log-tbody">
                         <tr><td class="order-id" style="font-size:0.9rem;">ORD-2829</td><td>6 items</td><td>Van 01</td><td>P. Chen</td><td class="td-muted">08:30am</td><td><span class="badge-wh badge-green">Delivered</span></td></tr>
                         <tr><td class="order-id" style="font-size:0.9rem;">ORD-2831</td><td>11 items</td><td>Van 03</td><td>A. Khan</td><td class="td-muted">09:10am</td><td><span class="badge-wh badge-blue">In Transit</span></td></tr>
                         </tbody>
@@ -160,101 +160,115 @@
 <script src="../../js/warehouse.js"></script>
 
 <script>
-/* ── DISPATCH QUEUE FROM LOCALSTORAGE ─────────────────────────
-   Reads fm_dispatch_queue (saved by completeOrder in warehouse.js)
-   and injects completed orders into the dispatch page.
+/* ── DISPATCH PAGE — reads fm_dispatch_queue ─────────────────
+   Only shows orders with status 'ready'.
+   Dispatched orders appear in the log as 'In Transit'.
 ──────────────────────────────────────────────────────────────*/
-function renderDispatchQueue() {
-    const queue = JSON.parse(localStorage.getItem('fm_dispatch_queue') || '[]');
-    if (queue.length === 0) return; // nothing to add — keep demo cards as-is
 
-    const row        = document.querySelector('.row.g-3.mb-3');
-    const alertBanner = document.querySelector('.wh-alert.wh-alert-red.mb-3');
-    if (!row) return;
+function updateBadges() {
+    var allOrders  = JSON.parse(localStorage.getItem('fm_orders') || '[]');
+    var allQueue   = JSON.parse(localStorage.getItem('fm_dispatch_queue') || '[]');
 
-    // Clear demo cards and replace with real ones
-    row.innerHTML = '';
-
-    // Also hide the hardcoded overdue alert since it references demo orders
-    if (alertBanner) alertBanner.style.display = 'none';
-
-    // Update subheading count
-    const sub = document.querySelector('.page-subheading');
-    if (sub) sub.textContent = queue.length + ' order' + (queue.length !== 1 ? 's' : '') + ' ready — hand over to the delivery driver and confirm dispatch';
-
-    queue.forEach(function(order) {
-        const id        = order.id || '—';
-        const items     = order.itemCount || 0;
-        const addr      = order.address || {};
-        const addrStr   = typeof addr === 'string' && addr.length > 0
-            ? addr
-            : [addr.name, addr.street, addr.city, addr.postcode].filter(Boolean).join(', ') || 'Address not provided';
-        const isOverdue = order.status === 'overdue';
-        const colDiv    = document.createElement('div');
-        colDiv.className = 'col-12 col-lg-4';
-
-        colDiv.innerHTML =
-            '<div class="dispatch-card glass-card' + (isOverdue ? ' overdue-card' : '') + '">'
-          + '  <div class="dispatch-card-header"' + (isOverdue ? ' style="background:#fff5f5;"' : '') + '>'
-          + '    <i class="bi bi-box-seam" style="color:' + (isOverdue ? '#dc2626' : '#16a34a') + ';"></i>'
-          + '    <h6' + (isOverdue ? ' style="color:#dc2626;"' : '') + '>#' + id + '</h6>'
-          + '    <span class="badge-wh ' + (isOverdue ? 'badge-red' : 'badge-green') + ' ms-auto">'
-          + (isOverdue ? 'Overdue' : 'Ready') + '</span>'
-          + '  </div>'
-          + '  <div class="dispatch-card-body">'
-          + '    <div class="row g-2 mb-3">'
-          + '      <div class="col-6"><div class="dispatch-detail-label">Items</div><div class="dispatch-detail-value">' + items + ' items</div></div>'
-          + '      <div class="col-6"><div class="dispatch-detail-label">Van</div><div class="dispatch-detail-value" style="color:#6b7280;">TBC</div></div>'
-          + '      <div class="col-6"><div class="dispatch-detail-label">Bay</div><div class="dispatch-detail-value">Staging Area</div></div>'
-          + '      <div class="col-6"><div class="dispatch-detail-label">Driver</div><div class="dispatch-detail-value" style="color:#6b7280;">Awaiting</div></div>'
-          + '      <div class="col-12"><div class="dispatch-detail-label">Delivery Address</div>'
-          + '        <div class="dispatch-detail-value" style="font-weight:400;font-size:0.82rem;">' + addrStr + '</div></div>'
-          + '    </div>'
-          + '    <div class="wh-progress mb-2"><div class="wh-progress-bar pb-green" style="width:100%;"></div></div>'
-          + '    <div class="td-muted mb-3">Picking complete · Ready for dispatch</div>'
-          + '    <button class="btn-wh btn-wh-success w-100" style="justify-content:center;" onclick="dispatchOrder(this,\'' + id + '\')">'
-          + '      <i class="bi bi-truck"></i> Confirm Dispatch'
-          + '    </button>'
-          + '  </div>'
-          + '</div>';
-
-        row.appendChild(colDiv);
+    // Pick badge = pending orders
+    var pending = allOrders.filter(function(o) {
+        return o.warehouseStatus !== 'picked' && o.status !== 'shipped' && o.status !== 'delivered';
     });
+    var pickBadge = document.querySelector('a[href="pick.html"] .nav-badge');
+    if (pickBadge) pickBadge.textContent = pending.length;
 
-    // Also append to dispatch log
-    addToDispatchLog(queue);
+    // Dispatch badge = ready orders only
+    var readyCount = allQueue.filter(function(o) {
+        var s = (o.status || '').toLowerCase();
+        return s === 'ready' || s === '';
+    }).length;
+    var dispatchBadge = document.querySelector('a[href="dispatch.html"] .nav-badge');
+    if (dispatchBadge) dispatchBadge.textContent = readyCount;
 }
 
-function addToDispatchLog(queue) {
-    const tbody = document.querySelector('.wh-table tbody');
-    if (!tbody) return;
-    queue.forEach(function(order) {
-        // Skip if already in log
-        if (tbody.querySelector('[data-order-id="' + order.id + '"]')) return;
-        const tr = document.createElement('tr');
-        tr.setAttribute('data-order-id', order.id);
-        const time = order.completedAt
-            ? new Date(order.completedAt).toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' })
-            : '—';
-        tr.innerHTML = '<td class="order-id" style="font-size:0.9rem;">#' + (order.id || '—') + '</td>'
-            + '<td>' + (order.itemCount || 0) + ' items</td>'
-            + '<td style="color:#6b7280;">TBC</td>'
-            + '<td style="color:#6b7280;">TBC</td>'
-            + '<td class="td-muted">' + time + '</td>'
-            + '<td><span class="badge-wh badge-amber">Awaiting</span></td>';
-        tbody.insertBefore(tr, tbody.firstChild);
-    });
+function renderDispatchQueue() {
+    var allQueue = JSON.parse(localStorage.getItem('fm_dispatch_queue') || '[]');
+
+    // Separate ready vs dispatched
+    var readyOrders     = allQueue.filter(function(o) { return (o.status || '').toLowerCase() === 'ready' || o.status === ''; });
+    var dispatchedOrders = allQueue.filter(function(o) { var s = (o.status||'').toLowerCase(); return s === 'dispatched' || s === 'shipped'; });
+
+    var row     = document.getElementById('dispatch-cards-row');
+    var alert   = document.getElementById('overdue-alert');
+    var sub     = document.getElementById('dispatch-subheading');
+
+    // Only replace demo cards if we have real data
+    if (allQueue.length > 0 && row) {
+        row.innerHTML = '';
+        if (alert) alert.style.display = 'none';
+
+        if (readyOrders.length === 0) {
+            if (sub) sub.textContent = 'No orders ready — all caught up!';
+        } else {
+            if (sub) sub.textContent = readyOrders.length + ' order' + (readyOrders.length !== 1 ? 's' : '') + ' ready — hand over to the delivery driver and confirm dispatch';
+            readyOrders.forEach(function(order) {
+                var id      = order.id || '—';
+                var items   = order.itemCount || 0;
+                var addr    = order.address || {};
+                var addrStr = typeof addr === 'string' && addr.length > 0
+                    ? addr
+                    : [addr.name, addr.street, addr.city, addr.postcode].filter(Boolean).join(', ') || 'Address not provided';
+                var col = document.createElement('div');
+                col.className = 'col-12 col-lg-4';
+                col.innerHTML =
+                    '<div class="dispatch-card glass-card">'
+                  + '  <div class="dispatch-card-header">'
+                  + '    <i class="bi bi-box-seam" style="color:#16a34a;"></i>'
+                  + '    <h6>#' + id + '</h6>'
+                  + '    <span class="badge-wh badge-green ms-auto">Ready</span>'
+                  + '  </div>'
+                  + '  <div class="dispatch-card-body">'
+                  + '    <div class="row g-2 mb-3">'
+                  + '      <div class="col-6"><div class="dispatch-detail-label">Items</div><div class="dispatch-detail-value">' + items + ' items</div></div>'
+                  + '      <div class="col-6"><div class="dispatch-detail-label">Van</div><div class="dispatch-detail-value" style="color:#6b7280;">TBC</div></div>'
+                  + '      <div class="col-6"><div class="dispatch-detail-label">Bay</div><div class="dispatch-detail-value">Staging Area</div></div>'
+                  + '      <div class="col-6"><div class="dispatch-detail-label">Driver</div><div class="dispatch-detail-value" style="color:#6b7280;">Awaiting</div></div>'
+                  + '      <div class="col-12"><div class="dispatch-detail-label">Delivery Address</div>'
+                  + '        <div class="dispatch-detail-value" style="font-weight:400;font-size:0.82rem;">' + addrStr + '</div></div>'
+                  + '    </div>'
+                  + '    <div class="wh-progress mb-2"><div class="wh-progress-bar pb-green" style="width:100%;"></div></div>'
+                  + '    <div class="td-muted mb-3">Picking complete · Ready for dispatch</div>'
+                  + '    <button class="btn-wh btn-wh-success w-100" style="justify-content:center;" onclick="dispatchOrder(this,\'' + id + '\')">'
+                  + '      <i class="bi bi-truck"></i> Confirm Dispatch'
+                  + '    </button>'
+                  + '  </div>'
+                  + '</div>';
+                row.appendChild(col);
+            });
+        }
+    }
+
+    // Populate dispatch log with dispatched orders
+    var tbody = document.getElementById('dispatch-log-tbody');
+    if (tbody) {
+        dispatchedOrders.forEach(function(order) {
+            if (tbody.querySelector('[data-order-id="' + order.id + '"]')) return;
+            var time = order.dispatchedAt
+                ? new Date(order.dispatchedAt).toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' })
+                : (order.completedAt ? new Date(order.completedAt).toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' }) : '—');
+            var tr = document.createElement('tr');
+            tr.setAttribute('data-order-id', order.id);
+            tr.innerHTML = '<td class="order-id" style="font-size:0.9rem;">#' + (order.id||'—') + '</td>'
+                + '<td>' + (order.itemCount||0) + ' items</td>'
+                + '<td style="color:#6b7280;">TBC</td>'
+                + '<td style="color:#6b7280;">TBC</td>'
+                + '<td class="td-muted">' + time + '</td>'
+                + '<td><span class="badge-wh badge-blue">In Transit</span></td>';
+            tbody.insertBefore(tr, tbody.firstChild);
+        });
+    }
+
+    updateBadges();
 }
 
 renderDispatchQueue();
 
-// Re-render when user navigates back to this tab from pick page
-document.addEventListener('visibilitychange', function() {
-    if (!document.hidden) renderDispatchQueue();
-});
-window.addEventListener('focus', function() {
-    renderDispatchQueue();
-});
+document.addEventListener('visibilitychange', function() { if (!document.hidden) renderDispatchQueue(); });
+window.addEventListener('focus', renderDispatchQueue);
 </script>
 
 <!-- Unauthorised Access Overlay -->
@@ -281,9 +295,6 @@ function showUnauthAndRedirect(msg, url) {
     setTimeout(function() { window.location.href = url; }, 2200);
 }
 
-/* ── WAREHOUSE PORTAL AUTH ──────────────────────────────────
-   Accessible to Warehouse workers and Management only.
-──────────────────────────────────────────────────────────────*/
 (function() {
     const user = JSON.parse(
         localStorage.getItem('fm_user') ||
